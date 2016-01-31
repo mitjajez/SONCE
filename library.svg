@@ -1,0 +1,78 @@
+<?xml version="1.0" standalone="no"?>
+<!--
+@Author: Mitja Jež
+@Mail:mitja.jez AT slap.si
+@Date:21.sep.2010
+
+
+-->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink">
+<!--<style type="text/css" >
+<![CDATA[
+.connection{
+	visibility:hidden;
+}
+/*
+.connection:hover{
+	visibility:visible;
+}
+*/
+//]]>
+</style>-->
+<defs>
+<circle id="connection" cx="0" cy="0" r="5" class="connection" style="fill:white;fill-opacity:0;stroke-width:0.5;stroke:green"/>
+</defs>
+
+<g id="resistor" name="resistor">
+<line x1="0" y1="-50" x2="0" y2="50" style="stroke: black;"/>
+<rect x="-10" y="-30" rx="3" ry="3" width="20" height="60"
+style="fill:white;stroke-width:1;stroke:black"/>
+<use xlink:href="#connection" x="0" y="-50" />
+<use xlink:href="#connection" x="0" y="50" />
+</g>
+
+<g id="inductor" name="inductor">
+<line x1="0" y1="-50" x2="0" y2="-30" style="stroke: black;"/>
+<line x1="0" y1="30" x2="0" y2="50" style="stroke: black;"/>
+<path d="M0,-30 a5,5 90 0,1 0,20 a5,5 90 0,1 0,20 a5,5 90 0,1 0,20" style="fill:white;stroke-width:1;stroke:black"/>
+<use xlink:href="#connection" x="0" y="-50" />
+<use xlink:href="#connection" x="0" y="50" />
+<!--<circle cx="0" cy="-50" r="5" style="fill:none;stroke-width:0.5;stroke:green"/>
+<circle cx="0" cy="50" r="5" style="fill:none;stroke-width:0.5;stroke:green"/>-->
+</g>
+
+<g id="capacitor" name="capacitor">
+<line x1="0" y1="-30" x2="0" y2="-3" style="stroke: black;"/>
+<line x1="0" y1="3" x2="0" y2="30" style="stroke: black;"/>
+<line x1="-12" y1="-3" x2="12" y2="-3" style="stroke: black;"/>
+<line x1="-12" y1="3" x2="12" y2="3" style="stroke: black;"/>
+<use xlink:href="#connection" x="0" y="-30" />
+<use xlink:href="#connection" x="0" y="30" />
+<!--<circle cx="0" cy="-30" r="5" style="fill:none;stroke-width:0.5;stroke:green"/>
+<circle cx="0" cy="30" r="5" style="fill:none;stroke-width:0.5;stroke:green"/>-->
+</g>
+
+<g id="voltage" name="voltage">
+<line x1="0" y1="-40" x2="0" y2="40" style="stroke: black;"/>
+<circle cx="0" cy="0" r="20" style="stroke:black;stroke-width:1;fill:white"/>
+<use xlink:href="#connection" x="0" y="-40" />
+<use xlink:href="#connection" x="0" y="40" />
+<!--<circle cx="0" cy="-40" r="5" style="fill:none;stroke-width:0.5;stroke:green"/>
+<circle cx="0" cy="40" r="5" style="fill:none;stroke-width:0.5;stroke:green"/>-->
+</g>
+
+<g id="current" name="current">
+<line x1="0" y1="-40" x2="0" y2="40" style="stroke: black;"/>
+<circle cx="0" cy="0" r="20" style="stroke:black;stroke-width:1;fill:white"/>
+<use xlink:href="#connection" x="0" y="-40" />
+<use xlink:href="#connection" x="0" y="40" />
+<!--<circle cx="0" cy="-40" r="5" style="fill:none;stroke-width:0.5;stroke:green"/>
+<circle cx="0" cy="40" r="5" style="fill:none;stroke-width:0.5;stroke:green"/>-->
+</g>
+
+</svg>
+

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<link href="style.css" type="text/css" rel="stylesheet" />
+<title>Simple ON-line Circuit Editor</title>
+<script type="text/javascript">
+var libdiv=document.getElementById("library");
+var pandiv=document.getElementById("panel");
+
+var	svgns="http://www.w3.org/2000/svg"
+var xlink="http://www.w3.org/1999/xlink" 
+
+function prepare(){
+	E="<embed name='sv' src='canvas.svg' width='100%' height='100%'></embed>"
+	var pad = document.getElementById("canvas");
+	pad.innerHTML=E;
+	pad.style.width=window.innerWidth-20+"px";
+	pad.style.height=window.innerHeight-50+"px";
+	
+	var lib = document.getElementById("panel");
+	lib.style.width=window.innerWidth-20+"px";
+}
+
+	</script>
+</head>
+
+
+<body bgcolor="#eeddbb" onload="prepare()" leftmargin="0" topmargin="0" bottommargin="0" rightmargin="10">
+<div id="panel" class="panel">File(save, export), analysis(op, ac, transient), help(about) </div>
+<div id="canvas" class="canvas"></div>
+
+</body>
+</html>
+
