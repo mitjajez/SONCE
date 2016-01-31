@@ -1,0 +1,159 @@
+@charset "UTF-8";
+
+ul.dropdown {
+	font: normal 14px/normal Tahoma, Verdana, Arial, Helvetica, sans-serif;
+}
+
+ul.dropdown li {
+	padding: 0px 5px;
+	background-color: #172322;
+	color: #fff;
+	line-height: 22px;
+	white-space: nowrap;
+}
+
+ul.dropdown li:hover {
+	color: #b0d730;
+}
+
+ul.dropdown a:link,
+ul.dropdown a:visited	{ color: #fff; text-decoration: none; }
+ul.dropdown a:hover		{ color: #b0d730; }
+ul.dropdown a:active	{ color: #0395cc; }
+
+
+/* -- level mark -- */
+
+ul.dropdown ul {
+/*	left: -21px;
+	width: 150px;*/
+	padding: 0 16px;
+	background: url(images/box1-top.png) 50% 0 no-repeat;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-radius: 0px 5px 5px 5px;
+	border-radius: 0px 5px 5px 5px;
+}
+
+ul.dropdown ul li {
+	height: auto;
+	padding: 5px 15px;
+	line-height: 1.3em;
+	white-space: normal;
+}
+
+/* -- level mark -- */
+
+ul.dropdown ul ul {
+/*	top: -12px;
+	left: 100%;*/
+	padding: 16px 0 0;
+	background: transparent url(images/box1-top-left.png) 0 0 no-repeat;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-radius: 0px 5px 5px 5px;
+	border-radius: 0px 5px 5px 5px;
+}
+
+/*-------------------------------------------------/
+ * @section		Search Form
+ */
+
+ul.dropdown form * {
+ display: inline;
+ float: left;
+}
+
+ul.dropdown form label {
+ display: none;
+}
+
+ul.dropdown form input.text {
+ width: 143px;
+ height: 18px;
+ padding: 2px 25px 2px 5px;
+ border-width: 0;
+ background: transparent url(images/bg_search-field.png) 0 0 no-repeat;
+ color: #969696;
+ font: normal 14px/17px Tahoma, Verdana, Arial, Helvetica, sans-serif;
+ vertical-align: middle;
+}
+
+ul.dropdown form input.text:focus {
+ outline: none;
+}
+
+ul.dropdown form input.button {
+ position: relative;
+ margin: 4px 0 0 -20px;
+}
+
+
+/*-------------------------------------------------/
+ * @section		Support Class `dir`
+ */
+
+
+ul.dropdown *.dir {
+ padding-right: 20px;
+ background-image: url(images/nav-arrow-down.png);
+ background-position: 100% 50%;
+ background-repeat: no-repeat;
+}
+
+
+/* -- Components override -- */
+
+ul.dropdown-horizontal ul *.dir {
+ padding-right: 15px;
+ background-image: url(images/nav-arrow-right.png);
+ background-position: 95% 50%;
+ background-repeat: no-repeat;
+}
+
+
+/*-------------------------------------------------/
+ * @section		Base Style Extension
+ */
+
+ul.dropdown li a {
+ display: block;
+ padding: 5px 10px;
+}
+
+
+/*-------------------------------------------------/
+ * @section		Base Style Reinitiate: post-override activities
+ */
+
+ul.dropdown li.dir {
+/* padding: 5px 20px 5px 10px;*/
+}
+
+ul.dropdown ul li.dir {
+/* padding: 5px 15px;*/
+}
+
+
+/*-------------------------------------------------/
+ * @section		Custom
+ */
+
+ul.dropdown ul a {
+ padding-left: 15px;
+}
+
+
+ul.dropdown li.hover *.open {
+ color: #b0d730;
+}
+
+/* CSS2 clone */
+
+ul.dropdown li:hover > *.dir {
+ color: #b0d730;
+}

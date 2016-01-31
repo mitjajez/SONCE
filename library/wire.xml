@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="no"?>
+<!--
+@Author: Mitja Jež
+@Mail:mitja.jez AT zeitgeist.si
+@Date:29.9.2011
+@Version: 2.0.0
+-->
+<wire>
+<!--	<wireType>
+		<id>lin</id>
+		<name>Linear</name>
+		<icon></icon>
+	</wireType> -->
+	<wireType>
+		<id>vh</id>
+		<name>Vertical-horizontal</name>
+		<icon></icon>
+	</wireType>
+	<wireType>
+		<id>hv</id>
+		<name>Horizontal-vertical</name>
+		<icon></icon>
+	</wireType>
+</wire>

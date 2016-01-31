@@ -1,0 +1,60 @@
+<?xml version="1.0" standalone="no"?>
+<!--
+@Author: Mitja Jež
+@Mail:mitja.jez AT slap.si
+@Date:21.sep.2010
+
+
+-->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" version="1.1"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<circle id="connection" cx="0" cy="0" r="5" class="connection" style="fill:white;fill-opacity:0;stroke-width:0.5;stroke:green"/>
+</defs>
+
+
+<g id="diode" name="diode" transform="translate(100,200)">
+<line x1="0" y1="-30" x2="0" y2="30" style="stroke: black;"/>
+<line x1="-10" y1="-10" x2="10" y2="-10" style="stroke: black;"/>
+<path d="M0 -10 L-10 10 H10 Z" style="fill:black;stroke-width:1;stroke:black" />
+<use xlink:href="#connection" x="0" y="-30" />
+<use xlink:href="#connection" x="0" y="30" />
+</g>
+
+<g id="zener" name="zener" transform="translate(200,200)">
+<line x1="0" y1="-40" x2="0" y2="-20" style="stroke: black;"/>
+<line x1="0" y1="20" x2="0" y2="40" style="stroke: black;"/>
+<line x1="-10" y1="-20" x2="10" y2="-20" style="stroke: black;"/>
+<line x1="-10" y1="20" x2="10" y2="-20" style="stroke: black;"/>
+<path d="M0 0 L-10 20 H10 Z" style="fill:black;stroke-width:1;stroke:black" />
+<use xlink:href="#connection" x="0" y="-40" />
+<use xlink:href="#connection" x="0" y="40" />
+</g>
+
+<g id="shotkey" name="shotkey" transform="translate(300,200)">
+<line x1="0" y1="-20" x2="0" y2="20" style="stroke: black;"/>
+<line x1="-10" y1="-10" x2="10" y2="-10" style="stroke: black;"/>
+<path d="M0 -10 L-10 10 H10 Z" style="fill:black;stroke-width:1;stroke:black" />
+<use xlink:href="#connection" x="0" y="-20" />
+<use xlink:href="#connection" x="0" y="20" />
+</g>
+
+<g id="oo" name="oo" transform="translate(300,300)">
+<line x1="25" y1="0" x2="40" y2="0" style="stroke: black;"/>
+<line x1="-25" y1="20" x2="-40" y2="20" style="stroke: black;"/>
+<line x1="-25" y1="-20" x2="-40" y2="-20" style="stroke: black;"/>
+<path d="M25 0 L-25 35 V-35 Z" style="fill:white;stroke-width:1;stroke:black" />
+<line x1="-20" y1="20" x2="-14" y2="20" style="stroke: black;"/>
+<line x1="-20" y1="-20" x2="-14" y2="-20" style="stroke: black;"/>
+<line x1="-17" y1="17" x2="-17" y2="23" style="stroke: black;"/>
+<use xlink:href="#connection" x="-40" y="20" />
+<use xlink:href="#connection" x="-40" y="-20" />
+<use xlink:href="#connection" x="40" y="0" />
+</g>
+
+
+</svg>
+

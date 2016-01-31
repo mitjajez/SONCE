@@ -1,34 +1,279 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<!--
+@Author: Mitja Jež
+@Mail:mitja.jez AT zeitgeist.si
+@Date:28.dec.2010
+@LastMod: 9.2.2012
+
+-->
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:svg="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
+		xml:lang="en">
+
 <head>
-<link href="style.css" type="text/css" rel="stylesheet" />
-<title>Simple ON-line Circuit Editor</title>
+	<title>Simple ON-line Circuit Editor</title>
+	<meta name="keywords" content="simple, online, circuit, editor, resistor, inductor, capacitor, Voltage, Current, transistor, jQuery, SVG, XML" />
+	<meta name="description" content="SONCE - Simple ONine Circuit Editor is Web application made with JavaScript library jQuery and it's SVG plugin. It generates SVG image of circuit and XML format of circuit for analyses." />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+	<!-- CSS -->
+	<link href="css/style.css" rel="stylesheet" type="text/css"/>
+	<link href="css/svg.css" rel="stylesheet" type="text/css"/>
+	<link href="css/jquery-ui-1.8.7.custom.css" rel="stylesheet" type="text/css"/>
+	<link href="css/jquery.svg.css" rel="stylesheet" type="text/css"/>
+	<link href="css/dropdown.css" rel="stylesheet" type="text/css"/>
+	<link href="css/jquery.svg.css" rel="stylesheet" type="text/css"/>
+
+	<!-- JQuery -->
+	<script type="text/javascript" src="../SONCE-JS/jquery-for-svg-1.4.2.min.js"></script>
+	<script type="text/javascript" src="../SONCE-JS/jquery-ui-1.8.7.custom.min.js"></script>
+	<script type="text/javascript" src="../SONCE-JS/jquery.svg-modifed.js"></script>
+	<script type="text/javascript" src="../SONCE-JS/jquery.svgdom.js"></script>
+
+	<!-- JS -->
+	<script type="text/javascript" src="js/sonce_menu.js"></script>
+	<script type="text/javascript" src="js/sonce_select.js"></script>
+	<script type="text/javascript" src="js/sonce_add.js"></script>
+	<script type="text/javascript" src="js/sonce_wire.js"></script>
+	<script type="text/javascript" src="js/sonce_xml.js"></script>
 <script type="text/javascript">
-var libdiv=document.getElementById("library");
-var pandiv=document.getElementById("panel");
 
-var	svgns="http://www.w3.org/2000/svg"
-var xlink="http://www.w3.org/1999/xlink" 
+// GET DATA FROM DB (cookie, XML, SQL)
+var gridSep=10;						//Grid seperation
+var snap = true;					//Snap to grid?
+var elcount=0;
+var wirecount=0;
+var nodecount=0;
+var $XMLroot = $('<XMLDocument />');
 
-function prepare(){
-	E="<embed name='sv' src='canvas.svg' width='100%' height='100%'></embed>"
-	var pad = document.getElementById("canvas");
-	pad.innerHTML=E;
-	pad.style.width=window.innerWidth-20+"px";
-	pad.style.height=window.innerHeight-50+"px";
+$(document).ready(function(){
+/* xml root element - because html() does not include the root element and we want to 
+ * include <report /> in the output. There may be a better way to do this.
+ */
+
+   	$('#svg').svg();
+   	var svg = $('#svg').svg('get');
+	var pos = $('#svg').position();
+//  - - - - - - - - - - - - - - - menu - - - - - - - - - - - - - - - - - 
+	$('#panel').css('width','right')
+	$(this).buildMenu();
+
+//  - - - - - - - - - - - - - - module - - - - - - - - - - - - - - - - - 
+	$("<h3/>").text("Tools").appendTo('#module');
+//  - - - - - - - - - - - - - - cir_code  - - - - - - - - - - - - - - - - 
+	$("<div/>", {id:"cir_cont"}).appendTo('#code');
+	$("<h2/>").text("circuit code").appendTo('#cir_cont');
+	$("<div/>", {id:"cir_code"}).addClass('off').appendTo('#cir_cont');
+	$('#cir_cont h2').click(function(e){
+		if( $(this).hasClass('open') ){ 
+			$(this).removeClass('open');
+			$('#cir_code').removeClass('on').addClass('off');
+		}
+		else{
+			$(this).addClass('open');
+			$('#cir_code').removeClass('off').addClass('on');
+		}
+	});
+//  - - - - - - - - - - - - - - svg_code  - - - - - - - - - - - - - - - - 
+	$("<div/>", {id:"svg_cont"}).appendTo('#code');
+	$("<h2/>").text("SVG code").appendTo('#svg_cont');
+	$("<div/>", {id:"svg_code"}).addClass('off').appendTo('#svg_cont');
+	$('#svg_cont h2').click(function(e){
+		if( $(this).hasClass('open') ){ 
+			$(this).removeClass('open');
+			$('#svg_code').removeClass('on').addClass('off');
+		}
+		else{
+			$(this).addClass('open');
+			$('#svg_code').removeClass('off').addClass('on');
+		}
+	});
+
+//  - - - - - - - - - - - - - - library  - - - - - - - - - - - - - - - - 
+// http://think2loud.com/reading-xml-with-jquery/
+	$("<div/>", {id:"libcontent"}).appendTo('#module');
+	$("<h2/>").text("Library").addClass('open').appendTo('#libcontent');
+	$("<ul/>", {id:"elements"}).appendTo('#libcontent');
+	$("<div/>", {id:"libpreview"}).appendTo('#libcontent');
+	$("#libpreview").svg(); 
+	$('#libcontent h2').click(function(e){
+		if( $(this).hasClass('open') ){ 
+			$(this).removeClass('open');
+			$('#elements').removeClass('on').addClass('off');
+			$('#libpreview').removeClass('on').addClass('off');
+		}
+		else{
+			$(this).addClass('open');
+			$('#elements').removeClass('off').addClass('on');
+			$('#libpreview').removeClass('off').addClass('on');
+		}
+	});
+	$.ajax({
+		type: "GET",
+		url: "library/library.xml",
+		dataType: "xml",
+		success: function(xml) {
+			$(xml).find('element').each(function(){
+				$("<li/>", { id: $(this).attr('id')})
+					.addClass('lib')
+					.text( $(this).children('name').text() )
+					.appendTo('#elements')
+					.click(function (e) { $(this).setAddMode(e); });
+			});
+			//	Library loaded and list of elements is build.
+		}
+	});
+
+//  - - - - - - - - - - - - - - wire  - - - - - - - - - - - - - - - - 
+	$("<div/>", {id:"wirecontent"}).appendTo('#module');
+	$("<h2/>").text("Wire").addClass('open').appendTo('#wirecontent');
+	$("<ul/>", {id:"wireTypes"}).appendTo('#wirecontent');
+	$('#wirecontent h2').click(function(e){
+		if( $(this).hasClass('open') ){ 
+			$(this).removeClass('open');
+			$('#wireTypes').removeClass('on').addClass('off');
+		}
+		else{
+			$(this).addClass('open');
+			$('#wireTypes').removeClass('off').addClass('on');
+		}
+	})
+	$.ajax({
+		type: "GET",
+		url: "library/wire.xml",
+		dataType: "xml",
+		success: function(xml) {
+			$(xml).find('wireType').each(function(){
+				$("<li/>", { id: $(this).children('id').text()})
+					.addClass('lib')
+					.text( $(this).children('name').text() )
+					.appendTo('#wireTypes')
+					.click(function(e){ $(this).drawWire(e); });
+			});
+			//	Knjižnjica elementov za risanje je naložena in seznam zgrajen.
+		}	
+	});
+
+	$XMLroot.append(
+		$('<circuit />').append(
+			$('<graph />').append(
+				$('<nodes />')
+			)
+		).append(
+			$('<labels />')
+		)
+	);
+
+	$("<div/>").text("Designing for change, Not profit").appendTo('#panel').css('font-size','24px').css('float','right');
+	$.updateCode();
+}); // ============== END READY =======================================
+
+$(document).keydown(function(e) {
+	e.preventDefault();
+	var svg = $("#svg").svg("get");
+	if (e.keyCode == 13) {    // enter
+//		$('.save').click();
+	}
+	if (e.keyCode == 27) {   // esc
+		$(this).unbindAll(e);
+	}
+	if (e.ctrlKey && e.keyCode == 83) {
+		e.keyCode = 0;
+		alert("Shranjeno (BO)");
+	}
+//	if (e.ctrlKey && e.button == 1) {
+	if (e.ctrlKey && e.which == 1) {
+		alert("Označeno (BO)");
+	}
+
+	$.updateCode(); //za kontrolo prikažemo SVG kodo.
+});
+
+// - - - - - - - - - - - - - - -  lastne f-je  - - - - - - - - - - - - -
+$.switchMode = function(mode){
+	if($('#svg').hasClass("add")){
+		$.cancelAdd();		//from element mode, clear jobs
+	}
+	else if($('#svg').hasClass("wire")){
+		$.cancelWire();
+	}
+	else if($('#svg').hasClass("move")){
+		$.cancelMove();
+	}
 	
-	var lib = document.getElementById("panel");
-	lib.style.width=window.innerWidth-20+"px";
+	$('#svg').addClass(mode);
 }
 
-	</script>
+// funkcija onemogoči vse dogodke
+$.fn.unbindAll = function(e) {
+	$.cancelWire();
+	$.cancelAdd();
+	$('#svg').unbind( 'mousemove' );
+	$('.chosen').removeClass('chosen').removeClass('hilite');
+	$('.selected').removeClass('selected');
+}
+
+$.snap = function(X, Y){
+	var x,y;
+	if(snap){
+		x = Math.round(X/gridSep)*gridSep;// - gridSep/4.0;
+		y = Math.round(Y/gridSep)*gridSep;// - gridSep/4.0;
+	}
+	else{
+		x = X; y = Y;
+	}
+	return {'x':x,'y':y};
+}
+
+$.updateCode = function(){
+   	var svg = $('#svg').svg('get');
+	var SVG = svg.toSVG().replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/&gt;&lt;/g, "&gt;<br />&lt;");
+	$('#svg_code').html( SVG );
+	var CIR = $XMLroot.html().replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/&gt;&lt;/g, "&gt;<br />&lt;");
+	$('#cir_code').html( CIR );
+}
+
+$.fn.hasClassSVG = function(classes){
+	var cls = $(this).attr('class').baseVal.split(" ");
+	var res = jQuery.inArray(classes, cls);
+	return res > -1;
+}
+$.fn.setClassSVG = function(classes){
+	var svg = $('#svg').svg('get');
+	var SVG = svg.getElementById( $(this).attr('id') );
+	svg.change( SVG, {'class': classes});
+	console.debug( SVG );
+}
+$.fn.addClassSVG = function(classes){
+	var cls = $(this).attr('class').baseVal + ' ' + classes;
+	var svg = $('#svg').svg('get');
+	var SVG = svg.getElementById( $(this).attr('id') );
+	svg.change( SVG, {'class': cls});
+	console.debug( SVG );
+}
+$.fn.removeClassSVG = function(classes){
+	var cls = $(this).attr('class').baseVal.split(" ");
+	var res = jQuery.inArray(classes, cls);
+	if(res>-1)
+		cls[res] = "";
+	var svg = $('#svg').svg('get');
+	var SVG = svg.getElementById( $(this).attr('id') );
+	svg.change( SVG, {'class': cls.join(" ")});
+}
+
+$.fn.removeSVG = function(){
+	$("#svg").svg("get").remove( $(this) );
+}
+
+$.fn.exists = function(){return jQuery(this).length>0;}
+</script>
 </head>
-
-
-<body bgcolor="#eeddbb" onload="prepare()" leftmargin="0" topmargin="0" bottommargin="0" rightmargin="10">
-<div id="panel" class="panel">File(save, export), analysis(op, ac, transient), help(about) </div>
-<div id="canvas" class="canvas"></div>
-
+<body>
+<div id="svg" width="100%"></div>
+<div id="head" width="100%"><div id="panel" width="100%"></div></div>
+<div id="module"></div>
+<div id="code"></div>
 </body>
 </html>
 

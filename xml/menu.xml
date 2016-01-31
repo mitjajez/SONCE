@@ -1,0 +1,182 @@
+<?xml version="1.0" standalone="no"?>
+<!--
+@Author: Mitja Jež
+@Mail:mitja AT xn--je-3va.si
+@Date:22.nov.2010
+@Version: 2.0.0
+
+values are for translate
+-->
+<main_menu>
+	<item>
+		<id>home</id>
+		<value>Home</value>
+	</item>
+	<item>
+		<id>circuit</id>
+		<value>Circuit</value>
+		<menu>
+		<item>
+			<id>new</id>
+			<value>New</value>
+			<icon></icon>
+			<shortcut>Ctrl+N</shortcut>
+		</item>
+		<item>
+			<id>save</id>
+			<value>Save</value>
+			<icon></icon>
+			<shortcut>Ctrl+S</shortcut>
+			<menu>
+				<item>
+					<id>save-as</id>
+					<value>Save As</value>
+					<icon></icon>
+					<shortcut>Ctrl+Shift+S</shortcut>
+				</item>
+				<item>
+					<id>save-in</id>
+					<value>Save In</value>
+					<icon></icon>
+					<shortcut></shortcut>
+				</item>
+			</menu>
+		</item>
+		<item>
+			<id>open</id>
+			<value>Open</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		<item>
+			<id>settings</id>
+			<value>Settings</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		<item>
+			<id>print</id>
+			<value>Print</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		</menu>
+	</item>
+	<item>
+		<id>edit</id>
+		<value>Edit</value>
+		<icon></icon>
+		<shortcut></shortcut>
+		<menu>
+		<item>
+			<id>rotate-cw</id>
+			<value>Rotate CW</value>
+			<icon></icon>
+			<shortcut>Ctrl+R</shortcut>
+		</item>
+		<item>
+			<id>rotate-ccw</id>
+			<value>Rotate CCW</value>
+			<icon></icon>
+			<shortcut>Ctrl+Shift+R</shortcut>
+		</item>
+		<item>
+			<id>flip-h</id>
+			<value>Flip Horizontaly</value>
+			<icon></icon>
+			<shortcut>Shift+H</shortcut>
+		</item>
+		<item>
+			<id>flip-v</id>
+			<value>Flip Vertically</value>
+			<icon></icon>
+			<shortcut>Shift+V</shortcut>
+		</item>
+		<item>
+			<id>preferences</id>
+			<value>Preferences</value>
+			<icon></icon>
+			<shortcut>Shift+V</shortcut>
+		</item>
+		</menu>
+	</item>
+	<item>
+		<id>analysis</id>
+		<value>Analysis</value>
+		<icon></icon>
+		<shortcut></shortcut>
+		<menu>
+		<item>
+			<id>dc-simulation</id>
+			<value>DC Simulation</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		<item>
+			<id>dc-sweep</id>
+			<value>DC Sweep</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		<item>
+			<id>td-simulation</id>
+			<value>Time Domain Simulation</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		<item>
+			<id>fd-simulation</id>
+			<value>Frequency Domain Simulation</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		</menu>
+	</item>
+	<item>
+		<id>view</id>
+		<value>View</value>
+		<icon></icon>
+		<shortcut></shortcut>
+		<menu>
+		<item>
+			<id>toolbar</id>
+			<value>Toolbar</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		<item>
+			<id>statusbar</id>
+			<value>Statusbar</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		</menu>
+	</item>
+	<item>
+		<id>help</id>
+		<value>Help</value>
+		<icon></icon>
+		<shortcut></shortcut>
+		<menu>
+		<item>
+			<id>about</id>
+			<value>About</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		<item>
+			<id>donate</id>
+			<value>Donate</value>
+			<icon></icon>
+			<shortcut></shortcut>
+		</item>
+		<item>
+			<id>calculator</id>
+			<value>Calculator</value>
+			<icon></icon>
+			<shortcut></shortcut>
+			<link>http://www.wolframalpha.com</link>
+		</item>
+		</menu>
+	</item>
+</main_menu>

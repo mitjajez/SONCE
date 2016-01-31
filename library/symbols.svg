@@ -1,0 +1,219 @@
+<?xml version="1.0" standalone="no"?>
+<?xml-stylesheet type="text/css" href="symbols.css" ?>
+<!--
+@Author: Mitja Jež
+@Mail:mitja.jez AT slap.si
+@Date:25.jul.2011
+@Version: 2.0.0
+-->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<circle id="round" cx="0" cy="0" r="20" class="round" />
+</defs>
+
+<g id="r" name="r"><!-- resistor -->
+<line x1="0" y1="-40" x2="0" y2="-25" class="line"/>
+<line x1="0" y1="25" x2="0" y2="40" class="line"/>
+<rect x="-10" y="-25" rx="3" ry="3" width="20" height="50" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="l" name="l"><!-- inductor -->
+<line x1="0" y1="-40" x2="0" y2="-30" class="line" />
+<line x1="0" y1="30" x2="0" y2="40" class="line"/>
+<path d="M0,-30 a5,5 90 0,1 0,20 a5,5 90 0,1 0,20 a5,5 90 0,1 0,20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="c" name="c"><!-- capacitor -->
+<line x1="0" y1="-30" x2="0" y2="-3" class="line"/>
+<line x1="0" y1="3" x2="0" y2="30" class="line"/>
+<line x1="-12" y1="-3" x2="12" y2="-3" class="line"/>
+<line x1="-12" y1="3" x2="12" y2="3" class="line"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="v" name="v"><!-- voltage -->
+<line x1="0" y1="-40" x2="0" y2="-20" class="line"/>
+<line x1="0" y1="20" x2="0" y2="40" class="line"/>
+<circle cx="0" cy="0" r="20" class="border"/>
+<line x1="-3" y1="-10" x2="3" y2="-10" class="line"/>
+<line x1="0" y1="-13" x2="0" y2="-7" class="line"/>
+<line x1="-3" y1="10" x2="3" y2="10" class="line"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="i" name="i"><!-- currnet -->
+<line x1="0" y1="-40" x2="0" y2="-20" class="line"/>
+<line x1="0" y1="20" x2="0" y2="40" class="line"/>
+<circle cx="0" cy="0" r="20" class="border"/>
+<line x1="0" y1="-10" x2="0" y2="10" class="line"/>
+<path d="M0 -10 L-5 0 H5 Z" class="fill"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="d" name="d">
+<line x1="0" y1="-30" x2="0" y2="30" class="line"/>
+<line x1="-10" y1="-10" x2="10" y2="-10" class="line"/>
+<path d="M0 -10 L-10 10 H10 Z" class="fill" />
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="zener" name="zener">
+<line x1="0" y1="-40" x2="0" y2="-20" class="line"/>
+<line x1="0" y1="20" x2="0" y2="40" class="line"/>
+<line x1="-10" y1="-20" x2="10" y2="-20" class="line"/>
+<line x1="-10" y1="20" x2="10" y2="-20" class="line"/>
+<path d="M0 0 L-10 20 H10 Z" class="fill" />
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="BJT-PNP" name="BJT-PNP">
+<line x1="10" y1="-30" x2="10" y2="-15" class="line"/>
+<line x1="10" y1="30" x2="10" y2="15" class="line"/>
+<line x1="-30" y1="0" x2="-6" y2="0" class="line"/>
+<line x1="-5" y1="-12" x2="-5" y2="12" class="line"/>
+<line x1="-5" y1="-3" x2="10" y2="-15" class="line"/>
+<line x1="-5" y1="3" x2="10" y2="15" class="line"/>
+<path d="M0 -7 L5 -15 L9 -10 Z" class="fill"/>
+<circle cx="3" cy="0" r="20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="BJT-NPN" name="BJT-NPN">
+<line x1="10" y1="-30" x2="10" y2="-15" class="line"/>
+<line x1="10" y1="30" x2="10" y2="15" class="line"/>
+<line x1="-30" y1="0" x2="-6" y2="0" class="line"/>
+<line x1="-5" y1="-12" x2="-5" y2="12" class="line"/>
+<line x1="-5" y1="-3" x2="10" y2="-15" class="line"/>
+<line x1="-5" y1="3" x2="10" y2="15" class="line"/>
+<path d="M8 14 L4 6 L0 11 Z" class="fill"/>
+<circle cx="3" cy="0" r="20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="JFET-P" name="JFET-P">
+<line x1="10" y1="-40" x2="10" y2="-10" class="line"/>
+<line x1="10" y1="40" x2="10" y2="10" class="line"/>
+<line x1="-40" y1="-10" x2="-6" y2="-10" class="line"/>
+<line x1="-5" y1="-14" x2="-5" y2="14" class="line"/>
+<line x1="-5" y1="-10" x2="10" y2="-10" class="line"/>
+<line x1="-5" y1="10" x2="10" y2="10" class="line"/>
+<path d="M-15 -10 L-8 -13 V-7 Z" class="fill"/>
+<circle cx="-1" cy="0" r="22" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="JFET-N" name="JFET-N">
+<line x1="10" y1="-30" x2="10" y2="-10" class="line"/>
+<line x1="10" y1="30" x2="10" y2="10" class="line"/>
+<line x1="-30" y1="10" x2="-6" y2="10" class="line"/>
+<line x1="-5" y1="-14" x2="-5" y2="14" class="line"/>
+<line x1="-5" y1="-10" x2="10" y2="-10" class="line"/>
+<line x1="-5" y1="10" x2="10" y2="10" class="line"/>
+<path d="M-8 10 L-15 13 V7 Z" class="fill"/>
+<circle cx="-1" cy="0" r="22" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="MOSFET-P-enh" name="MOSFET-P-enh">
+<line x1="10" y1="-30" x2="10" y2="0" class="line"/>
+<line x1="10" y1="30" x2="10" y2="10" class="line"/>
+<line x1="-30" y1="-10" x2="-9" y2="-10" class="line"/>
+<line x1="-9" y1="-10" x2="-9" y2="10" class="line"/>
+<line x1="-5" y1="-14" x2="-5" y2="-6" class="line"/>
+<line x1="-5" y1="-4" x2="-5" y2="4" class="line"/>
+<line x1="-5" y1="14" x2="-5" y2="6" class="line"/>
+<line x1="-5" y1="-10" x2="10" y2="-10" class="line"/>
+<line x1="-5" y1="10" x2="10" y2="10" class="line"/>
+<line x1="-6" y1="0" x2="10" y2="0" class="line"/>
+<path d="M6 0 L-1 3 V-3 Z" class="fill"/>
+<circle cx="0" cy="0" r="20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="MOSFET-N-enh" name="MOSFET-N-enh">
+<line x1="10" y1="-30" x2="10" y2="-10" class="line"/>
+<line x1="10" y1="30" x2="10" y2="0" class="line"/>
+<line x1="-30" y1="10" x2="-9" y2="10" class="line"/>
+<line x1="-9" y1="-10" x2="-9" y2="10" class="line"/>
+<line x1="-5" y1="-14" x2="-5" y2="-6" class="line"/>
+<line x1="-5" y1="-4" x2="-5" y2="4" class="line"/>
+<line x1="-5" y1="14" x2="-5" y2="6" class="line"/>
+<line x1="-5" y1="-10" x2="10" y2="-10" class="line"/>
+<line x1="-5" y1="10" x2="10" y2="10" class="line"/>
+<line x1="-6" y1="0" x2="10" y2="0" class="line"/>
+<path d="M-1 0 L6 3 V-3 Z" class="fill"/>
+<circle cx="0" cy="0" r="20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="MOSFET-P" name="MOSFET-P">
+<line x1="10" y1="-30" x2="10" y2="-10" class="line"/>
+<line x1="10" y1="30" x2="10" y2="10" class="line"/>
+<line x1="-30" y1="0" x2="-15" y2="0" class="line"/>
+<circle cx="-12" cy="0" r="2" class="border"/>
+<line x1="-9" y1="-10" x2="-9" y2="10" class="line"/>
+<line x1="-5" y1="-14" x2="-5" y2="14" class="line"/>
+<line x1="-5" y1="-10" x2="10" y2="-10" class="line"/>
+<line x1="-5" y1="10" x2="10" y2="10" class="line"/>
+<circle cx="0" cy="0" r="20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="MOSFET-N" name="MOSFET-N">
+<line x1="10" y1="-30" x2="10" y2="-10" class="line"/>
+<line x1="10" y1="30" x2="10" y2="10" class="line"/>
+<line x1="-30" y1="0" x2="-9" y2="0" class="line"/>
+<line x1="-9" y1="-10" x2="-9" y2="10" class="line"/>
+<line x1="-5" y1="-14" x2="-5" y2="14" class="line"/>
+<line x1="-5" y1="-10" x2="10" y2="-10" class="line"/>
+<line x1="-5" y1="10" x2="10" y2="10" class="line"/>
+<circle cx="0" cy="0" r="20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="MOSFET-P-dep" name="MOSFET-P-dep">
+<line x1="10" y1="-30" x2="10" y2="0" class="line"/>
+<line x1="10" y1="30" x2="10" y2="10" class="line"/>
+<line x1="-30" y1="-10" x2="-9" y2="-10" class="line"/>
+<line x1="-9" y1="-10" x2="-9" y2="10" class="line"/>
+<line x1="-5" y1="-14" x2="-5" y2="14" class="line"/>
+<line x1="-5" y1="-10" x2="10" y2="-10" class="line"/>
+<line x1="-5" y1="10" x2="10" y2="10" class="line"/>
+<line x1="-6" y1="0" x2="10" y2="0" class="line"/>
+<path d="M6 0 L-1 3 V-3 Z" class="fill"/>
+<circle cx="0" cy="0" r="20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="MOSFET-N-dep" name="MOSFET-N-dep">
+<line x1="10" y1="-30" x2="10" y2="-10" class="line"/>
+<line x1="10" y1="30" x2="10" y2="0" class="line"/>
+<line x1="-30" y1="10" x2="-9" y2="10" class="line"/>
+<line x1="-9" y1="-10" x2="-9" y2="10" class="line"/>
+<line x1="-5" y1="-14" x2="-5" y2="14" class="line"/>
+<line x1="-5" y1="-10" x2="10" y2="-10" class="line"/>
+<line x1="-5" y1="10" x2="10" y2="10" class="line"/>
+<line x1="-6" y1="0" x2="10" y2="0" class="line"/>
+<path d="M-1 0 L6 3 V-3 Z" class="fill"/>
+<circle cx="0" cy="0" r="20" class="border"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+<g id="ic_op_amp" name="ic"><!-- operational amplifier -->
+<line x1="25" y1="0" x2="40" y2="0" class="line"/>
+<line x1="-25" y1="20" x2="-40" y2="20" class="line"/>
+<line x1="-25" y1="-20" x2="-40" y2="-20" class="line"/>
+<path d="M25 0 L-25 35 V-35 Z" class="border"/>
+<line x1="-20" y1="20" x2="-14" y2="20" class="mark"/>
+<line x1="-20" y1="-20" x2="-14" y2="-20" class="mark"/>
+<line x1="-17" y1="17" x2="-17" y2="23" class="mark"/>
+<use xlink:href="#round" x="0" y="0" />
+</g>
+
+</svg>

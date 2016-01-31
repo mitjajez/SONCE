@@ -1,0 +1,41 @@
+svg{
+	background-color:black;
+}
+.round{
+	fill:white;
+	fill-opacity:0;
+	stroke:white;
+	stroke-opacity:0;
+}
+.wire{
+}
+.line{
+	stroke:white;
+	stroke-width:2;
+}
+.border {
+	fill:white;
+	fill-opacity:0;
+	stroke-width:2;
+	stroke:white;
+}
+.fill {
+	fill:white;
+	stroke-width:2;
+	stroke:white;
+}
+.mark {
+	stroke:white;
+}
+
+.connection{
+/*	visibility:hidden;*/
+	stroke-width:3;
+	fill:white;
+	fill-opacity:0;
+	stroke-width:0.5;
+	stroke:#00ff00;
+}
+.connection:hover{
+	visibility:visible;
+}
