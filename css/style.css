@@ -10,11 +10,10 @@ body {
 }
 
 div#head{ position: fixed; top: 0; left:0; width:100%;}
-div#panel{ margin:10px 180px 10px 10px; padding:3px; height:20px; border:solid 1px red; }
-div#svg{ margin:50px 180px 10px 10px; padding:0px; height:1000px; border:solid 1px red; }
+div#panel{ margin:10px 10px 10px; padding:3px; height:20px; border:solid 1px red; }
+div#svg{ margin:50px 10px 10px; padding:0px; height:1000px; border:solid 1px red; }
 div#module{ position: fixed; top: 50px; left:10px; margin:3px; padding:3px; width:200px; border:solid 1px yellow; }
-div#ptc{ position: fixed; top: 10px; right:10px; width: 160px; height:600px; margin:0px; padding:0px; text-align:center;}
-div#code{ position: fixed; top: 50px; right:180px; overflow:auto; width: 400px; margin:3px; padding:0px;}
+div#code{ position: fixed; top: 50px; right:10px; overflow:auto; width: 400px; margin:3px; padding:0px;}
 #cir_code, #svg_code{ margin:3px 0px; overflow:auto; max-height:400px; border:1px solid green;}
 /*div#cir_code{ position: absolute; top: 50px; right:180px; overflow:auto; width: 130px; height:200px; margin:0px; padding:0px;}
 div#svg_code{ position: absolute; bottom: 100px; right:180px; overflow:auto; width: 400px; height:300px; margin:0px; padding:0px;}*/
