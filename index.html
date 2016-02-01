@@ -1,3 +1,4 @@
+<?xml version="1.0" standalone="no"?>
 <!DOCTYPE html>
 <!--
 @Author: Mitja Jež
@@ -26,10 +27,9 @@
 	<link href="css/jquery.svg.css" rel="stylesheet" type="text/css"/>
 
 	<!-- JQuery -->
-	<script type="text/javascript" src="../SONCE-JS/jquery-for-svg-1.4.2.min.js"></script>
-	<script type="text/javascript" src="../SONCE-JS/jquery-ui-1.8.7.custom.min.js"></script>
-	<script type="text/javascript" src="../SONCE-JS/jquery.svg-modifed.js"></script>
-	<script type="text/javascript" src="../SONCE-JS/jquery.svgdom.js"></script>
+	<script type="text/javascript" src="js/jquery-for-svg-1.4.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.7.custom.min.js"></script>
+	<script type="text/javascript" src="js/jquery.svg-modifed.js"></script>
 
 	<!-- JS -->
 	<script type="text/javascript" src="js/sonce_menu.js"></script>
@@ -56,15 +56,16 @@ $(document).ready(function(){
    	var svg = $('#svg').svg('get');
 	var pos = $('#svg').position();
 //  - - - - - - - - - - - - - - - menu - - - - - - - - - - - - - - - - - 
-	$('#panel').css('width','right')
+	$('#panel').css('width','right');
 	$(this).buildMenu();
 
 //  - - - - - - - - - - - - - - module - - - - - - - - - - - - - - - - - 
 	$("<h3/>").text("Tools").appendTo('#module');
+
 //  - - - - - - - - - - - - - - cir_code  - - - - - - - - - - - - - - - - 
 	$("<div/>", {id:"cir_cont"}).appendTo('#code');
 	$("<h2/>").text("circuit code").appendTo('#cir_cont');
-	$("<div/>", {id:"cir_code"}).addClass('off').appendTo('#cir_cont');
+	$("<div/>", {id:"cir_code"}).appendTo('#cir_cont');
 	$('#cir_cont h2').click(function(e){
 		if( $(this).hasClass('open') ){ 
 			$(this).removeClass('open');
@@ -75,6 +76,7 @@ $(document).ready(function(){
 			$('#cir_code').removeClass('off').addClass('on');
 		}
 	});
+
 //  - - - - - - - - - - - - - - svg_code  - - - - - - - - - - - - - - - - 
 	$("<div/>", {id:"svg_cont"}).appendTo('#code');
 	$("<h2/>").text("SVG code").appendTo('#svg_cont');
