@@ -1,0 +1,13 @@
+ERROR: Unexpected mongo exit code 1. Restarting.
+Rešitev:
+sudo dpkg-reconfigure locales
+en_US.UTF-8 UTF-8
+sl_SI.UTF-8 UTF-8
+
+//    meteor add force-ssl
+//    meteor add fourseven:scss
+
+//    meteor remove blaze-html-templates
+//    meteor add peerlibrary:blaze-components
+
+//    meteor add underscore

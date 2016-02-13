@@ -1,0 +1,84 @@
+{
+	"version": "",
+	"grid":"10",
+	"elements": [
+		{
+			"key": "r",
+			"name": "Resistor",
+			"types": "",
+			"footprint": "",
+			"model": ""
+		},
+		{
+			"key": "l",
+			"name": "Inductor",
+			"types": "",
+			"footprint": "",
+			"model": ""
+		},
+		{
+			"key": "c",
+			"name": "Capacitor",
+			"types": "",
+			"sim": "c",
+			"footprint": "",
+			"model": ""
+		},
+		{
+			"key": "v",
+			"name": "Voltage",
+			"types": "",
+			"sim": "v",
+			"footprint": "",
+			"model": ""
+		},
+		{
+			"key": "i",
+			"name": "Currnet",
+			"types": "",
+			"sim": "i",
+			"footprint": "",
+			"model": ""
+		},
+		{
+			"key": "d",
+			"name": "Diode",
+			"types": ["rectifier", "zener", "schottky", "varicap", "tunnel", "LED", "foto"],
+			"sim": "d",
+			"footprint": "",
+			"model": ""
+		},
+		{
+			"key": "BJT",
+			"name": "Bipolar junction transistor",
+			"types": ["PNP", "NPN"],
+			"sim": "q",
+			"footprint": "",
+			"model": "Q_type"
+		},
+		{
+			"key": "JFET",
+			"name": "Junction gate field-effect transistor",
+			"types": ["P", "N"],
+			"sim": "j",
+			"footprint": "",
+			"model": "J_"
+		},
+		{
+			"key": "MOSFET",
+			"name": "Metal–oxide–semiconductor field-effect transistor",
+			"types": ["P-enh", "N-enh", "P-enh-B", "N-enh-B", "P-dep", "N-dep"],
+			"sim": "m",
+			"footprint": "",
+			"model": "J_"
+		},
+		{
+			"key": "OA",
+			"name": "Operational Amplifier",
+			"types": ["lm741"],
+			"sim": "m",
+			"footprint": "",
+			"model": ""
+		}
+	]
+}

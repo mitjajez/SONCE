@@ -1,0 +1,262 @@
+<head>
+  <title>Simple ONline Circuit Editor</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="page-header">
+      <h1>Simple ONline Circuit Editor</h1>
+    </div>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed"
+          data-toggle="collapse" data-target="#navbar-collapse-meni" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">SONCE</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="navbar-collapse-meni">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+          <li><a href="#"><i class="fa fa-wrench"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+              aria-haspopup="true" aria-expanded="false">
+              Something <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Something else</a></li>
+              <li><a href="#">Another action</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+              aria-haspopup="true" aria-expanded="false">About <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Help</a></li>
+              <li><a href="#">Another action</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="https://mitja.jež.si" target="_blank">Author</a></li>
+              <li role="separator" class="divider"></li>
+              <li><i class="fa fa-money"></i> Donate <span class="caret"></span>
+                <ul class="dropdown-menu">
+                  <li><a href="#"><i class="fa fa-paypal"></i> PayPal</a></li>
+                  <li><a href="#"><i class="fa fa-btc"></i> BitCoin</a></li>
+                  <li><a href="#"><i class="fa fa-gratipay"></i> Gittip</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+              aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user"></i> Login <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Separated link</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <p class="navbar-text navbar-right">Designing for change, not profit</p>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <div class="row">
+    <div class="sidebar col-md-3 col-sm-4">
+      {{> sidebar}}
+    </div>
+
+    <div class="canvas col-md-6 col-sm-8">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Editing field</h3>
+        </div>
+        <div class="panel-body">
+          <svg width="100%" height="500">
+          </svg>
+        </div>
+        <div class="panel-footer">Statistics</div>
+      </div>
+    </div>
+
+    <div class="code col-md-3 col-sm-12 col-xs-12">
+      koda
+    </div> <!-- code -->
+  </div> <!-- row -->
+</div> <!-- container -->
+<script type="text/javascript" src="/js/svg4everybody.min.js"></script>
+<script>svg4everybody(); // run it now or whenever you are ready</script>
+</body>
+
+
+<template name="sidebar">
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="active">
+      <a href="#grid" aria-controls="grid" role="tab" data-toggle="tab"><i class="fa fa-th"></i></a>
+    </li>
+    <li role="presentation">
+      <a href="#list" aria-controls="list" role="tab" data-toggle="tab"><i class="fa fa-list"></i></a>
+    </li>
+    <li role="presentation">
+      <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"><i class="fa fa-cog"></i></a>
+    </li>
+    <li role="presentation">
+      <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">
+        <i class="fa fa-comments"> logs</i> <span class="badge">4</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="grid">
+      {{> gridOfElements}}
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="list">
+      {{> listOfElements}}
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="settings">
+      <h4 class="list-group-item-heading">Symbols</h4>
+      <div class="symbols-list">
+        {{> SymbolsList}}
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="messages">
+      {{> logs}}
+    </div>
+  </div>
+</template>
+
+
+
+
+<template name="listOfElements">
+  <h4 class="list-group-item-heading">List of elements in library</h4>
+  <div class="elements-list">
+    {{#each elements}}
+      {{> element}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="element">
+  <li class="list-group-item">
+    <div class="input-group">
+      <input type="text" class="form-control" aria-label="..." value="{{element.name}}" disabled>
+    </div>
+  </li>
+</template>
+
+
+<template name="gridOfElements">
+  <h4 class="list-group-item-heading">Grid of elements in library</h4>
+  <div class="elements-grid">
+    {{#each elements}}
+      {{> elementIcon (elArgs element)}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="elementIcon">
+<div class="element col-xs-3 col-sm-4 col-md-3">
+  <div class="thumbnail box .ratio1">
+    <a href="#" title="{{el.name}}">
+      <svg role="img" class="box-content" width="100%" height="100%">
+        <use x="0" y="0" width="100%" height="100%" class="preview"
+          xlink:href="library/symbols.svg#{{symTypes.[0]}}" />
+      </svg>
+    </a>
+  </div>
+</div>
+<div class="toggle-types panel panel-default">
+  <div class="panel-body row">
+  {{#each symType in symTypes}}
+  <div class="col-xs-3 col-sm-4 col-md-3">
+    <div class="thumbnail box .ratio1">
+      <a href="#" title="{{el.key}}-tip">
+        <svg role="img" class="box-content" width="100%" height="100%">
+          <use x="0" y="0" width="100%" height="100%" class="symbol"
+            xlink:href="library/symbols.svg#{{symType}}" />
+        </svg>
+      </a>
+    </div>
+  </div>
+  {{/each}}
+  </div>
+</div>
+</template>
+
+
+<template name="elementOld">
+  <li class="list-group-item {{#if checked}}checked{{/if}}">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox" checked="{{checked}}" class="toggle-checked" aria-label="..." >
+      </span>
+      <input type="text" class="form-control" aria-label="..." value="{{text}}" disabled>
+      <span class="input-group-btn">
+        <button class="delete btn btn-default" type="button"><i class="fa fa-trash"></i></button>
+      </span>
+    </div>
+  </li>
+</template>
+
+<template name="logs">
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+      style="min-width: 2em; width: 60%;">
+      60%
+    </div>
+  </div>
+
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-success">Dapibus ac facilisis in</a>
+    <a href="#" class="list-group-item list-group-item-info">Cras sit amet nibh libero</a>
+    <a href="#" class="list-group-item list-group-item-warning">Porta ac consectetur ac</a>
+    <a href="#" class="list-group-item list-group-item-danger">Vestibulum at eros</a>
+  </div>
+
+  <div class="alert alert-success" role="alert">...</div>
+
+  <div class="alert alert-info" role="alert">
+    <a href="#" class="alert-link">...</a>
+  </div>
+
+  <div class="alert alert-warning alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span></button>
+    <strong>Warning!</strong> Better check yourself, you're not looking too good.
+  </div>
+  <div class="alert alert-danger" role="alert">...</div>
+</template>
