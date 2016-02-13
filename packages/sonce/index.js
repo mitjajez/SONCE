@@ -1,3 +1,5 @@
+console.log( "Index.js" );
+
 if (Meteor.isClient) {
 
 }

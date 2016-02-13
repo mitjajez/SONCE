@@ -5,12 +5,19 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
+  api.versionsFrom('1.2.1');
+
   api.use([
-    'app-index',
-    'app-symbols'
+    'spacebars'
+  ]);
+
+  // 3rd party dependencies.
+  api.use([
+    'peerlibrary:blaze-components'
   ]);
 
   api.addFiles([
+    'elements.html',
     'elements.js'
   ], 'client');
 });

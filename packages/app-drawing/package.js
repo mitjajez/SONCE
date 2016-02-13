@@ -6,7 +6,7 @@ Package.describe({
 
 Package.onUse(function (api) {
   api.use([
-    'app-core'
+//    'mitjajez:sonce'
   ]);
 
   api.addFiles([
