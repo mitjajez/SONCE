@@ -1,3 +1,4 @@
+console.log( "symbols.js" );
 Template.symbol.helpers({
   editMode: function() {
     return Session.equals("editSymbol", this._id) ?

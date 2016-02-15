@@ -1,4 +1,3 @@
-console.log( "elements.js" );
 Template.listOfElements.helpers({
   elements: function () {
     return Elements.find({});
@@ -7,7 +6,6 @@ Template.listOfElements.helpers({
 
 Template.gridOfElements.helpers({
   elements: function () {
-    console.log( "Elements: %o", Elements );
     return Elements.find({});
   },
   elArgs(el) {

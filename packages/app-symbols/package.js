@@ -8,7 +8,6 @@ Package.onUse(function (api) {
   api.versionsFrom('1.2.1');
   // Core dependencies.
   api.use([
-    'spacebars',
   ]);
 
   // 3rd party dependencies.

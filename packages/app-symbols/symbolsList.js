@@ -1,4 +1,4 @@
-Template.SymbolsList.helpers({
+Template.symbolsList.helpers({
   symbols: function () {
     return Symbols.find({});
   }

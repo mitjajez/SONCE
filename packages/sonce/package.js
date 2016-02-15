@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'App index',
-  version: '0.1.0',
+  version: '0.1.1',
   name: 'mitjajez:sonce',
   git: "https://github.com/mitjajez/SONCE.git"
 });
@@ -12,19 +12,16 @@ Package.onUse(function (api) {
   // Internal dependencies.
    api.use([
      'app-elements',
-     'app-symbols'
+     'app-symbols',
+     'app-mongol'
    ]);
 
    // Core dependencies.
   api.use([
-//    'ecmascript',
-//    'meteor-platform',
     'mongo',
+    'minimongo',
     'force-ssl',
-    'spacebars',
-    'jquery',
-    'underscore',
-    'webapp'
+    'jquery'
   ]);
 
   // 3rd party dependencies.
@@ -34,11 +31,11 @@ Package.onUse(function (api) {
     'peerlibrary:blaze-components'
   ]);
 
+  api.export('Elements');
+  api.export('Symbols');
+
   // Expose these to the global namespace
   api.imply([
-    'app-elements',
-    'app-symbols',
-    'peerlibrary:blaze-components'
   ]);
 
   api.addFiles([

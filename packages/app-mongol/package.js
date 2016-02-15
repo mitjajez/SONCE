@@ -1,22 +1,21 @@
 Package.describe({
-  name: 'app-elements',
-  summary: 'Elements library',
+  summary: 'Mongol tool for Mongo Debuging',
   version: '1.0.0'
 });
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.2.1');
 
   api.use([
+    'session'
   ]);
 
   // 3rd party dependencies.
   api.use([
-    'peerlibrary:blaze-components'
+    'msavin:mongol'
   ]);
 
   api.addFiles([
-    'elements.html',
-    'elements.js'
+    'mongol.cfg.js'
   ], 'client');
+
 });

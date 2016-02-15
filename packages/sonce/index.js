@@ -1,9 +1,1 @@
-console.log( "Index.js" );
-
-if (Meteor.isClient) {
-
-}
-
-if (Meteor.isServer) {
-
-}
+console.log( "index.js: " );

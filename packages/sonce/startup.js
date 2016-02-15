@@ -1,7 +1,6 @@
 Meteor.startup(function () {
-  console.log( "Startup" );
   // code to run on server at startup
-  var reset = 1;
+  var reset = 0;
   if(reset){
     Elements.remove({});
     Symbols.remove({});
@@ -22,17 +21,4 @@ Meteor.startup(function () {
       Symbols.insert( {symbol:s} );
     });
   }
-  // On the server
-//
-//      library: function (comment, postId) {
-//      "getLibrary": function () {
-//        return JSON.parse( Assets.getText("library/library.json") );
-//      },
-
-//      "getSymbols": function () {
-//        return JSON.parse( Assets.getText("library/symbols.json") );
-//      }
-//    });
-
-
 });
