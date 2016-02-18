@@ -61,12 +61,14 @@ use.round {
 .line{
 	stroke:white;
 	stroke-width:2;
+  stroke-linecap:round;
 }
 .border {
 	fill:white;
 	fill-opacity:0;
 	stroke-width:2;
 	stroke:white;
+  stroke-linecap:round;
 }
 .fill {
 	fill:white;
@@ -75,6 +77,7 @@ use.round {
 }
 .mark {
 	stroke:white;
+  stroke-linecap:round;
 }
 
 .connection{
@@ -84,6 +87,7 @@ use.round {
 	fill-opacity:0;
 	stroke-width:0.5;
 	stroke:#00ff00;
+  stroke-linecap:round;
 }
 .connection:hover{
 	visibility:visible;
