@@ -1,0 +1,44 @@
+<template name="Components_list">
+	<div class="content">
+		<div class="list-view components-list">
+      <div class="status">
+        <h2>{{_ "Components_List"}}</h2>
+      </div>
+			<form class="js-element-new filter input-symbol">
+				<input type="text" placeholder={{_ 'Type to add new tasks'}}>
+				<span class="icon-add js-element-add">filter</span>
+			</form>
+			<ul class="list clearfix lines grid">
+        {{#each component in components}}
+
+				<li class="component-symbol grid-item">
+						{{> Components_item (componentArgs component "")}}
+
+						{{#if component.types}}
+							<div class="more-types grid">
+								{{#each type in component.types}}
+          				{{> Components_item (componentArgs component type)}}
+        				{{/each}}
+							</div>
+						{{/if}}
+
+				</li>
+
+				{{/each}}
+			</ul>
+<!--      {{#if Template.subscriptionsReady}} -->
+<!--        {{#if hasComponents}}
+          <h2>{{_ "Components_list_empty"}}</h2>
+        {{else}} -->
+          <div class="control">
+            <div class="search-form">
+              <div class="input-line filter">
+<!--                {{> inputAutocomplete settings=autocompleteSettingsAddUser id="component-add-filter" class="filter" placeholder=tFilter}} -->
+              </div>
+            </div>
+          </div>
+<!--        {{/if}} -->
+<!--      {{/if}} -->
+    </div>
+  </div>
+</template>

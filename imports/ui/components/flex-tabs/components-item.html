@@ -1,0 +1,42 @@
+<template name="Components_item">
+  {{#if view_grid}}
+<!--    {{#if hasTypes component}}-->
+    {{#if component.types}}
+      {{#unless type}}
+      <div class="thumbnail box">
+      <a class="js-show-more-types">
+        <svg role="img" class="box-content" width="100%" height="100%"
+          preserveAspectRatio="xMaxYMax meet">
+          <use x="0" y="0" width="100%" height="100%"
+            xlink:href="{{symbolsSVG}}#{{symbolName component ''}}" />
+        </svg>
+        <i class="show-more-types icon-arrow-down" role="button"></i>
+      </a>
+      </div>
+      {{else}}
+      <div class="grid-item thumbnail box">
+        <a class="js-select-component" title="{{component.name}}">
+          <svg role="img" class="box-content" width="100%" height="100%"
+            preserveAspectRatio="xMaxYMax meet">
+            <use x="0" y="0" width="100%" height="100%"
+              xlink:href="{{symbolsSVG}}#{{symbolName component type}}" />
+          </svg>
+        </a>
+      </div>
+      {{/unless}}
+    {{else}}
+      <div class="thumbnail box">
+      <a class="js-select-component" title="{{component.name}}">
+        <svg role="img" class="box-content" width="100%" height="100%"
+          preserveAspectRatio="xMaxYMax meet">
+            <use x="0" y="0" width="100%" height="100%"
+              xlink:href="{{symbolsSVG}}#{{symbolName component type}}" />
+        </svg>
+      </a>
+      </div>
+    {{/if}}
+  {{else}}
+    <a href="#" title="{{component.name}}">{{component.name}}</a>
+     {{_ component.name}}
+  {{/if}}
+</template>

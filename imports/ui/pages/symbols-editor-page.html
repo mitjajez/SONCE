@@ -1,0 +1,9 @@
+<template name="Symbols_editor_page">
+  {{#if sidArray}}
+    {{#each sid in sidArray}}
+      {{> Symbols_editor (symbolArgs sid)}}
+    {{/each}}
+  {{else}}
+    {{> App_notFound}}
+  {{/if}}
+</template>

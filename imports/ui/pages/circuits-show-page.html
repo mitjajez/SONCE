@@ -1,0 +1,9 @@
+<template name="Circuits_show_page">
+  {{#if cidArray}}
+    {{#each cid in cidArray}}
+      {{> Circuits_show (circuitArgs cid)}}
+    {{/each}}
+  {{else}}
+    {{> App_notFound}}
+  {{/if}}
+</template>

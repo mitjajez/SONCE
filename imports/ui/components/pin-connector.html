@@ -1,0 +1,10 @@
+<template name="Pin_connector">
+  {{#let t=element.transform}}
+  <circle id="{{element.name}}-{{pin.id}}" class="pin-connector js-pin" cx="{{pin.x}}" cy="{{pin.y}}" r="3">
+    <!-- {{pinClass pin}} -->
+    {{#if active}}
+    <animate dur="2s" attributeName="r" values="4; 5; 4" repeatCount="indefinite" />
+    {{/if}}
+  </circle>
+  {{/let}}
+</template>

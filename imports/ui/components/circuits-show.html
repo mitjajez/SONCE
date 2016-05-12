@@ -1,0 +1,114 @@
+<template name="Circuits_show">
+  <section class="page circuits-show">
+    <nav class="js-title-nav">
+      {{#momentum plugin="fade"}}
+        {{#if editing}}
+          <form class="js-edit-form circuit-edit-form">
+            <input type="text" name="name" value="{{circuit.name}}">
+            <div class="nav-group right">
+              <a href="#" class="js-cancel nav-item">
+                <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+              </a>
+            </div>
+          </form>
+        {{else}}
+          <div class="nav-group">
+            <a href="#" class="js-menu nav-item">
+              <span class="icon-circuit-unordered" title={{_ 'Show Menu'}}></span>
+            </a>
+          </div>
+
+          <h1 class="js-edit-circuit title-page">
+            <span class="title-wrapper">{{circuit.name}}</span>
+          </h1>
+
+          <div class="nav-group right">
+            <div class="nav-item options-mobile">
+              <select class="circuit-edit">
+                <option disabled selected>{{_ 'Select an action'}}</option>
+                {{#if circuit.userId}}
+                  <option value="public">{{_ 'Make Public'}}</option>
+                {{else}}
+                  <option value="private">{{_ 'Make Private'}}</option>
+                {{/if}}
+                <option value="delete">{{_ 'Delete'}}</option>
+              </select>
+              <span class="icon-cog"></span>
+            </div>
+            <div class="options-web">
+              {{#if cancel}}
+              <a href="#" class="js-cancel nav-item">
+                <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+              </a>
+              {{/if}}
+              {{#if editing}}
+              <a class="js-toggle-circuit-privacy nav-item">
+                {{#if circuit.userId}}
+                  <span class="icon-lock" title={{_ 'Make circuit public'}}></span>
+                {{else}}
+                  <span class="icon-unlock" title={{_ 'Make circuit private'}}></span>
+                {{/if}}
+              </a>
+
+              <a class="js-delete-circuit nav-item">
+                <span class="icon-trash" title={{_ 'Delete circuit'}}></span>
+              </a>
+              {{else}}
+              <a class="js-edit-circuit nav-item">
+                <span class="icon-edit" title={{_ 'Edit circuit'}}></span>
+              </a>
+              {{/if}}
+            </div>
+          </div>
+        {{/if}}
+      {{/momentum}}
+    </nav>
+
+    <svg class="js-circuit-canvas circuit-items {{addingClass}} {{wiringClass}} {{editingClass}}" width="100%" height="100%"
+      preserveAspectRatio="xMinYMin meet">
+
+      {{#if elementsReady}}
+        <defs>
+        </defs>
+        {{#each element in elements}}
+          {{> Elements_item (elementArgs element)}}
+        {{else}}
+          <text class="title-message">{{_ 'No elements here'}}</text>
+          <text class="subtitle-message">{{_ 'Add new elements using the field above'}}</text>
+        {{/each}}
+        {{#each wire in wires}}
+          {{> Wires_item (wireArgs wire)}}
+        {{/each}}
+
+        {{#if selectedElement }}
+        {{#if editing }}
+          {{> Element_edit_menu (elementMenuArgs "")}}
+        {{else}}
+          {{> Element_info (elementMenuArgs "")}}
+        {{/if}}
+        {{/if}}
+
+        {{#if selectedWire }}
+        {{#if editing }}
+          {{> Wire_edit_menu (wireMenuArgs "")}}
+        {{else}}
+<!--          {{> Wire_info (wireMenuArgs "")}} -->
+        {{/if}}
+        {{/if}}
+
+        <text x="10" y="100">Selected element: {{selectedElement}}</text>
+        <text x="10" y="120">Active wire: {{activewire}}</text>
+        <text x="10" y="140">Selected wires: {{selectedWire}}</text>
+
+
+        {{#if editing}}
+          {{> Operations}}
+        {{/if}}
+
+      {{else}}
+          <text class="title-message">{{_ 'Loading elements...'}}</text>
+      {{/if}}
+    </svg>
+
+  </section>
+</template>

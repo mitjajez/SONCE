@@ -1,0 +1,70 @@
+@import './utils.less';
+
+@menu-width: 270px;
+
+body {
+  .position(absolute, 0, 0, 0, 0);
+  background-color: #315481;
+  background-image: linear-gradient(to bottom, #315481, #918e82 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+#sonce {
+  .position(fixed, 0, 0, 0, 0, auto);
+
+  // Hide anything offscreen
+  overflow: hidden;
+}
+
+.side-nav {
+  .position(absolute, 0, 0, 0, 0, @menu-width);
+}
+
+.main-content {
+  .position(fixed, 0, 0, 0, @menu-width, auto);
+  transition: all 200ms ease-out;
+  margin-right: 40px;
+  background: @color-tertiary;
+  opacity: 1;
+  transition: width 0.25s cubic-bezier(0.5, 0, 0.1, 1) 0s;
+
+  @media screen and (min-width: 40em) {
+    left: @menu-width;
+  }
+  .page{
+    .position(absolute, 0, 0, 0, 0, 100%);
+  }
+  .content-scrollable {
+    .position(absolute, 0, 0, 0, 0);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  // Toggle menu on mobile
+  .menu-open & {
+    transform: translate3d(@menu-width, 0, 0);
+    opacity: .85;
+    left: 0;
+
+    @media screen and (min-width: 40em) {
+      // Show menu on desktop, negate .menu-open
+      opacity: 1;
+      left: @menu-width;
+    }
+  }
+}
+
+// Transparent screen to prevent interactions on content when menu is open
+.content-overlay {
+  .position(absolute, 0, 0, 0, 0);
+  cursor: pointer;
+
+  .menu-open & {
+    transform: translate3d(@menu-width, 0, 0);
+    z-index: 1;
+  }
+
+  // Hide overlay on desktop
+  @media screen and (min-width: 40em) { display: none; }
+}

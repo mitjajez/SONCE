@@ -1,0 +1,11 @@
+<template name="Flex_tab_bar">
+	{{#each button in buttons}}
+		{{> Flex_tab_button button=button}}
+	{{/each}}
+</template>
+
+<template name="Flex_tab_button">
+	<div class="tab-button {{active button}} {{visible button}}" title="{{title button}}">
+		<i class="{{button.icon}}" aria-label="{{title button}}" role="button" tabindex="0"></i>
+	</div>
+</template>

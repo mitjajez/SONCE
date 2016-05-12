@@ -1,0 +1,7 @@
+<template name="Wires_item">
+    <path id="{{wire._id}}" name="{{wire.name}}" class="wire" d="{{wire.d}}">
+      {{#if selected }}
+      <animate dur="2s" attributeName="stroke-opacity" values="1; .7; 1" repeatCount="indefinite" />
+      {{/if}}
+    </path>
+</template>

@@ -1,0 +1,24 @@
+<template name="Element_edit_menu">
+  {{#let t=element.transform}}
+  <g class="element-edit-menu" transform="translate({{t.x}},{{t.y}})">
+    <path class="radial-menu-background" stroke-width="50" stroke-linecap="round"
+      d="M-35,35 A50,50 0 0,0 {{xy buttons.length}}"/>
+    {{#each button in buttons}}
+    <g class="{{button.id}} radial-menu-item js-menu-action" data-id="{{button.id}}"
+      transform="translate({{xy button.order}})" xlink:title="{{i18nLabel}}">
+      <circle r="15"/>
+      <use transform="translate(-10,-10)" width="20" height="20" xlink:href="#{{button.icon}}"/>
+    </g>
+    {{/each}}
+
+    <rect class="rect-menu-background" x="-65" y="100" width="250" height="200" rx="10" ry="10" />
+    <foreignObject x="-65" y="100" width="250" height="200">
+      <form>
+          <input type="text" value="{{element.name}}"/>
+          <input type="text" value="{{element.value}}"/>
+      </form>
+    </foreignObject>
+    <circle cx="60" cy="80" r="30" fill="#00ff00" fill-opacity="0.5"/>
+  </g>
+  {{/let}}
+</template>

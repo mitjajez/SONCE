@@ -1,0 +1,22 @@
+<template name="Element_info">
+  {{#let t=element.transform}}
+  <rect class="rect-menu-background" x="{{t.x}}" y="{{t.y}}" rx="10" ry="10" width="300" height="150"/>
+  <g class="rect-menu-item" transform="translate({{t.x}},{{t.y}})">
+    <title>{{element.component}} - {{element.name}}</title>
+    <text class="title" x="150" y="30" text-anchor="middle">{{element.component}}</text>
+    <text class="title" x="10" y="50" text-anchor="start">Name: {{element.name}}</text>
+    <text x="290" y="50" text-anchor="end">;)</text>
+    {{#if element.value}}
+    <text x="290" y="50" text-anchor="end">Value: {{element.value}}</text>
+    {{/if}}
+    <text x="10" y="70" text-anchor="start">Type: {{element.type}}</text>
+    <text x="10" y="90" text-anchor="start">Symbol:
+      <a xlink:href= "/symbols/{{symbol._id}}" xlink:title="Symbol view page">
+        {{element.symbol}}
+      </a>
+    </text>
+    <text x="10" y="110" text-anchor="start">Added: {{showDate element.added}}</text>
+    <text x="10" y="130" text-anchor="start">Modified: {{showDate element.modified}}</text>
+  </g>
+  {{/let}}
+</template>

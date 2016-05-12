@@ -1,0 +1,63 @@
+<template name="App_body">
+  {{#HammerTouchArea gestureMap=templateGestures}}
+    <div id="sonce" class="{{menuOpen}} {{cordova}}">
+
+      <div class="connection-status">
+      {{#unless connected}}
+        <div class="notifications">
+          <div class="notification">
+            <span class="icon-sync"></span>
+            <div class="meta">
+              <div class="title-notification">Trying to connect</div>
+              <div class="description">There seems to be a connection issue</div>
+            </div>
+          </div>
+        </div>
+      {{/unless}}
+      </div>
+      <div class="content-overlay"></div>
+
+      <div class="flex-tab-bar" role="toolbar">
+        {{> Flex_tab_bar}}
+      </div>
+      <div class="main-content {{flexOpened}}">
+        {{#momentum plugin="fade"}}
+          {{#if Template.subscriptionsReady}}
+            {{> Template.dynamic template=main}}
+            <section class="flex-tab">
+              {{> Template.dynamic template=flexTemplate data=flexData}}
+            </section>
+          {{else}}
+            {{> App_loading}}
+          {{/if}}
+        {{/momentum}}
+      </div>
+
+      <aside class="side-nav">
+        {{#if currentUser}}
+          <div class="btns-group-vertical">
+            <a href="#" class="js-user-menu btn-secondary">
+              {{#if userMenuOpen}}
+                <span class="icon-arrow-up"></span>
+                {{else}}
+                <span class="icon-arrow-down"></span>
+              {{/if}}
+
+              {{emailLocalPart}}
+            </a>
+            {{#if userMenuOpen}}
+              <a class="js-logout btn-secondary">{{_ 'Logout'}}</a>
+            {{/if}}
+          </div>
+        {{else}}
+          <div class="btns-group">
+            <a href="{{pathFor 'signin'}}" class="btn-secondary">{{_ 'Sign In'}}</a>
+            <a href="{{pathFor 'join'}}" class="btn-secondary">{{_ 'Join'}}</a>
+          </div>
+        {{/if}}
+
+        {{> Circuits_list}}
+      </aside>
+    </div>
+  {{/HammerTouchArea}}
+</template>

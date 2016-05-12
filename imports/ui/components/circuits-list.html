@@ -1,0 +1,19 @@
+<template name="Circuits_list">
+  <div class="circuits-list">
+    <a class="js-new-circuit link-circuit-new">
+      {{_ "New Circuit"}}
+      <span class="icon-plus"></span>
+    </a>
+
+    {{#each circuit in circuits}}
+      <a href="{{pathFor 'Circuits.show' _id=circuit._id}}" title="{{circuit.name}}"
+          class="circuit-element {{activeCircuitClass circuit}}">
+        {{#if circuit.userId}}
+          <span class="icon-lock"></span>
+        {{/if}}
+
+        {{circuit.name}}
+      </a>
+    {{/each}}
+  </div>
+</template>

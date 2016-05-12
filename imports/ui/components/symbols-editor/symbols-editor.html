@@ -1,0 +1,109 @@
+<template name="Symbols_editor">
+  <section class="page symbols-editor {{editingClass}}">
+    <header>
+    <nav class="js-title-nav">
+      {{#momentum plugin="fade"}}
+        {{#if editing}}
+          <form class="js-edit-title edit-form">
+            <input type="text" name="name" value="{{symbol.title}}">
+            <div class="nav-group right">
+              <a href="#" class="js-cancel nav-item">
+                <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+              </a>
+            </div>
+          </form>
+        {{else}}
+          <div class="nav-group">
+            <a href="#" class="js-menu nav-item">
+              <span class="icon-symbol-unordered" title={{_ 'Show Menu'}}></span>
+            </a>
+          </div>
+
+          <h1 class="js-edit-symbol title-page">
+            <span class="title-wrapper">{{symbol.title}}</span>
+          </h1>
+
+          <div class="nav-group right">
+            <div class="nav-item options-mobile">
+              <select class="symbol-edit">
+                <option disabled selected>{{_ 'Select an action'}}</option>
+                <option value="delete">{{_ 'Delete'}}</option>
+              </select>
+              <span class="icon-cog"></span>
+            </div>
+            <div class="options-web">
+              {{#if instance.state.get 'editing'}}
+              <a href="#" class="js-cancel nav-item">
+                <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+              </a>
+              <a class="js-delete-symbol nav-item">
+                <span class="icon-trash" title={{_ 'Delete symbol'}}></span>
+              </a>
+              {{else}}
+              <a class="js-edit-symbol nav-item">
+                <span class="icon-edit" title={{_ 'Edit symbol'}}></span>
+              </a>
+              {{/if}}
+            </div>
+          </div>
+        {{/if}}
+      {{/momentum}}
+    </nav>
+    </header>
+    <div class="editor-body">
+      <div class="symbol-preview" style="max-width: 500px; max-height: 500px; width: 100%; height: 100%">
+        <svg class="js-symbol-svg {{editingClass}}" width="100%" height="100%"
+          viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <line id="horizontal" x1="-100%" y1="0" x2="100%" y2="0" class="grid-line" />
+            <line id="vertical" x1="0" y1="-100%" x2="0" y2="100%" class="grid-line" />
+          </defs>
+          <use xlink:href="#horizontal" />
+          <use xlink:href="#vertical" />
+          {{#each pin in symbol.pins}}
+          <circle class="connector pin-{{pin.id}}" cx="{{pin.x}}" cy="{{pin.y}}" r="3" />
+          {{/each}}
+        </svg>
+      </div>
+      <div class="symbol-data">
+        <h3>Symbol data:</h3>
+        {{#if editing}}
+        <form class="js-edit-form edit-form">
+          <label for="title">Title</label>:
+          <input id="title" type="text" name="title" value="{{symbol.title}}">
+          <label for="key">Key</label>
+          <input id="key" type="text" name="key" value="{{symbol.key}}">
+          <label for="unit">Unit</label>
+          <input id="unit" type="text" name="unit" placeholder="px" value="{{symbol.unit}}">
+          <label for="svg">SVG</label>
+          <input id="svg" type="text" name="svg" value="{{symbol.svg}}">
+          <label for="width">Width</label>
+          <input id="width" type="text" name="width" value="{{symbol.width}}">
+          <input type="submit" hidden>
+        </form>
+        {{else}}
+        <p><strong>Title</strong>: {{symbol.title}}</p>
+        <p><strong>Key</strong>: {{symbol.key}}</p>
+        <p><strong>Unit</strong>: {{symbol.unit}}</p>
+        <p><strong>SVG</strong>: {{symbol.svg}}</p>
+        {{#if symbol.width}}
+        <p><strong>Width</strong>: {{symbol.width}}</p>
+        {{else}}
+        <p>Width is empty, please update symbol!</p>
+        {{/if}}
+
+        {{/if}}
+        <ul>
+          {{#each pin in symbol.pins}}
+          <li><strong>{{pin.id}}</strong>: [{{pin.x}}, {{pin.y}}]</li>
+          {{/each}}
+        </ul>
+        <h3>SVG code:</h3>
+        <code class="svg-code"></code>
+      </div>
+    </div>
+    <footer>
+      noga
+    </footer>
+  </section>
+</template>

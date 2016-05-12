@@ -1,0 +1,35 @@
+<template name="Symbols_list">
+	<div class="content">
+		<div class="list-view symbols-list">
+      <div class="status">
+        <h2>{{_ "Symbols_List"}}</h2>
+      </div>
+			<form class="js-symbol-new filter input-symbol">
+				<input type="text" placeholder={{_ 'Type to add new tasks'}}>
+				<span class="icon-add js-symbol-add">filter</span>
+			</form>
+			<ul class="list clearfix lines">
+      {{#each symbol in symbols}}
+				<li class="symbols-item">
+						{{> Symbols_item (symbolArgs symbol)}}
+				</li>
+			{{/each}}
+			</ul>
+      {{#if Template.subscriptionsReady}}
+        {{#if hasSymbols}}
+          <h2>{{_ "Symbols_list_empty"}}</h2>
+        {{else}}
+          <div class="control">
+            <div class="search-form">
+              <div class="input-line filter">
+								<!--
+                {{> inputAutocomplete settings=autocompleteSettingsAddUser id="symbol-add-filter" class="filter" placeholder=tFilter}}
+							-->
+              </div>
+            </div>
+          </div>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</template>
