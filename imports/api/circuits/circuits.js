@@ -8,6 +8,8 @@ import { Wires } from '../wires/wires.js';
 class CircuitsCollection extends Mongo.Collection {
   insert(circuit, callback) {
     const ourCircuit = circuit;
+    ourCircuit.created = ourCircuit.created || new Date();
+
     if (!ourCircuit.name) {
       let nextLetter = 'A';
       ourCircuit.name = `Circuit ${nextLetter}`;
@@ -18,7 +20,6 @@ class CircuitsCollection extends Mongo.Collection {
         ourCircuit.name = `Circuit ${nextLetter}`;
       }
     }
-
     return super.insert(ourCircuit, callback);
   }
   remove(selector, callback) {
@@ -38,13 +39,13 @@ Circuits.deny({
 
 Circuits.schema = new SimpleSchema({
   "name": { type: String },
-  "type": { type: String },
+  "type": { type: String, optional: true },
   "created": { type: Date },
-  "modified": { type: Date },
+  "modified": { type: Date, optional: true },
   "elements": { type: Number, defaultValue: 0 },
-  "members": { type: [String] },
-  "moderators": { type: [String] },
-  "owner": { type: Object },
+  "members": { type: [String], optional: true },
+  "moderators": { type: [String], optional: true },
+  "owner": { type: Object, optional: true },
   userId: { type: String, regEx: SimpleSchema.RegEx.Id, optional: true },
 });
 

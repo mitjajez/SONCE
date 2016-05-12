@@ -5,6 +5,7 @@ import { Symbols }        from '../../api/symbols/symbols.js';
 import { Components }     from '../../api/components/components.js';
 import { Circuits }       from '../../api/circuits/circuits.js';
 import { Elements }       from '../../api/elements/elements.js';
+import { Wires }          from '../../api/wires/wires.js';
 
 // if the database is empty on server start, create some sample data.
 Meteor.startup(() => {

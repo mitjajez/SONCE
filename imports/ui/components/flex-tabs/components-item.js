@@ -1,6 +1,6 @@
 import { Template } from 'meteor/peerlibrary:blaze-components';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { Session } from 'meteor/session'
+import { Session } from 'meteor/session';
 import { _ } from 'meteor/underscore';
 
 import './components-item.html';
