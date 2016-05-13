@@ -244,12 +244,38 @@ Template.Circuits_show.events({
     insertElement.call( element, displayError);
   },
 
-  'click .js-pin'(event, instance) {
+  'mouseenter .js-pin'(event, instance) {
     const pin = this.element.name +"-"+ this.pin.id
+    console.log( "MOUSEENTER on PIN "+ pin);
+    const mx = new Snap.Matrix();
+    mx.translate(this.element.transform.x, this.element.transform.y)
+    const rot = this.element.transform.rot;
+    if( rot ) {
+      mx.rotate(this.element.transform.rot)
+    }
+    const px = mx.x(this.pin.x, this.pin.y);
+    const py = mx.y(this.pin.x, this.pin.y);
+    const s = Snap('.js-circuit-canvas');
+    const activePin = s.circle( px, py, 10);
+    activePin.attr({
+      'class': "active js-active-pin",
+      'data-id': pin,
+      'data-element': this.element.name,
+    });
+  },
+
+  'mouseleave .js-active-pin'(event, instance) {
+    const pin = instance.$('.js-active-pin').data('id');
+    const s = Snap('.js-circuit-canvas');
+    s.select('.js-active-pin').remove();
+  },
+
+  'click .js-active-pin'(event, instance) {
+    const $pin = instance.$('.js-active-pin');
+    const pin = $pin.data('id');
     console.log( "CLICK on PIN "+ pin);
-    const data = instance.data;
-    const px = this.element.transform.x + this.pin.x;
-    const py = this.element.transform.y + this.pin.y
+    const px = $pin.attr('cx');
+    const py = $pin.attr('cy');
     let d = "";
     if( instance.state.get('wire') ){
       if( !instance.state.equals('startPin', pin) ) {
@@ -260,11 +286,9 @@ Template.Circuits_show.events({
         d = d + " V "+ py +" H "+ px;
         updateWireD.call( {wid, newD:d}, displayError);
         updateWirePins.call( {wid, newPin:pin}, displayError);
-        instance.state.set('wire', false);
       }
       else {
         console.log( "Cancel wiring" );
-        return;
       }
       instance.state.set('wire', false);
       instance.state.set('startPin', false);
@@ -278,7 +302,7 @@ Template.Circuits_show.events({
   //      type: ,
         d: d,
         pins: [pin],
-        cid: data.circuit()._id,
+        cid: instance.data.circuit()._id,
       };
       const wid = insertWire.call( wire, displayError);
       instance.state.set('wire', wid);
@@ -304,13 +328,27 @@ Template.Circuits_show.events({
     console.log( d );
     updateWireD.call( {wid, newD:d}, displayError);
   },
+
   'click .wire'(event, instance) {
     console.log( "CLICK on WIRE " );
-    this.selected ? this.setSelected( false ) : this.setSelected( true );
     const offset = instance.$('.js-circuit-canvas').offset();
     const X = event.pageX-offset.left;
     const Y = event.pageY-offset.top;
-    instance.state.set( 'menuPosition', "translate("+X+","+Y+")" );
+    const wid = instance.state.get('wire');
+    if( wid ) {
+      console.log( "Stop wiring" );
+//      const wid = instance.state.get('wire');
+      const s = Snap('.js-circuit-canvas');
+      d = s.select("#"+wid).attr("d");
+      d = d + " V "+ Y +" H "+ X;
+      updateWireD.call( {wid, newD:d}, displayError);
+      instance.state.set('wire', false);
+      instance.state.set('startPin', false);
+    }
+    else {
+      this.selected ? this.setSelected( false ) : this.setSelected( true );
+      instance.state.set( 'menuPosition', "translate("+X+","+Y+")" );
+    }
   },
 
   'mousedown .js-cancel, click .js-cancel'(event, instance) {
