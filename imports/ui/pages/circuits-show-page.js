@@ -1,5 +1,6 @@
 import { Template } from 'meteor/peerlibrary:blaze-components';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Session } from 'meteor/session';
 
 import { Circuits } from '../../api/circuits/circuits.js';
 
@@ -14,6 +15,7 @@ Template.Circuits_show_page.onCreated(function circuitsShowPageOnCreated() {
   this.getCircuitId = () => FlowRouter.getParam('_id');
 
   this.autorun(() => {
+    Session.set("openCircuit", this.getCircuitId());
     this.subscribe('elements.inCircuit', this.getCircuitId());
     this.subscribe('wires.inCircuit', this.getCircuitId());
     this.subscribe('symbols.all');

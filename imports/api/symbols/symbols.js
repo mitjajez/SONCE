@@ -40,7 +40,7 @@ Symbols.schema = new SimpleSchema({
   'title': { type: String },
   'unit': { type: String, optional: true  },
   'svg': { type: String },
-  'width': { type: Number },
+  'width': { type: Number, optional: true }, // TODO: remove optional with new symbol library
   'pins': { type: [Object] },
   'pins.$.id': { type: String },
   'pins.$.x': { type: Number },

@@ -12,7 +12,11 @@ const CIRCUIT_ID_ONLY = new SimpleSchema({
 
 export const insertCircuit = new ValidatedMethod({
   name: 'circuits.insert',
-  validate: new SimpleSchema({}).validator(),
+
+  validate: new SimpleSchema({
+//    "name": { type: String, optional: true },
+  }).validator(),
+
   run() {
     return Circuits.insert({});
   },

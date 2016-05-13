@@ -36,6 +36,7 @@ Template.Circuits_list.events({
   'click .js-new-circuit'() {
     const cid = insertCircuit.call((err) => {
       if (err) {
+        console.log( err );
         // At this point, we have already redirected to the new circuit page, but
         // for some reason the circuit didn't get created. This should almost never
         // happen, but it's good to handle it anyway.

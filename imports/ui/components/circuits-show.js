@@ -388,7 +388,7 @@ Template.Circuits_show.events({
       return;
     }
 
-    insert.call({
+    insertElement.call({
       circuitId: this.circuit()._id,
       text: $input.val(),
     }, displayError);
