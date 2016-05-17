@@ -1,23 +1,20 @@
 import { Mongo } from 'meteor/mongo';
 import { Factory } from 'meteor/factory';
-import faker from 'faker';
-
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+//import faker from 'faker';
+
 import { Circuits } from '../circuits/circuits.js';
 import { Symbols } from '../symbols/symbols.js';
 import { Components } from '../components/components.js';
+
 
 class ElementsCollection extends Mongo.Collection {
   insert(doc, callback) {
     const ourDoc = doc;
     ourDoc.added = ourDoc.added || new Date();
 
-    console.log( "pred" );
-    console.log( ourDoc );
-
     if (!ourDoc.name) {
-      let componentKey = Components.findOne({"name": ourDoc.component }, {fields: {key: 1}}).key;
-      console.log(componentKey);
+      let componentKey = Components.findOne({"key": ourDoc.component }, {fields: {key: 1}}).key;
       let nextNumber = Elements.find({"component": ourDoc.component }).count();
       nextNumber = nextNumber ? nextNumber + 1 : 1;
       ourDoc.name = `${componentKey}${nextNumber}`;
@@ -28,10 +25,7 @@ class ElementsCollection extends Mongo.Collection {
         ourDoc.name = `${componentKey}${nextNumber}`;
       }
     }
-    console.log( "potem" );
-    console.log( ourDoc );
-    const result = super.insert(ourDoc, callback);
-    return result;
+    return super.insert(ourDoc, callback);
   }
   update(selector, modifier) {
     const result = super.update(selector, modifier);

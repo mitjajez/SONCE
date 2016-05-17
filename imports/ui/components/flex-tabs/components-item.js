@@ -44,12 +44,12 @@ Template.Components_item.helpers({
 
 Template.Components_item.events({
   'click .js-select-component': function (event, instance) {
-    const symbol = this.type ? this.component.key+"-"+this.type : this.component.key;
+    const symbolName = this.type ? this.component.key+"-"+this.type : this.component.key;
     Session.set("component2add", {
       "name": this.component.name,
       "key": this.component.key,
       "type": this.type,
-      "symbol": symbol,
+      "symbol": symbolName,
 //      "pins": ""
     });
   },

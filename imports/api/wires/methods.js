@@ -114,6 +114,7 @@ export const removeWire = new ValidatedMethod({
     wid: { type: String },
   }).validator(),
   run({ wid }) {
+    console.log( "METHOD wires.remove "+ wid );
     const wire = Wires.findOne(wid);
 
     if (!wire.editableBy(this.userId)) {

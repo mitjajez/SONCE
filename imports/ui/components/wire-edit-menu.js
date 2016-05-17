@@ -45,10 +45,11 @@ Template.Wire_edit_menu.helpers({
 });
 
 Template.Wire_edit_menu.events({
-  'click .wire-edit-menu .js-menu-action'(e,t) {
+  'click .wire-edit-menu .js-menu-action'(event, instance) {
+    console.log( "BUTTON click" );
     // packages/rocketchat-ui/views/app/room.coffee
-    const el = t.$(e.currentTarget);
+    const el = instance.$(event.currentTarget);
     const button = WireAction.getButtonById ( el.data('id') );
-    button.action.call ( this, e, t );
+    button.action.call ( this, event, instance );
   },
 });

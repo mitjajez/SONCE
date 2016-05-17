@@ -24,7 +24,7 @@
 
           <div class="nav-group right">
             <div class="nav-item options-mobile">
-              <select class="circuit-edit">
+              <select class="js-action">
                 <option disabled selected>{{_ 'Select an action'}}</option>
                 {{#if circuit.userId}}
                   <option value="public">{{_ 'Make Public'}}</option>
@@ -54,7 +54,7 @@
                 <span class="icon-trash" title={{_ 'Delete circuit'}}></span>
               </a>
               {{else}}
-              <a class="js-edit-circuit nav-item">
+              <a class="js-edit nav-item">
                 <span class="icon-edit" title={{_ 'Edit circuit'}}></span>
               </a>
               {{/if}}
@@ -64,46 +64,51 @@
       {{/momentum}}
     </nav>
 
-    <svg class="js-circuit-canvas circuit-items {{addingClass}} {{wiringClass}} {{editingClass}}" width="100%" height="100%"
+    <svg class="js-circuit-canvas circuit-items {{actingClass}}" width="100%" height="100%"
       preserveAspectRatio="xMinYMin meet">
 
       {{#if elementsReady}}
         <defs>
         </defs>
+        {{> Active_wire wiring=wiring}}
+        {{> Active_element}}
+
+        <text x="150" y="100" >acting: {{actingClass}} | active: {{active}} | selection: {{selection}}</text>
+
+        {{#each wire in wires}}
+          {{> Wires_item (wireArgs wire)}}
+        {{/each}}
+
         {{#each element in elements}}
           {{> Elements_item (elementArgs element)}}
         {{else}}
           <text class="title-message">{{_ 'No elements here'}}</text>
           <text class="subtitle-message">{{_ 'Add new elements using the field above'}}</text>
         {{/each}}
-        {{#each wire in wires}}
-          {{> Wires_item (wireArgs wire)}}
-        {{/each}}
 
-        {{#if selectedElement }}
         {{#if editing }}
-          {{> Element_edit_menu (elementMenuArgs "")}}
-        {{else}}
-          {{> Element_info (elementMenuArgs "")}}
-        {{/if}}
-        {{/if}}
+          {{#if selectedElement }}
+            <!-- element menu -->
+            {{> Element_edit_menu (elementMenuArgs "")}}
+          {{/if}}
+          {{#if selectedWire }}
+            <!-- wire menu -->
+            {{> Wire_edit_menu (wireMenuArgs "")}}
+          {{/if}}
 
-        {{#if selectedWire }}
-        {{#if editing }}
-          {{> Wire_edit_menu (wireMenuArgs "")}}
-        {{else}}
-<!--          {{> Wire_info (wireMenuArgs "")}} -->
-        {{/if}}
-        {{/if}}
-
-        <text x="10" y="100">Selected element: {{selectedElement}}</text>
-        <text x="10" y="120">Active wire: {{activewire}}</text>
-        <text x="10" y="140">Selected wires: {{selectedWire}}</text>
-
-
-        {{#if editing}}
           {{> Operations}}
+
+        {{else}}
+          {{#if selectedElement }}
+            {{> Element_info (elementMenuArgs "")}}
+          {{/if}}
+          {{#if selectedWire }}
+            <!-- {{> Wire_info (wireMenuArgs "")}} -->
+          {{/if}}
+
         {{/if}}
+
+        {{> Active_pin}}
 
       {{else}}
           <text class="title-message">{{_ 'Loading elements...'}}</text>
