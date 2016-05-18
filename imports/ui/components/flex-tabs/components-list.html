@@ -4,28 +4,33 @@
       <div class="status">
         <h2>{{_ "Components_List"}}</h2>
       </div>
-			<form class="js-element-new filter input-symbol">
-				<input type="text" placeholder={{_ 'Type to add new tasks'}}>
-				<span class="icon-add js-element-add">filter</span>
-			</form>
-			<ul class="list clearfix lines grid">
-        {{#each component in components}}
+			{{> EasySearch.Input index=componentsIndex }}
+				<ul class="list clearfix lines {{viewClass}}">
+		    {{#EasySearch.Each index=componentsIndex }}
 
-				<li class="component-symbol grid-item">
-						{{> Components_item (componentArgs component "")}}
+					<li class="component-symbol">
+					{{#if view_grid}}
 
-						{{#if component.types}}
-							<div class="more-types grid">
-								{{#each type in component.types}}
-          				{{> Components_item (componentArgs component type)}}
-        				{{/each}}
-							</div>
+						{{#if types}}
+							{{> Components_item key=key name=name type=types.[0] }}
+			        <div class="more-types grid" hidden="hidden">
+			          {{#each type in types}}
+									{{> Components_item key=key name=name type=type }}
+				        {{/each}}
+				      </div>
+						{{else}}
+							{{> Components_item key=key name=name type="" }}
 						{{/if}}
 
-				</li>
+					{{else}}
+						<a href="#" title="{{name}}">{{_ name}}</a>
+					{{/if}}
+	      	</li>
+	    	{{/EasySearch.Each}}
+	  		</ul>
 
-				{{/each}}
-			</ul>
+
+
 <!--      {{#if Template.subscriptionsReady}} -->
 <!--        {{#if hasComponents}}
           <h2>{{_ "Components_list_empty"}}</h2>

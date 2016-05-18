@@ -40,6 +40,9 @@ diff-sequence@1.0.5
 dispatch:mocha-core@0.0.1
 dispatch:mocha-phantomjs@0.1.0
 dispatch:phantomjs-tests@0.0.4
+easy:search@2.0.9
+easysearch:components@2.0.9
+easysearch:core@2.0.9
 ecmascript@0.4.3
 ecmascript-runtime@0.2.10
 ejson@1.0.11

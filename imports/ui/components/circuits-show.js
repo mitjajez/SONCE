@@ -53,6 +53,14 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 //  Session.set( "component2add", false);
   Session.setDefault( "selectedPin", false);
 
+  this.state = new ReactiveDict();
+  this.state.setDefault({
+    acting: 'viewing',    // viewing | editing | adding | wiring
+    active: false,        // element | wire | pin
+    selection: false,     //
+    menuPosition: false,  // element center | click coords
+  });
+
   this.autorun(() => {
     new SimpleSchema({
       circuit: { type: Function },
@@ -61,14 +69,11 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 //      wiresReady: { type: Boolean },
       wires: { type: Mongo.Cursor },
     }).validate(Template.currentData());
-  });
 
-  this.state = new ReactiveDict();
-  this.state.setDefault({
-    acting: 'viewing',    // viewing | editing | adding | wiring
-    active: false,        // element | wire | pin
-    selection: false,     //
-    menuPosition: false,  // element center | click coords
+    if( Session.get( "component2add" ) ){
+      this.state.set('acting', "adding");
+    }
+
   });
 
   this.deleteCircuit = () => {
@@ -117,9 +122,6 @@ Template.Circuits_show.helpers({
 
   adding() {
     const instance = Template.instance();
-    if( Session.get( "component2add" ) ){
-      instance.state.set('acting', "adding");
-    }
     return instance.state.equals('acting', "adding");
   },
   editing() {
@@ -278,7 +280,6 @@ Template.Circuits_show.events({
     const $wire = instance.$('.js-active-wire');
     console.log( $wire );
     const $data = $wire.data();
-    instance.state.set('acting', "wiring");
     instance.state.set('startPin', pid);
     // instance.setStartWirePoint({x:px, y:py});
     d = "M"+px+" "+py;
@@ -294,6 +295,7 @@ Template.Circuits_show.events({
 
     console.log( $wire );
     console.log( $wire.data() );
+    instance.state.set('acting', "wiring");
   },
 
   'click .wiring .js-active-pin'(event, instance) {
@@ -328,27 +330,19 @@ Template.Circuits_show.events({
     const X = event.pageX-offset.left;
     const Y = event.pageY-offset.top;
     const $wire = instance.$('.js-active-wire');
-//    const $data = $wire.data('d');
-//    const d = $data.d;
     const d = $wire.data('d');
-//    const s = Snap('.js-circuit-canvas');
-//    const p = s.select(".js-active-wire");
-//    const p = Snap('.js-circuit-canvas').select(".js-active-wire");
     $wire.attr("d", d + " V "+ Y +" H "+ X);
   },
 
   'click .js-circuit-canvas.wiring'(event, instance){
     const offset = instance.$(event.currentTarget).offset();
+    const X = event.pageX-offset.left;
+    const Y = event.pageY-offset.top;
     const $wire = instance.$('.js-active-wire');
     const $data = $wire.data();
-    const s = Snap('.js-circuit-canvas');
-    const d = s.select('.js-active-wire').attr("d");
-    $data.d = d;
-    const wid = instance.state.get('selection');
-    if(wid && !instance.state.equals('selection', ".js-active-wire") ) {
-      updateWireD.call( {wid, newD:d}, displayError);
-    }
-    else {
+    const d = $data.d;
+    $data.d = d + " V "+ Y +" H "+ X;
+    if(instance.state.equals('selection', false) ) {
       const wire = {
         d: $data.d,
         pins: $data.pins,
@@ -357,6 +351,11 @@ Template.Circuits_show.events({
       const wid = insertWire.call( wire, displayError);
       instance.state.set('active', "wire");
       instance.state.set('selection', wid);
+    }
+    else {
+      const wid = instance.state.get('selection');
+      updateWireD.call( {wid, newD:$data.d}, displayError);
+      // instance.addWirePoint({w:, x:px, y:py});
     }
   },
 
@@ -380,7 +379,7 @@ Template.Circuits_show.events({
     const offset = instance.$('.js-circuit-canvas').offset();
     const X = event.pageX-offset.left;
     const Y = event.pageY-offset.top;
-    
+
     const s = Snap('.js-circuit-canvas');
     d = s.select("#"+wid).attr("d");
     d = d + " V "+ Y +" H "+ X;
@@ -390,9 +389,18 @@ Template.Circuits_show.events({
 
   'mousedown .js-cancel, click .js-cancel'(event, instance) {
     event.preventDefault();
-    instance.state.set('acting', "viewing");
-    instance.state.set('active', false);
-    instance.state.set('selection', false);
+    if(Session.get( "component2add" )){
+      Session.set( "component2add", false );
+      instance.state.set('acting', "viewing");
+      instance.$('.js-active-element').attr('visibility',"hidden");
+    }
+    else if ( instance.state.get('active') || instance.state.get('selection')) {
+      instance.state.set('active', false);
+      instance.state.set('selection', false);
+    }
+    else {
+      instance.state.set('acting', "viewing");
+    }
   },
 
   'keydown input[type=text]'(event) {
