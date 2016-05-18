@@ -4,6 +4,7 @@
 **/tmp/*
 .meteor/local*
 
+npm-debug.log
 # ------------- Linux gitignore
 
 *~
