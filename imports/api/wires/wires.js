@@ -19,17 +19,13 @@ class WiresCollection extends Mongo.Collection {
         ourDoc.name = `w${nextNumber}`;
       }
     }
-    const result = super.insert(ourDoc, callback);
-    return result;
+    return super.insert(ourDoc, callback);
   }
   update(selector, modifier) {
-    const result = super.update(selector, modifier);
-    return result;
+    return super.update(selector, modifier);
   }
   remove(selector) {
-    const wires = this.find(selector).fetch();
-    const result = super.remove(selector);
-    return result;
+    return super.remove(selector);
   }
 }
 

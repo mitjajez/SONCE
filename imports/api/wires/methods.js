@@ -122,7 +122,9 @@ export const removeWire = new ValidatedMethod({
         'Cannot remove wires in a private circuit that is not yours');
     }
 
-    Wires.remove(wid);
+    if(wire) {
+      return Wires.remove(wid);
+    }
   },
 });
 
