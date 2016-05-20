@@ -8,6 +8,10 @@
 
 Meteor version of SONCE is up to be used as educational tool and could be the new way of communication with as./prof./mentor while learning electronics by drawing and testing. Get focus on how circuit work and not how to get simulation result. See topology of circuit, see all available matrixes.
 
+# Status & Contributing
+
+SONCE is under heavy development and the amount of functionality will grow in the future. Contributions are welcome.
+
 # Development
 
 ## Quick start for code developers
