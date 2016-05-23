@@ -4,7 +4,6 @@ import { Session } from 'meteor/session';
 import { $ } from 'meteor/jquery';
 import { _ } from 'meteor/underscore';
 
-import './pin-connector.js';
 import './elements-item.html';
 import { Elements } from '../../api/elements/elements.js';
 import { Symbols } from '../../api/symbols/symbols.js';
@@ -46,16 +45,6 @@ Template.Elements_item.helpers({
     }
     return {x: x, y: 0, }
   },
-  pinArgs(pin) {
-    const element = this.element;
-    const symbol = this.symbol;
-    return {
-      element,
-      symbol,
-      pin,
-    }
-  },
-
 });
 
 Template.Elements_item.events({

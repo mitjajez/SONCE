@@ -1,7 +1,20 @@
 <template name="Wires_item">
-    <path id="{{wire._id}}" name="{{wire.name}}" class="js-wire wire" d="{{wire.d}}" data-pins="{{wire.pins}}">
+    <path
+        id="{{wire._id}}"
+        name="{{wire.name}}"
+        xlink:title="{{wire.name}}"
+        class="js-wire circuit-wire wire"
+        d="{{wire.d}}"
+        data-pins="{{wire.pins}}">
       {{#if selected }}
-      <animate dur="2s" attributeName="stroke-opacity" values="1; .5; 1" repeatCount="indefinite" />
+      <animate
+          dur="2s"
+          attributeName="stroke-opacity"
+          values="1; .5; 1"
+          repeatCount="indefinite" />
       {{/if}}
     </path>
+    <text class="wire-label">
+      <textPath xlink:href="#{{wire._id}}" startOffset="50%">{{wire.name}}</textPath>
+    </text>
 </template>

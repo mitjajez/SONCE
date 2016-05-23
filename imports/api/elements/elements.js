@@ -1,7 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Factory } from 'meteor/factory';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-//import faker from 'faker';
 
 import { Circuits } from '../circuits/circuits.js';
 import { Symbols } from '../symbols/symbols.js';
@@ -14,17 +13,21 @@ class ElementsCollection extends Mongo.Collection {
     ourDoc.added = ourDoc.added || new Date();
 
     if (!ourDoc.name) {
-      let componentKey = Components.findOne({"key": ourDoc.component }, {fields: {key: 1}}).key;
-      let nextNumber = Elements.find({"component": ourDoc.component }).count();
+      const componentKey = Components.findOne({"key": ourDoc.component }).key;
+      let nextNumber = this.find({
+        "component": ourDoc.component,
+        "cid": ourDoc.cid
+      }).count();
       nextNumber = nextNumber ? nextNumber + 1 : 1;
       ourDoc.name = `${componentKey}${nextNumber}`;
 
-      while (!!this.findOne({ name: ourDoc.name })) {
+      while (!!this.findOne({ "name": ourDoc.name, "cid": ourDoc.cid })) {
         // not going to be too smart here, can go past Z
         nextNumber += 1;
         ourDoc.name = `${componentKey}${nextNumber}`;
       }
     }
+
     return super.insert(ourDoc, callback);
   }
   update(selector, modifier) {

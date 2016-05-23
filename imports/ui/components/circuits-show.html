@@ -1,5 +1,6 @@
 <template name="Circuits_show">
-  <section class="page circuits-show">
+  <section class="page circuits-show {{actingClass}}">
+    <header>
     <nav class="js-title-nav">
       {{#momentum plugin="fade"}}
         {{#if editing}}
@@ -62,18 +63,12 @@
           </div>
 
         {{/if}}
-        <form class="command-box">
-          <input name="command-line" type="text"/>
-          <div class="nav-group right">
-            <a href="#" class="js-cancel nav-item">
-              <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
-            </a>
-          </div>
-        </form>
       {{/momentum}}
     </nav>
+    </header>
 
-    <svg class="js-circuit-canvas circuit-items {{actingClass}}" width="100%" height="100%"
+
+    <svg class="js-circuit-canvas circuit-items" width="100%" height="100%"
       preserveAspectRatio="xMinYMin meet">
 
       <defs>
@@ -84,17 +79,20 @@
             <animate dur="2s" attributeName="r" values="3; 1; 3" repeatCount="indefinite" />
           </circle>
         </marker>
+
+        <marker id="wireLabel"
+                markerWidth="20" markerHeight="8"
+                refX="10" refY="4">
+          <text class="connector" x="0" y="0" >wire</text>
+        </marker>
       </defs>
 
       {{#if elementsReady}}
         {{> Active_wire wiring=wiring}}
         {{> Active_element}}
 
-        <text x="1em" y="7em" >
-          acting: {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
-          active: {{active}} |
-          selection: {{selection}}
-        </text>
+        <text x="30em" y="5em" width="100%" textLength="4em" text-anchor="end">Netlist:</text>
+
 
         {{#each wire in wires}}
           {{> Wires_item (wireArgs wire)}}
@@ -135,6 +133,23 @@
           <text class="title-message">{{_ 'Loading elements...'}}</text>
       {{/if}}
     </svg>
+    <footer>
+      <form class="command-box">
+        <input name="command-line" type="text"/>
+<!--        <div class="nav-group right">
+          <a href="#" class="js-cancel nav-item">
+            <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+          </a>
+        </div>-->
+      </form>
+      <p>
+        acting: {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
+        active: {{active}} |
+        selection: {{selection}}
+      </p>
+
+
+    </footer>
 
   </section>
 </template>

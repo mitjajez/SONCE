@@ -9,9 +9,33 @@
           <li>
             <label>Name</label>
             <div>
-              <span>{{circuit.name}} <i class="icon-pencil" data-edit="circuitName"></i></span>
+              <span>{{circuit.name}} <i class="icon-edit" data-edit="circuitName"></i></span>
             </div>
           </li>
+        </ul>
+      </form>
+      <form>
+        <ul class="list clearfix">
+        {{#each element in elements}}
+          <li>
+            <label>Element</label>
+            <div>
+              <span>{{element.name}}</span>
+            </div>
+          </li>
+        {{/each}}
+        </ul>
+      </form>
+      <form>
+        <ul class="list clearfix">
+        {{#each wire in wires}}
+          <li>
+            <label>Wire</label>
+            <div>
+              <span>{{wire.name}}</span>
+            </div>
+          </li>
+        {{/each}}
         </ul>
       </form>
     </div>

@@ -9,11 +9,11 @@ class WiresCollection extends Mongo.Collection {
     ourDoc.added = ourDoc.added || new Date();
 
     if (!ourDoc.name) {
-      let nextNumber = Wires.find().count();
+      let nextNumber = Wires.find({'cid': ourDoc.cid }).count();
       nextNumber = nextNumber ? nextNumber + 1 : 1;
       ourDoc.name = `w${nextNumber}`;
 
-      while (!!this.findOne({ name: ourDoc.name })) {
+      while (!!this.findOne({ name: ourDoc.name, 'cid': ourDoc.cid })) {
         // not going to be too smart here, can go past Z
         nextNumber += 1;
         ourDoc.name = `w${nextNumber}`;

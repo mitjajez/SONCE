@@ -25,18 +25,46 @@
 }
 .wire{
   fill: none;
-  stroke: black;
+  stroke: white;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-.active-wire{
-  stroke-width: 3;
+.wire-label{
+  font-size: 10px;
+  visibility: hidden;
+}
+.circuit-wire:hover + .wire-label{
+  visibility: visible;
 }
 
-.editing .wire:hover {
-  stroke-width: 3;  
+.viewing {
+  .pin-connector {
+    visibility: hidden;
+  }
+}
+.editing {
+  .circuit-element:hover .bound{
+    fill-opacity: .1;
+  }
+  .circuit-wire:hover {
+    stroke-width: 3;
+    cursor: url("/img/cursor-select-line.png"), pointer;
+  }
+  .active-pin:hover {
+    cursor: url("/img/cursor-select-line.png"), pointer;
+  }
+}
+.wiring {
+  .wire:hover {
+    stroke-width: 3;
+  }
+  .wire:hover:not(.active-wire) {
+    cursor: url("img/cursor-select-line.png");
+  }
+  .active-wire {
+    stroke-width: 3;
+  }
 }
 
 .circuit-items .circuit-item {

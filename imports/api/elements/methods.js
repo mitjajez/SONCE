@@ -6,6 +6,8 @@ import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 
 import { Elements } from './elements.js';
 import { Circuits } from '../circuits/circuits.js';
+import { Components } from '../components/components.js';
+
 
 export const insertElement = new ValidatedMethod({
   name: 'elements.insert',
@@ -19,10 +21,12 @@ export const insertElement = new ValidatedMethod({
     "transform": { type: Object },
     "transform.x": { type: Number },
     "transform.y": { type: Number },
-    "transform.rot": { type: Number, optional: true },
+    "transform.rot": { type: Number },
   }).validator(),
 
   run({ name, component, type, symbol, cid, transform }) {
+    console.log( "METHOD elements.insert "+ component );
+
     const circuit = Circuits.findOne(cid);
 
     if (circuit.isPrivate() && circuit.userId !== this.userId) {
@@ -50,6 +54,8 @@ export const rotateElement = new ValidatedMethod({
     phi: { type: Number },
   }).validator(),
   run({ eid, phi }) {
+    console.log( "METHOD elements.insert "+ eid );
+
     // This is complex auth stuff - perhaps denormalizing a userId onto elements
     // would be correct here?
     const element = Elements.findOne(eid);
@@ -93,6 +99,8 @@ export const removeElement = new ValidatedMethod({
     eid: { type: String },
   }).validator(),
   run({ eid }) {
+    console.log( "METHOD elements.remove "+ eid );
+
     const element = Elements.findOne(eid);
 
     if (!element.editableBy(this.userId)) {
@@ -107,6 +115,7 @@ export const removeElement = new ValidatedMethod({
 // Get circuit of all method names on Elements
 const ELEMENTS_METHODS = _.pluck([
   insertElement,
+  rotateElement,
   updateElementText,
   removeElement,
 ], 'name');
