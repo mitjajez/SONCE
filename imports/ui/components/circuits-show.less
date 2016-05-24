@@ -9,7 +9,7 @@
   // Custom nav for.circuits-show
   nav {
     background: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);
-    height: 5em;
+    height: 3em;
 
     text-align: center;
     @media screen and (min-width: 40em) { text-align: left; }
@@ -92,6 +92,20 @@
       .nav-group:not(.right) { display: none !important; }
       .options-mobile { display: none; }
       .options-web {  display: block; }
+    }
+  }
+  footer {
+    .position(absolute, auto, 0, 0, 0, auto);
+    background: linear-gradient(to top, #d0edf5, #e1e5f0 100%);
+    height: 3em;
+
+    form.command-box{
+      .position(absolute, auto, 0, 0, auto);
+    }
+
+    .status {
+      .position(absolute, auto, 13rem, 0, 1rem);
+      line-height: 48px;
     }
   }
 }

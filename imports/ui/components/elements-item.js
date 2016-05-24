@@ -4,7 +4,6 @@ import { Session } from 'meteor/session';
 import { $ } from 'meteor/jquery';
 import { _ } from 'meteor/underscore';
 
-import './pin-connector.js';
 import './elements-item.html';
 import { Elements } from '../../api/elements/elements.js';
 import { Symbols } from '../../api/symbols/symbols.js';
@@ -46,57 +45,10 @@ Template.Elements_item.helpers({
     }
     return {x: x, y: 0, }
   },
-  pinArgs(pin) {
-    const element = this.element;
-    const symbol = this.symbol;
-    return {
-      element,
-      symbol,
-      pin,
-    }
-  },
-
 });
 
 Template.Elements_item.events({
   'click .js-select-element'(event, instance) {
     this.selected ? this.setSelected( false ) : this.setSelected( true );
   },
-
-  'change [type=checkbox]'(event) {
-    const checked = $(event.target).is(':checked');
-
-    setCheckedStatus.call({
-      elementId: this.element._id,
-      newCheckedStatus: checked,
-    });
-  },
-
-  'focus input[type=text]'() {
-    this.setEditing(true);
-  },
-
-  'blur input[type=text]'() {
-    if (this.editing) {
-      this.setEditing(false);
-    }
-  },
-
-  'keydown input[type=text]'(event) {
-    // ESC or ENTER
-    if (event.which === 27 || event.which === 13) {
-      event.preventDefault();
-      event.target.blur();
-    }
-  },
-
-  // update the text of the item on keypress but throttle the event to ensure
-  // we don't flood the server with updates (handles the event at most once
-  // every 300ms)
-  'keyup input[type=text]': _.throttle(function elementsItemKeyUpInner(event) {
-    updateElementText.call({
-      elementId: this.element._id,
-      newText: event.target.value,
-    }, displayError);
-  }, 300),
 });

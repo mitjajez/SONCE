@@ -58,6 +58,18 @@
 .flex-tab {
 /*    background-color: #f4f4f4; */
     border-left-color: #eaeaea;
+    li {
+      color: rgba(255, 255, 255, 0.4);
+      &:hover {
+        color: white;
+      }
+    }
+    li .options{
+      visibility: hidden;
+    }
+    li:hover .options{
+      visibility: visible;
+    }
 }
 .main-content.flex-opened {
     right: 400px;

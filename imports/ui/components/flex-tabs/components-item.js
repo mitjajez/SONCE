@@ -10,10 +10,9 @@ import { Symbols } from '../../../api/symbols/symbols.js';
 Template.Components_item.onCreated(function componentsItemOnCreated() {
   this.autorun(() => {
     new SimpleSchema({
-      component: { type: Components._helpers },
+      key: { type: String },
+      name: { type: String },
       type: { type: String, optional: true },
-      view_grid: { type: Boolean, optional: true },
-      onViewChange: { type: Function },
     }).validate(Template.currentData());
   });
 });
@@ -23,38 +22,31 @@ Template.Components_item.onRendered(function componentsItemOnRendered() {
 
 
 Template.Components_item.helpers({
-  hasTypes: function(component){
-      return _.isArray(component.types) && component.types[0] !== ""
+  symbolsSVG: () => Session.get("symbolsSVG"),
+
+  symbolName() {
+    const sel = this.type ? this.key+"-"+this.type : this.key;
+    const sym = Symbols.findOne({key:sel});
+    return sym ? "sym-"+sym.svg : "";
   },
-  symbolsSVG: function(){
-    return Session.get("symbolsSVG");
-  },
-  symbolName: function(component, type){
-    if(type !== "" ){
-      return "sym-"+ component.key +"-"+ type;
-    }
-    else if (_.isArray(component.types) && component.types[0] !== "") {
-      return "sym-"+ component.key +"-"+ component.types[0];
-    }
-    else {
-      return "sym-"+ component.key;
-    }
-  }
+
 });
 
 Template.Components_item.events({
-  'click .js-select-component': function (event, instance) {
-    const symbol = this.type ? this.component.key+"-"+this.type : this.component.key;
+  'click .js-select-component'(event, instance) {
+    const sel = this.type ? this.key+"-"+this.type : this.key;
+    const sym = Symbols.findOne({key:sel});
+
     Session.set("component2add", {
-      "name": this.component.name,
-      "key": this.component.key,
+      "name": this.name,
+      "key": this.key,
       "type": this.type,
-      "symbol": symbol,
+      "symbol": sym ? sym.svg : "missing! Edit symbols.json",
 //      "pins": ""
     });
   },
 
-  'click .js-show-more-types': function (event, instance) {
+  'click .js-show-more-types'(event, instance) {
     const $parent = $( event.delegateTarget );
     const $types = $parent.find('.more-types');
 //    $types.css( {'left': '-'+ $parent.position().left+'px', 'width': '400%'} );

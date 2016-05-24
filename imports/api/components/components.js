@@ -1,6 +1,7 @@
 import { Mongo } from 'meteor/mongo';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Factory } from 'meteor/factory';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { EasySearch } from 'meteor/easy:search';
 
 class ComponentsCollection extends Mongo.Collection {
   insert(component, callback) {
@@ -56,4 +57,10 @@ Components.helpers({
 
     return this.userId === userId;
   }
+});
+
+Components.index = new EasySearch.Index({
+  collection: Components,
+  fields: ['name', 'key'],
+  engine: new EasySearch.Minimongo()
 });

@@ -1,43 +1,44 @@
-//import { Template } from 'meteor/templating';
 import { Template } from 'meteor/peerlibrary:blaze-components';
 import { ReactiveVar } from 'meteor/reactive-var'
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { TAPi18n } from 'meteor/tap:i18n';
 
 import { TabBar } from 'meteor/flextab';
 
 import { componentsListRenderHold } from '../../launch-screen.js';
-import './components-list.html';
-import './components-item.js';
-
 import { Components } from '../../../api/components/components.js';
 
-//import {
-//  insertElement,
-//} from '../../../api/elements/methods.js';
-
 import { displayError } from '../../lib/errors.js';
+//import '../search-components.js';
+import './components-item.js';
 
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { TAPi18n } from 'meteor/tap:i18n';
+import './components-list.html';
+
+Template.Components_list.onCreated(function componentsListOnCreated() {
+  this.autorun(() => {
+    this.subscribe('components.inList');
+  });
+
+  this.state = new ReactiveDict();
+  this.state.setDefault({
+    view: 'grid'
+  });
+
+  this.setView = (view_grid) => {
+    instance.state.set('view', view_grid ? 'grid' : false);
+  }
+});
 
 Template.Components_list.helpers({
-  components: function() {
-    return Components.find({});
-  },
-  componentArgs: function(component, type){
-//    console.log( "Components_list.helpers.component" );
-//    console.log( component );
-    const instance = Template.instance();
-    return {
-      component,
-      type,
-      view_grid: instance.state.equals('view', 'grid'),
-      onViewChange(view_grid) {
-        instance.state.set('view', view_grid ? 'grid' : false);
-      }
-    };
-  }
+  componentsIndex: () => Components.index,
+
+  view_grid: () => Template.instance().state.equals('view', 'grid'),
+
+  viewClass: () => Template.instance().state.get('view'),
+
+  components: () => Components.find({}),
 });
 
 Template.Components_list.events({
@@ -108,46 +109,7 @@ Template.Components_list.events({
   */
 });
 
-Template.Components_list.onCreated(function componentsListOnCreated() {
-  this.autorun(() => {
-    this.subscribe('components.inList');
-  });
 
-  this.state = new ReactiveDict();
-  this.state.setDefault({
-    view: 'grid'
-  });
-
-  /*
-  this.currentSearchTerm = new ReactiveVar('');
-  this.searchResult = new ReactiveVar;
-  this.hasMore = new ReactiveVar(true);
-  this.limit = new ReactiveVar(20);
-  this.ready = new ReactiveVar(true);
-  return this.search = (function(_this) {
-    return function() {
-      var value;
-      _this.ready.set(false);
-      value = _this.$('#message-search').val();
-      return Tracker.nonreactive(function() {
-        return Meteor.call('messageSearch', value, Session.get('openedRoom'), _this.limit.get(), function(error, result) {
-          var ref, ref1, ref2, ref3, ref4, ref5;
-          _this.currentSearchTerm.set(value);
-          _this.ready.set(true);
-          if ((result != null) && (((ref = result.elements) != null ? ref.length : void 0) > 0 || ((ref1 = result.users) != null ? ref1.length : void 0) > 0 || ((ref2 = result.channels) != null ? ref2.length : void 0) > 0)) {
-            _this.searchResult.set(result);
-            if (((ref3 = result.elements) != null ? ref3.length : void 0) + ((ref4 = result.users) != null ? ref4.length : void 0) + ((ref5 = result.channels) != null ? ref5.length : void 0) < _this.limit.get()) {
-              return _this.hasMore.set(false);
-            }
-          } else {
-            return _this.searchResult.set();
-          }
-        });
-      });
-    };
-  })(this);
-  */
-});
 Template.Components_list.onRendered(function componentsListsOnRendered() {
   this.autorun(() => {
     if (this.subscriptionsReady()) {

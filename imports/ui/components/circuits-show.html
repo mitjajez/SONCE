@@ -1,5 +1,6 @@
 <template name="Circuits_show">
-  <section class="page circuits-show">
+  <section class="page circuits-show {{actingClass}}">
+    <header>
     <nav class="js-title-nav">
       {{#momentum plugin="fade"}}
         {{#if editing}}
@@ -24,7 +25,7 @@
 
           <div class="nav-group right">
             <div class="nav-item options-mobile">
-              <select class="circuit-edit">
+              <select class="js-action">
                 <option disabled selected>{{_ 'Select an action'}}</option>
                 {{#if circuit.userId}}
                   <option value="public">{{_ 'Make Public'}}</option>
@@ -54,61 +55,98 @@
                 <span class="icon-trash" title={{_ 'Delete circuit'}}></span>
               </a>
               {{else}}
-              <a class="js-edit-circuit nav-item">
+              <a class="js-edit nav-item">
                 <span class="icon-edit" title={{_ 'Edit circuit'}}></span>
               </a>
               {{/if}}
             </div>
           </div>
+
         {{/if}}
       {{/momentum}}
     </nav>
+    </header>
 
-    <svg class="js-circuit-canvas circuit-items {{addingClass}} {{wiringClass}} {{editingClass}}" width="100%" height="100%"
+
+    <svg class="js-circuit-canvas circuit-items" width="100%" height="100%"
       preserveAspectRatio="xMinYMin meet">
 
+      <defs>
+        <marker id="activeWireEnd"
+                markerWidth="8" markerHeight="8"
+                refX="4" refY="4">
+          <circle class="connector" cx="4" cy="4" r="3" >
+            <animate dur="2s" attributeName="r" values="3; 1; 3" repeatCount="indefinite" />
+          </circle>
+        </marker>
+
+        <marker id="wireLabel"
+                markerWidth="20" markerHeight="8"
+                refX="10" refY="4">
+          <text class="connector" x="0" y="0" >wire</text>
+        </marker>
+      </defs>
+
       {{#if elementsReady}}
-        <defs>
-        </defs>
+        {{> Active_wire wiring=wiring}}
+        {{> Active_element}}
+
+        {{#each wire in wires}}
+          {{> Wires_item (wireArgs wire)}}
+        {{/each}}
+
         {{#each element in elements}}
           {{> Elements_item (elementArgs element)}}
         {{else}}
           <text class="title-message">{{_ 'No elements here'}}</text>
           <text class="subtitle-message">{{_ 'Add new elements using the field above'}}</text>
         {{/each}}
-        {{#each wire in wires}}
-          {{> Wires_item (wireArgs wire)}}
-        {{/each}}
 
-        {{#if selectedElement }}
         {{#if editing }}
-          {{> Element_edit_menu (elementMenuArgs "")}}
-        {{else}}
-          {{> Element_info (elementMenuArgs "")}}
-        {{/if}}
-        {{/if}}
+          {{#if selectedElement }}
+            <!-- element menu -->
+            {{> Element_edit_menu (elementMenuArgs "")}}
+          {{/if}}
+          {{#if selectedWire }}
+            <!-- wire menu -->
+            {{> Wire_edit_menu (wireMenuArgs "")}}
+          {{/if}}
 
-        {{#if selectedWire }}
-        {{#if editing }}
-          {{> Wire_edit_menu (wireMenuArgs "")}}
-        {{else}}
-<!--          {{> Wire_info (wireMenuArgs "")}} -->
-        {{/if}}
-        {{/if}}
-
-        <text x="10" y="100">Selected element: {{selectedElement}}</text>
-        <text x="10" y="120">Active wire: {{activewire}}</text>
-        <text x="10" y="140">Selected wires: {{selectedWire}}</text>
-
-
-        {{#if editing}}
           {{> Operations}}
+
+        {{else}}
+          {{#if selectedElement }}
+            {{> Element_info (elementMenuArgs "")}}
+          {{/if}}
+          {{#if selectedWire }}
+            <!-- {{> Wire_info (wireMenuArgs "")}} -->
+          {{/if}}
+
         {{/if}}
+
+        {{> Active_pin}}
 
       {{else}}
           <text class="title-message">{{_ 'Loading elements...'}}</text>
       {{/if}}
     </svg>
+    <footer>
+      <div class="status">
+        acting: {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
+        active: {{active}} |
+        selection: {{selection}}
+      </div>
+      <form class="command-box">
+        <input name="command-line" type="text"/>
+<!--        <div class="nav-group right">
+          <a href="#" class="js-cancel nav-item">
+            <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+          </a>
+        </div>-->
+      </form>
+
+
+    </footer>
 
   </section>
 </template>

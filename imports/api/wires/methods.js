@@ -45,7 +45,6 @@ export const updateWireD = new ValidatedMethod({
     newD: { type: String },
   }).validator(),
   run({ wid, newD }) {
-    console.log( "METHOD updateWireD");
     const wire = Wires.findOne(wid);
     if (wire.d === newD) {
       // The status is already what we want, let's not do any extra work
@@ -57,7 +56,6 @@ export const updateWireD = new ValidatedMethod({
         'Cannot edit checked status in a private circuit that is not yours');
     }
 
-    console.log( newD );
     Wires.update(wid, { $set: {
       d: newD,
     } });
@@ -93,10 +91,7 @@ export const updateWirePins = new ValidatedMethod({
     newPin: { type: String },
   }).validator(),
   run({ wid, newPin }) {
-    console.log( "METHOD updateWirePins");
     const wire = Wires.findOne(wid);
-    console.log(wire.pins);
-    console.log( wire.pins.indexOf(newPin) );
     if (wire.pins.indexOf(newPin) !== -1) {
       // The status is already what we want, let's not do any extra work
       return;
@@ -107,11 +102,9 @@ export const updateWirePins = new ValidatedMethod({
         'Cannot edit checked status in a private circuit that is not yours');
     }
 
-    console.log( newPin );
     Wires.update(wid, { $addToSet: {
       pins: newPin,
     } });
-    console.log(wire.pins);
   },
 });
 
@@ -121,6 +114,7 @@ export const removeWire = new ValidatedMethod({
     wid: { type: String },
   }).validator(),
   run({ wid }) {
+    console.log( "METHOD wires.remove "+ wid );
     const wire = Wires.findOne(wid);
 
     if (!wire.editableBy(this.userId)) {
@@ -128,7 +122,9 @@ export const removeWire = new ValidatedMethod({
         'Cannot remove wires in a private circuit that is not yours');
     }
 
-    Wires.remove(wid);
+    if(wire) {
+      return Wires.remove(wid);
+    }
   },
 });
 

@@ -40,6 +40,9 @@ diff-sequence@1.0.5
 dispatch:mocha-core@0.0.1
 dispatch:mocha-phantomjs@0.1.0
 dispatch:phantomjs-tests@0.0.4
+easy:search@2.0.9
+easysearch:components@2.0.9
+easysearch:core@2.0.9
 ecmascript@0.4.3
 ecmascript-runtime@0.2.10
 ejson@1.0.11
@@ -48,6 +51,7 @@ es5-shim@4.5.10
 factory@1.0.0
 fastclick@1.0.11
 flextab@1.0.0
+flowkey:hotkeys@1.1.1
 force-ssl@1.0.11
 geojson-utils@1.0.8
 hot-code-push@1.0.4
@@ -79,6 +83,7 @@ modules-runtime@0.6.3
 momentjs:moment@2.13.1
 mongo@1.1.7
 mongo-id@1.0.4
+mousetrap:mousetrap@1.4.6_1
 npm-bcrypt@0.8.5
 npm-mongo@1.4.43
 observe-sequence@1.0.11

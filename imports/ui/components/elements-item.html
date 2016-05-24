@@ -1,10 +1,13 @@
 <template name="Elements_item">
   {{#let t=element.transform}}
-  <g class="js-circuit-element circuit-element" transform="translate({{t.x}} {{t.y}})">
+  <g id="{{element._id}}" name="{{element.name}}" class="js-circuit-element circuit-element" transform="translate({{t.x}} {{t.y}})">
     <g class="element-symbol" transform="{{rotation}}">
       <use xlink:href="{{symbolsSVG}}#{{element.symbol}}" />
       {{#each pin in symbol.pins}}
-        {{> Pin_connector (pinArgs pin)}}
+      <circle id="{{element.name}}-{{pin.id}}"
+              data-id="{{pin.id}}" data-element="{{element.name}}"
+              class="pin-connector js-pin"
+              cx="{{pin.x}}" cy="{{pin.y}}" r="3" />
       {{/each}}
     </g>
     <text class="name-label" x="{{nameLabel.x}}" y="{{nameLabel.y}}">{{element.name}}</text>

@@ -72,3 +72,5 @@ practicalmeteor:mocha@2.1.1-rc.1
 sonce:library
 flextab
 peerlibrary:blaze-components
+easy:search
+flowkey:hotkeys
