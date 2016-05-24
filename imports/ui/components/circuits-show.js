@@ -8,6 +8,8 @@ import { $ } from 'meteor/jquery';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { TAPi18n } from 'meteor/tap:i18n';
+//import { ? } from 'meteor/flowkey:hotkeys';
+import zpd from 'snap.svg.zpd';
 
 import { Elements } from '../../api/elements/elements.js';
 import { Symbols } from '../../api/symbols/symbols.js';
@@ -146,6 +148,10 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 });
 
 Template.Circuits_show.onRendered(function circuitShowOnRendered() {
+  const paper = Snap('.js-circuit-canvas');
+  paper.zpd(function (err, paper) {
+//      console.log(paper);
+  });
 });
 
 

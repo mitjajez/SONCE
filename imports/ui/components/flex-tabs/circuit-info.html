@@ -9,31 +9,38 @@
           <li>
             <label>Name</label>
             <div>
-              <span>{{circuit.name}} <i class="icon-edit" data-edit="circuitName"></i></span>
+              <span>{{circuit.name}}
+                <i class="icon-edit" title={{_ 'Edit circuit name'}}
+                  data-edit="circuitName"></i>
+              </span>
             </div>
           </li>
         </ul>
       </form>
       <form>
+        <h3>Netlist:</h3>
         <ul class="list clearfix">
         {{#each element in elements}}
           <li>
-            <label>Element</label>
-            <div>
-              <span>{{element.name}}</span>
-            </div>
+            {{element.name}}
+            <span class="options">
+              <i class="icon-edit" title={{_ 'Edit element'}}
+                data-edit="circuitName"></i>
+              <i class="icon-trash" title={{_ 'Delete element'}}
+                data-edit="circuitName"></i>
+            </span>
+            {{element.pins}}
           </li>
         {{/each}}
         </ul>
       </form>
       <form>
+        <h3>Wires:</h3>
         <ul class="list clearfix">
         {{#each wire in wires}}
           <li>
-            <label>Wire</label>
-            <div>
-              <span>{{wire.name}}</span>
-            </div>
+            <span>{{wire.name}}</span>
+            {{wire.pins}}
           </li>
         {{/each}}
         </ul>

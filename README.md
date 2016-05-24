@@ -41,7 +41,7 @@ SONCE is slovenian sun.
 
 ## License
 
-Note that Rocket.Chat is distributed under the [MIT License](http://opensource.org/licenses/MIT).
+Note that SONCE is distributed under the [MIT License](http://opensource.org/licenses/MIT).
 
 
 ## History

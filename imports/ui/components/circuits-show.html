@@ -91,9 +91,6 @@
         {{> Active_wire wiring=wiring}}
         {{> Active_element}}
 
-        <text x="30em" y="5em" width="100%" textLength="4em" text-anchor="end">Netlist:</text>
-
-
         {{#each wire in wires}}
           {{> Wires_item (wireArgs wire)}}
         {{/each}}
@@ -134,6 +131,11 @@
       {{/if}}
     </svg>
     <footer>
+      <div class="status">
+        acting: {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
+        active: {{active}} |
+        selection: {{selection}}
+      </div>
       <form class="command-box">
         <input name="command-line" type="text"/>
 <!--        <div class="nav-group right">
@@ -142,11 +144,6 @@
           </a>
         </div>-->
       </form>
-      <p>
-        acting: {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
-        active: {{active}} |
-        selection: {{selection}}
-      </p>
 
 
     </footer>
