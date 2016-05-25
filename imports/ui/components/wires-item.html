@@ -3,18 +3,22 @@
         id="{{wire._id}}"
         name="{{wire.name}}"
         xlink:title="{{wire.name}}"
-        class="js-wire circuit-wire wire"
+        class="js-wire circuit-wire wire {{selectedClass}}"
         d="{{wire.d}}"
         data-pins="{{wire.pins}}">
+      </path>
       {{#if selected }}
+      <path
+          class="wire {{selectedClass}}"
+          d="{{wire.d}}">
       <animate
           dur="2s"
           attributeName="stroke-opacity"
           values="1; .5; 1"
           repeatCount="indefinite" />
+        </path>
       {{/if}}
-    </path>
-    <text class="wire-label">
+<!--    <text class="wire-label">
       <textPath xlink:href="#{{wire._id}}" startOffset="50%">{{wire.name}}</textPath>
-    </text>
+    </text> -->
 </template>

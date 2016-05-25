@@ -8,8 +8,10 @@ import { $ } from 'meteor/jquery';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { TAPi18n } from 'meteor/tap:i18n';
-//import { ? } from 'meteor/flowkey:hotkeys';
-import zpd from 'snap.svg.zpd';
+
+import { Hotkeys } from 'meteor/flowkey:hotkeys';
+import Snap from 'snapsvg';
+//import SnapZPD from 'snap.svg.zpd';
 
 import { Elements } from '../../api/elements/elements.js';
 import { Symbols } from '../../api/symbols/symbols.js';
@@ -65,6 +67,9 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     menuPosition: false,  // element center | click coords
     wiringMode: "HV",     // HV | VH | LV | LH | L |
     svgOffset: false,
+    zoom: 1,
+    pan: "0,0",
+    mouse: {x:0, y:0},
   });
 
   this.autorun(() => {
@@ -82,18 +87,37 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 
   });
 
-  this.getEventPoint = (event) => {
-    if( !this.state.equals('svgOffset') ){
-      const svgOffset = this.$('.js-circuit-canvas').offset();
-      this.state.set('svgOffset', svgOffset);
+  this.getEventPoint = (event, mode) => {
+    const e = event.originalEvent;
+    const gridSpace = 10;
+    let X = Y = 0;
+    if(mode === "svg") {
+      const sCircuit = Snap('.js-circuit-canvas').select('.js-circuit');
+      const t = sCircuit.transform().globalMatrix.split();
+      X = ( e.layerX - t.dx)/ t.scalex;
+      Y = ( e.layerY - t.dy)/ t.scaley;
     }
-    const offset = this.state.get('svgOffset');
-    let X = event.pageX-offset.left;
-    let Y = event.pageY-offset.top;
-    X = Math.round(X/10) * 10;
-    Y = Math.round(Y/10) * 10;
-    return {x:X, y:Y};
+    else {
+      X = e.layerX;
+      Y = e.layerY;
+    }
+    return {
+      x: Math.round(X/10) * 10,
+      y: Math.round(Y/10) * 10,
+    };
   };
+
+  this.zoom = (event) => {
+    console.log( "ZOOM");
+    const T = this.getEventPoint(event, "svg");
+    const z = event.originalEvent.deltaY > 0 ? 0.9 : 1.1;
+    const sCircuit = Snap('.js-circuit-canvas').select('.js-circuit');
+    const t = sCircuit.transform().globalMatrix.scale(z, z, T.x, T.y);
+    sCircuit.transform(t);
+    const out = t.split()
+    this.state.set('zoom', (out.scalex*100).toFixed() );
+    this.state.set('pan', (out.dx).toFixed() +", "+ (out.dx).toFixed());
+  }
 
   this.wiringModes = ["HV", "VH", "LV", "LH", "L"];
 
@@ -148,18 +172,19 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 });
 
 Template.Circuits_show.onRendered(function circuitShowOnRendered() {
-  const paper = Snap('.js-circuit-canvas');
-  paper.zpd(function (err, paper) {
-//      console.log(paper);
-  });
 });
 
 
 Template.Circuits_show.helpers({
+  mouse: () => Template.instance().state.get('mouse'),
+  zoom: () => Template.instance().state.get('zoom'),
+  pan: () => Template.instance().state.get('pan'),
+
   actingClass: () => Template.instance().state.get('acting'),
   active: () => Template.instance().state.get('active'),
   selection: () => Template.instance().state.get('selection'),
 
+  viewing: () => Template.instance().state.equals('acting', "viewing"),
   adding: () => Template.instance().state.equals('acting', "adding"),
   editing: () => Template.instance().state.equals('acting', "editing"),
   wiring: () => Template.instance().state.equals('acting', "wiring"),
@@ -235,7 +260,17 @@ Template.Circuits_show.events({
     this.setSelected(true);
   },
 
+  // COMMON --------------------------------------------------------------------
+  'wheel .js-circuit-canvas'(event, instance) {
+    instance.zoom(event);
+  },
 
+  'mousemove .js-circuit-canvas'(event, instance) {
+    const pos = instance.getEventPoint (event);
+    instance.state.set('mouse', {x:pos.x, y:pos.y} );
+  },
+
+  // VIEWING -------------------------------------------------------------------
 
   // ADDING --------------------------------------------------------------------
   'mouseenter .adding .js-circuit-canvas'(event, instance) {
@@ -269,7 +304,7 @@ Template.Circuits_show.events({
   },
 
   'mousemove .adding .js-circuit-canvas'(event, instance) {
-    const p = instance.getEventPoint(event)
+    const p = instance.getEventPoint(event, "svg");
     const $active = instance.$('.js-active-element');
     const t = $active.data().element.transform;
     t.x = p.x;
@@ -286,8 +321,8 @@ Template.Circuits_show.events({
   },
 
 
-  'keydown .adding input[name=command-line]'(event, instance) {
-    console.log( 'keydown .adding' );
+  'keyup .adding input[name=command-line]'(event, instance) {
+    console.log( 'keyup .adding' );
     if (event.which === 82) {
       console.log("--> r ... rotate");
       const $active = instance.$('.js-active-element');
@@ -325,8 +360,8 @@ Template.Circuits_show.events({
       'cy': py,
       'visibility': "visable",
     });
-    instance.state.set('active', "pin");
-    instance.state.set('selection', $pin.attr('id'));
+//    instance.state.set('active', "pin");
+//    instance.state.set('selection', $pin.attr('id'));
   },
 
   'mouseleave .editing .js-active-pin'(event, instance) {
@@ -368,6 +403,7 @@ Template.Circuits_show.events({
     const px = $pin.attr('cx');
     const py = $pin.attr('cy');
     const wid = instance.state.get('selection');
+    console.log( wid );
 
     const $wire = instance.$('.js-active-wire');
     $wire.attr({'visibility': "hidden"});
@@ -375,7 +411,7 @@ Template.Circuits_show.events({
 
     if( instance.state.equals('startPin', pid) ) {
       console.log( "--> Cancel wiring" );
-      if(wid && !instance.state.equals('selection', ".js-active-wire")) {
+      if(wid && wid !== ".js-active-wire") {
         removeWire.call( {wid}, displayError);
       }
     }
@@ -383,7 +419,7 @@ Template.Circuits_show.events({
       console.log( "--> Stop wiring" );
       $data.d += instance.newWirePoint(px, py);
       $data.pins.push(pid);
-      if(wid && !instance.state.equals('selection', ".js-active-wire")) {
+      if(wid && wid !== ".js-active-wire") {
         updateWireD.call( {wid, newD:$data.d}, displayError);
         updateWirePins.call( {wid, newPin:pid}, displayError);
       }
@@ -404,7 +440,7 @@ Template.Circuits_show.events({
   },
 
   'mousemove .wiring .js-circuit-canvas'(event, instance){
-    const p = instance.getEventPoint(event)
+    const p = instance.getEventPoint(event, "svg");
     const $wire = instance.$('.js-active-wire');
     $wire.attr("d", $wire.data('d') + instance.newWirePoint(p.x, p.y));
   },
@@ -456,9 +492,9 @@ Template.Circuits_show.events({
     console.log( "Stop wiring" );
   },
 
-  'keydown .wiring input[name=command-line]'(event, instance) {
+  'keyup .wiring input[name=command-line]'(event, instance) {
     console.log( 'keydown .wiring' );
-    $cli = instance.$('input[name=command-line]');
+    const $cli = instance.$('input[name=command-line]');
     if (event.which === 87) {
       console.log("--> w ... wiring mode");
       const modes = instance.wiringModes;
