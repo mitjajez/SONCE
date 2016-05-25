@@ -88,6 +88,7 @@
       </defs>
 
       {{#if elementsReady}}
+      <g class="js-circuit">
         {{> Active_wire wiring=wiring}}
         {{> Active_element}}
 
@@ -102,6 +103,19 @@
           <text class="subtitle-message">{{_ 'Add new elements using the field above'}}</text>
         {{/each}}
 
+        {{> Active_pin}}
+      </g>
+
+        {{#if viewing }}
+          {{#if selectedElement }}
+            {{> Element_info (elementMenuArgs "")}}
+          {{/if}}
+          {{#if selectedWire }}
+            <!-- {{> Wire_info (wireMenuArgs "")}} -->
+          {{/if}}
+
+        {{/if}}
+
         {{#if editing }}
           {{#if selectedElement }}
             <!-- element menu -->
@@ -113,28 +127,26 @@
           {{/if}}
 
           {{> Operations}}
-
-        {{else}}
-          {{#if selectedElement }}
-            {{> Element_info (elementMenuArgs "")}}
-          {{/if}}
-          {{#if selectedWire }}
-            <!-- {{> Wire_info (wireMenuArgs "")}} -->
-          {{/if}}
-
         {{/if}}
-
-        {{> Active_pin}}
-
       {{else}}
           <text class="title-message">{{_ 'Loading elements...'}}</text>
       {{/if}}
     </svg>
     <footer>
       <div class="status">
-        acting: {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
-        active: {{active}} |
-        selection: {{selection}}
+        <div style="float:left;">
+          {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
+        </div>
+        <div style="float:left;">
+          {{active}}: {{selection}}
+        </div>
+
+        <div style="float:right;">
+          T: {{mouse.x}}, {{mouse.y}}
+        </div>
+        <div style="float:right;">
+          Zoom: {{zoom}} %, pan: {{pan}} |
+        </div>
       </div>
       <form class="command-box">
         <input name="command-line" type="text"/>
