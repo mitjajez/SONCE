@@ -1,0 +1,5 @@
+.git
+.build
+.docker*
+.meteor/local
+node_modules
