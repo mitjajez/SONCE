@@ -1,2 +1,0 @@
-# Ensure that storage has proper permissions.
-chown meteor:meteor /storage || true
