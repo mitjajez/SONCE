@@ -1,1 +1,1 @@
-FROM tozd/meteor
+FROM meteorhacks/meteord:onbuild
