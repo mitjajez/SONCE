@@ -6,7 +6,14 @@
 # By default /srv. It uses a MongoDB database, tozd/meteor-mongodb image which is automatically run as well.
 # Moreover, the example uses tozd/docker-hosts for service discovery. Feel free to use Docker container linking instead.
 
-NAME='sonce'
+NAME="sonce"
+VERSION="latest"
+CURRENT_DIR=`basename $PWD`
+BUILD_DIR="/home/mitja/Dokumenti/SONCE/docker-build"
+DOCKER_TAG=mitjajez/sonce
+DOMAIN="sonce.se" # .se as shematic editor / .be may be as board editor
+SERVER="http://${DOMAIN}"
+
 DATA_ROOT='/srv'
 MONGODB_DATA="${DATA_ROOT}/${NAME}/mongodb/data"
 MONGODB_LOG="${DATA_ROOT}/${NAME}/mongodb/log"
@@ -43,11 +50,16 @@ sleep 1
 docker rm "${NAME}_mongodb" || true
 sleep 1
 
-# Mounted volume "/srv/var/hosts:/etc/hosts:ro" is used by tozd/docker-hosts service discovery and can be removed.
 docker run --detach=true --restart=always --name "${NAME}_mongodb" --hostname "${NAME}_mongodb" \
  --volume "${CONFIG}:/etc/service/mongod/run.config" \
  --volume "${MONGODB_LOG}:/var/log/mongod" --volume "${MONGODB_DATA}:/var/lib/mongodb" \
  tozd/meteor-mongodb:2.6
+
+#docker run \
+#  --name "${NAME}_mongodb" \
+#  --volume "${MONGODB_DATA}:/data/db" \
+#  --volume "${CONFIG}:/etc/service/meteor/run.config" \
+#  -d mongo
 
 docker ps -s
 
@@ -56,11 +68,19 @@ sleep 1
 docker rm "${NAME}" || true
 sleep 1
 # Mounted volume "/srv/var/hosts:/etc/hosts:ro" is used by tozd/docker-hosts service discovery and can be removed.
-docker run --detach=true --restart=always --name "${NAME}" --hostname "${NAME}" \
- --env VIRTUAL_HOST=sonce.io --env VIRTUAL_URL=/ --env VIRTUAL_LETSENCRYPT=true \
- --env ROOT_URL=http://sonce.io --env MAIL_URL=smtp://mail.tnode.com --env STORAGE_DIRECTORY=/storage \
- --volume "${CONFIG}:/etc/service/meteor/run.config" \
- --volume "${METEOR_LOG}:/var/log/meteor" --volume "${METEOR_STORAGE}:/storage" \
- mitjajez/sonce
+#docker run --detach=true --restart=always --name "${NAME}" --hostname "${NAME}" \
+# --env VIRTUAL_HOST=${DOMAIN} --env VIRTUAL_URL=/ --env VIRTUAL_LETSENCRYPT=true \
+# --env ROOT_URL=${SERVER} --env MAIL_URL=smtp://mail.tnode.com  \
+# --volume "${CONFIG}:/etc/service/meteor/run.config" \
+# --volume "${METEOR_LOG}:/var/log/meteor" \
+# ${DOCKER_TAG}
+
+docker run -d \
+ --name "${NAME}" --hostname "${NAME}" \
+ --env ROOT_URL=${SERVER} \
+ --volume ${CONFIG}:"/etc/service/meteor/run.config" \
+ --link ${NAME}_mongodb:mongo \
+ --publish="8080:80" \
+ ${DOCKER_TAG}
 
 docker ps -s
