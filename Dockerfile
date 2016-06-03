@@ -1,1 +1,1 @@
-FROM meteorhacks/meteord:binbuild
+FROM mitjajez/meteord:onbuild
