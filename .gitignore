@@ -4,7 +4,6 @@
 **/tmp/*
 .meteor/local*
 .docker*
-Dockerfile #different dockerfiles for different git branches
 
 npm-debug.log
 # ------------- Linux gitignore

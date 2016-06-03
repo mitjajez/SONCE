@@ -9,8 +9,7 @@
 NAME="sonce"
 VERSION="latest"
 CURRENT_DIR=`basename $PWD`
-#BUILD_DIR="/home/mitja/Dokumenti/SONCE/docker-build"
-BUILD_DIR="/home/mitja/Dokumenti/SONCE/deploy"
+BUILD_DIR="/home/mitja/Dokumenti/SONCE/docker-build"
 DOCKER_TAG=mitjajez/sonce
 DOMAIN="sonce.se" # .se as shematic editor / .be may be as board editor
 SERVER="http://${DOMAIN}"
@@ -79,12 +78,9 @@ sleep 1
 docker run -d \
  --name "${NAME}" --hostname "${NAME}" \
  --env ROOT_URL=${SERVER} \
- --volume ${BUILD_DIR}:/bundle \
  --volume ${CONFIG}:"/etc/service/meteor/run.config" \
  --link ${NAME}_mongodb:mongo \
- --env REBUILD_NPM_MODULES=1 \
  --publish="8080:80" \
- meteorhacks/meteord:binbuild
- # meteorhacks/meteord:base
+ ${DOCKER_TAG}
 
 docker ps -s
