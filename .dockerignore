@@ -1,5 +1,8 @@
-.git
-.build
-.docker*
-.meteor/local
 node_modules
+.git
+.gitignore
+build.sh
+run.sh
+LICENCE.md
+README.md
+razvoj.txt

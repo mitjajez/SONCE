@@ -1,0 +1,19 @@
+mongo:
+  image: mongo
+# volumes:
+#    - ./data/runtime/db:/data/db
+#    - ./data/dump:/dump
+  command: mongod --smallfiles --oplogSize 128
+
+rocketchat:
+  image: mitjajez/sonce:latest
+# volumes:
+#    - ./uploads:/app/uploads
+  environment:
+    - PORT=3000
+    - ROOT_URL=http://sonce.se:3000
+    - MONGO_URL=mongodb://mongo:27017/sonce
+  links:
+    - mongo:mongo
+  ports:
+    - 3000:3000
