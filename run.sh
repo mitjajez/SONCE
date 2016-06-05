@@ -42,8 +42,6 @@ docker run -it \
  --publish="80:3000" \
  --env VIRTUAL_LETSENCRYPT=true \
  --env DELAY=10 \
- ${DOCKER_TAG}
-
- docker pause ${DOCKER_TAG}
+ ${DOCKER_TAG}:${VERSION}
 
 docker ps -s

@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="latest"
+VERSION="dev" #latest
 BUILD_DIR="/home/mitja/Dokumenti/SONCE/docker-build"
 DOCKER_TAG="mitjajez/sonce"
 SERVER="http://sonce.se" # .se as shematic editor / .be may be as board editor
@@ -39,6 +39,3 @@ df -h /
 echo
 echo "Building Dockerfile..."
 docker build -t ${DOCKER_TAG}:${VERSION} .
-#docker push ${DOCKER_TAG}:${VERSION}
-#gcloud docker push ${DOCKER_TAG}:${VERSION}
-#kubectl rolling-update ${APP_NAME} --update-period=15s --image=${DOCKER_TAG}:${VERSION}

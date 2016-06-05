@@ -7,11 +7,8 @@ RUN groupadd -r sonce \
 
 ENV DOCKER /opt/docker
 COPY .docker $DOCKER
-RUN /bin/bash -c 'ls -lh $DOCKER'
 COPY ./ /clone
-RUN /bin/bash -c 'ls -lh /clone'
 RUN apt-get update && apt-get install -y \
-    curl \
  && rm -rf /var/lib/apt/lists/*
 
 RUN /bin/bash $DOCKER/build_app.sh
