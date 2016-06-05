@@ -1,6 +1,10 @@
 # Simple ONline Circuit Editor
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/RocketChat/Rocket.Chat/raw/master/LICENSE)
+[![Build Status](https://travis-ci.org/mitjajez/SONCE.svg?branch=master)](https://travis-ci.org/mitjajez/SONCE)
+[![CircleCI](https://circleci.com/gh/mitjajez/SONCE.svg?style=svg)](https://circleci.com/gh/mitjajez/SONCE)
+[![Code Climate](https://codeclimate.com/github/mitjajez/SONCE/badges/gpa.svg)](https://codeclimate.com/github/mitjajez/SONCE)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/mitjajez/SONCE/master/LICENCE.md)
+[![dockeri.co](http://dockeri.co/image/mitjajez/sonce)](https://registry.hub.docker.com/mitjajez/sonce/)
 
 * [Development](#development)
  * [Quick Start](#quick-start-for-code-developers)
