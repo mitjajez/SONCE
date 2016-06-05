@@ -21,9 +21,9 @@ ONBUILD RUN meteor build --architecture=os.linux.x86_64 --directory /app --serve
 
 # cleanup
 ONBUILD RUN  rm -rf $COPIED_APP_PATH \
-  && rm -rf /tmp/source
-  && rm -rf ~/.meteor
-  && rm /usr/local/bin/meteor
+  && rm -rf /tmp/source \
+  && rm -rf ~/.meteor \
+  && rm /usr/local/bin/meteor \
   && rm -rf /source
 
 VOLUME /app/uploads
