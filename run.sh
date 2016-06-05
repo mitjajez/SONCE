@@ -7,7 +7,7 @@
 # Moreover, the example uses tozd/docker-hosts for service discovery. Feel free to use Docker container linking instead.
 
 NAME="sonce"
-VERSION="latest"
+VERSION="dev" #latest
 CURRENT_DIR=`basename $PWD`
 DOCKER_TAG="mitjajez/sonce"
 DOMAIN="sonce.se" # .se as shematic editor / .be may be as board editor

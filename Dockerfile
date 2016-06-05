@@ -6,7 +6,7 @@ MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 #&&  useradd -r -g sonce sonce
 
 ENV DOCKER /opt/docker
-ONBUILD COPY ./docker $DOCKER
+COPY .docker $DOCKER
 ONBUILD RUN ls $DOCKER
 ONBUILD COPY ./ /clone
 ONBUILD RUN $DOCKER/build_app.sh
