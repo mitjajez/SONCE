@@ -9,13 +9,17 @@ MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 ONBUILD COPY ./ /tmp/source
 ONBUILD RUN cp -R /tmp/source /source \
   && cd /source \
-  && npm install
+  && npm install \
+  && ls /source
 
-ONBUILD RUN curl -L https://install.meteor.com | /bin/sh
+ONBUILD RUN curl https://install.meteor.com | /bin/sh
+ONBUILD RUN meteor --version && ls /app
 
-ONBUILD RUN meteor build --architecture=os.linux.x86_64 --directory /app --server=http://localhost:3000 \
+ONBUILD RUN mkdir /app \
+  && meteor build --architecture=os.linux.x86_64 --directory /app --server=http://localhost:3000 \
   && cd /app/bundle/programs/server/ \
-  && npm install
+  && npm install \
+  && ls /app
 
 # cleanup
 ONBUILD \
