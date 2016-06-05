@@ -1,6 +1,5 @@
 FROM node:0.10
 
-# crafted and tuned by pierre@ozoux.net and sing.li@rocket.chat
 MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 
 #RUN groupadd -r sonce \
