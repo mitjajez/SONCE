@@ -9,7 +9,6 @@
 NAME="sonce"
 VERSION="latest"
 CURRENT_DIR=`basename $PWD`
-BUILD_DIR="/home/mitja/Dokumenti/SONCE/docker-build"
 DOCKER_TAG=mitjajez/sonce
 DOMAIN="sonce.se" # .se as shematic editor / .be may be as board editor
 SERVER="http://${DOMAIN}"

@@ -1,0 +1,22 @@
+language: node_js
+branches:
+  only:
+  - develop
+  - "/^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$/"
+git:
+  depth: 1
+node_js:
+  - "0.12"
+cache:
+  directories:
+  - "~/.meteor"
+before_install:
+  - if [ ! -e "$HOME/.meteor/meteor" ]; then curl https://install.meteor.com | /bin/sh; fi
+install:
+  - export PATH="$HOME/.meteor:$PATH"
+before_script:
+  - mkdir /tmp/build
+script:
+  - meteor build /tmp/build
+services:
+  - mongodb
