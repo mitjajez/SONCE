@@ -32,7 +32,7 @@ WORKDIR /app
 USER sonce
 
 WORKDIR /app/bundle
-RUN echo $(ls /app)
+RUN echo $(ls /app/bundle)
 
 
 # needs a mongoinstance - defaults to container linking with alias 'db'
