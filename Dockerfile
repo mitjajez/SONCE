@@ -3,8 +3,8 @@ FROM node:0.10
 # crafted and tuned by pierre@ozoux.net and sing.li@rocket.chat
 MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 
-RUN groupadd -r sonce \
-&&  useradd -r -g sonce sonce
+#RUN groupadd -r sonce \
+#&&  useradd -r -g sonce sonce
 
 ONBUILD COPY ./ /tmp/source
 ONBUILD RUN cp -R /tmp/source /source \
@@ -22,17 +22,17 @@ ONBUILD \
   RUN rm -rf /tmp/source \
   && rm -rf ~/.meteor \
   && rm /usr/local/bin/meteor \
-  && rm -rf /source \
-  && echo $(ls /app)
+  && rm -rf /source
 
 VOLUME /app/uploads
 
 WORKDIR /app
+RUN ls /app
 
-USER sonce
+#USER sonce
 
 WORKDIR /app/bundle
-RUN echo $(ls /app/bundle)
+RUN ls /app/bundle
 
 
 # needs a mongoinstance - defaults to container linking with alias 'db'
