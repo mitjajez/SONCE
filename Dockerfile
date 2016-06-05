@@ -8,6 +8,7 @@ MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 
 ENV DOCKER /opt/docker
 ONBUILD COPY ./docker $DOCKER
+ONBUILD RUN ls $DOCKER
 ONBUILD COPY ./ /clone
 ONBUILD RUN $DOCKER/build_app.sh
 
@@ -18,14 +19,6 @@ WORKDIR /app
 #USER sonce
 
 WORKDIR /app/bundle
-
-
-# needs a mongoinstance - defaults to container linking with alias 'db'
-ENV MONGO_URL=mongodb://db:27017/meteor \
-    HOME=/tmp \
-    PORT=3000 \
-    ROOT_URL=http://localhost:3000 \
-    Accounts_AvatarStorePath=/app/uploads
 
 ENV METEOR_SETTINGS={}
 

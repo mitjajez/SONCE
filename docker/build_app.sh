@@ -5,13 +5,13 @@ meteor --version
 cp -R /clone /source
 cd /source
 npm install
-ls /source
+echo $(ls /source)
 
 mkdir /app
 meteor build --architecture=os.linux.x86_64 --directory /app --server=http://localhost:3000
 cd /app/bundle/programs/server/
 npm install
-ls /app
+echo $(ls /app)
 
 # cleanup
 rm -rf /clone

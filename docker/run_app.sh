@@ -4,8 +4,12 @@ if [[ $DELAY ]]; then
   sleep $DELAY
 fi
 
-# Honour already existing PORT setup
-export PORT=${PORT:-80}
+# needs a mongoinstance - defaults to container linking with alias 'db'
+export MONGO_URL=mongodb://db:27017/meteor \
+    HOME=/tmp \
+    PORT=3000 \
+    ROOT_URL=http://localhost:3000 \
+    Accounts_AvatarStorePath=/app/uploads
 
 echo "=> Starting meteor app on port:$PORT"
 node main.js
