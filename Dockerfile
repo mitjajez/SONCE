@@ -25,7 +25,8 @@ ENV MONGO_URL=mongodb://db:27017/meteor \
     HOME=/tmp \
     PORT=3000 \
     ROOT_URL=http://localhost:3000 \
-    METEOR_SETTINGS {} \
     Accounts_AvatarStorePath=/app/uploads
+
+ENV METEOR_SETTINGS={}
 
 ENTRYPOINT bash $DOCKER/run_app.sh
