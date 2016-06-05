@@ -5,8 +5,8 @@ FROM node:0.10
 # crafted and tuned by pierre@ozoux.net and sing.li@rocket.chat
 MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 
-#RUN groupadd -r sonce \
-#&&  useradd -r -g sonce sonce
+RUN groupadd -r sonce \
+&&  useradd -r -g sonce sonce
 
 ONBUILD COPY ./ /tmp/source
 ONBUILD RUN cp -R /tmp/source /source \
