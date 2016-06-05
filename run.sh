@@ -35,12 +35,14 @@ sleep 1
 docker rm "${NAME}" || true
 sleep 1
 
-docker run -d \
+docker run -it \
  --name "${NAME}" --hostname "${NAME}" \
  --env ROOT_URL=${SERVER} --env VIRTUAL_HOST=${DOMAIN} --env VIRTUAL_URL=/ \
  --link sonce_mongodb:db \
  --publish="80:3000" \
  --env VIRTUAL_LETSENCRYPT=true \
  ${DOCKER_TAG}
+
+ docker pause ${DOCKER_TAG}
 
 docker ps -s
