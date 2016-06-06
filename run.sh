@@ -1,22 +1,14 @@
 #!/bin/bash -e
 
-# WARNING: You have to adapt the script for your installation. It contains hard-coded values for another installation.
-
-# An example script to run the app in production. It uses data volumes under the $DATA_ROOT directory.
-# By default /srv. It uses a MongoDB database, tozd/meteor-mongodb image which is automatically run as well.
-# Moreover, the example uses tozd/docker-hosts for service discovery. Feel free to use Docker container linking instead.
-
 NAME="sonce"
 VERSION="dev" #latest
-CURRENT_DIR=`basename $PWD`
-DOCKER_TAG="mitjajez/sonce"
+DOCKER_TAG="mitjajez/${NAME}"
 DOMAIN="localhost" # .se as shematic editor / .be may be as board editor
 SERVER="http://${DOMAIN}"
 
 DATA_ROOT='/srv'
 MONGODB_DATA="${DATA_ROOT}/${NAME}/mongodb/data"
 MONGODB_LOG="${DATA_ROOT}/${NAME}/mongodb/log"
-
 
 docker stop "${NAME}_mongodb" || true
 sleep 1

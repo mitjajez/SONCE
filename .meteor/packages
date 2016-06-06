@@ -56,7 +56,7 @@ chriswessels:hammer
 juliancwirko:postcss@1.0.0-beta.11
 standard-minifier-js
 ddp-rate-limiter
-app-prod-security
+#app-prod-security
 
 # rest apis
 simple:rest-accounts-password
