@@ -14,6 +14,6 @@ RUN /bin/bash $DOCKER/install.sh \
 
 USER sonce
 VOLUME /app/uploads
-#WORKDIR /app/bundle
 
+EXPOSE 3000/tcp
 ENTRYPOINT /bin/bash $DOCKER/run_app.sh
