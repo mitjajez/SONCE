@@ -8,9 +8,9 @@ RUN groupadd -r sonce \
 ENV DOCKER /opt/docker
 COPY .docker $DOCKER
 COPY ./ /clone
-RUN /bin/bash install.sh
+RUN /bin/bash $DOCKER/install.sh
 RUN /bin/bash $DOCKER/build_app.sh
-RUN /bin/bash install.sh
+RUN /bin/bash $DOCKER/cleanup.sh
 
 VOLUME /app/uploads
 
