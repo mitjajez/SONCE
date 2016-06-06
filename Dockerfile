@@ -7,19 +7,16 @@ RUN groupadd -r sonce \
 
 ENV DOCKER /opt/docker
 COPY .docker $DOCKER
-COPY ./ /clone
-RUN /bin/bash $DOCKER/install.sh
-RUN /bin/bash $DOCKER/build_app.sh
-RUN /bin/bash $DOCKER/cleanup.sh
 
-VOLUME /app/uploads
+COPY ./ /clone
+#ENV METEOR_SETTINGS={}
+RUN /bin/bash $DOCKER/install.sh \
+  && /bin/bash $DOCKER/build_app.sh
 
 WORKDIR /app
+VOLUME /app/uploads
 
 USER sonce
-
 WORKDIR /app/bundle
-
-ENV METEOR_SETTINGS={}
 
 ENTRYPOINT bash $DOCKER/run_app.sh
