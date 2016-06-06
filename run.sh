@@ -35,6 +35,7 @@ sleep 1
 docker rm "${NAME}" || true
 sleep 1
 
+docker pull ${DOCKER_TAG}:${VERSION}
 docker run -it \
  --name "${NAME}" --hostname "${NAME}" \
  --env ROOT_URL=${SERVER} --env VIRTUAL_HOST=${DOMAIN} --env VIRTUAL_URL=/ \
