@@ -1,5 +1,4 @@
 FROM node:0.10
-#FROM debian:wheezy
 MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 
 RUN groupadd -r sonce \
@@ -15,6 +14,6 @@ RUN /bin/bash $DOCKER/install.sh \
 
 USER sonce
 VOLUME /app/uploads
-WORKDIR /app/bundle
+#WORKDIR /app/bundle
 
 ENTRYPOINT bash $DOCKER/run_app.sh

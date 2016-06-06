@@ -3,6 +3,7 @@ set -e
 
 #install base
 apt-get update && apt-get install -y \
+    nodejs-legacy \
     build-essential
 
 apt-get autoremove
