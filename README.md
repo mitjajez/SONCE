@@ -26,6 +26,7 @@ docker pull mitjajez/sonce:latest
 
 ## Building from source
 If you have installed node and meteor properly, skip to [Building](#building)
+
 **Debian users** need install newer *node*, and "link" nodejs to node:
 ```sh
 curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -
