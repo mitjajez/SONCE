@@ -3,7 +3,6 @@
 **/node_modules/*
 **/tmp/*
 .meteor/local*
-.docker*
 
 npm-debug.log
 # ------------- Linux gitignore

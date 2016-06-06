@@ -1,9 +1,10 @@
 node_modules
+.meteor/local
 .git
 .gitignore
 build.sh
 run.sh
-LICENCE.md
-README.md
-razvoj.txt
+*.md
+*.txt
 docker-compose.yml
+.travis.yml

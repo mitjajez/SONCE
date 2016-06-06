@@ -7,7 +7,7 @@
 # Moreover, the example uses tozd/docker-hosts for service discovery. Feel free to use Docker container linking instead.
 
 NAME="sonce"
-VERSION="latest"
+VERSION="dev" #latest
 CURRENT_DIR=`basename $PWD`
 DOCKER_TAG="mitjajez/sonce"
 DOMAIN="sonce.se" # .se as shematic editor / .be may be as board editor
@@ -41,8 +41,7 @@ docker run -it \
  --link sonce_mongodb:db \
  --publish="80:3000" \
  --env VIRTUAL_LETSENCRYPT=true \
- ${DOCKER_TAG}
-
- docker pause ${DOCKER_TAG}
+ --env DELAY=10 \
+ ${DOCKER_TAG}:${VERSION}
 
 docker ps -s

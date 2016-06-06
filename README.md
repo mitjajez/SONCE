@@ -4,19 +4,32 @@
 [![CircleCI](https://circleci.com/gh/mitjajez/SONCE.svg?style=svg)](https://circleci.com/gh/mitjajez/SONCE)
 [![Code Climate](https://codeclimate.com/github/mitjajez/SONCE/badges/gpa.svg)](https://codeclimate.com/github/mitjajez/SONCE)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/mitjajez/SONCE/master/LICENCE.md)
+
 [![dockeri.co](http://dockeri.co/image/mitjajez/sonce)](https://registry.hub.docker.com/mitjajez/sonce/)
 
+* [Deployment](#deployment)
 * [Development](#development)
- * [Quick Start](#quick-start-for-code-developers)
+  * [Quick Start](#quick-start-for-code-developers)
+* [About SONCE](#about-sonce)
+  * [Roadmap](#roadmap)
+* [Donate](#donate)
 
+# Deployment
 
-Meteor version of SONCE is up to be used as educational tool and could be the new way of communication with as./prof./mentor while learning electronics by drawing and testing. Get focus on how circuit work and not how to get simulation result. See topology of circuit, see all available matrixes.
+## Docker
 
-# Status & Contributing
+Use the automated build image of our [most recent release](https://hub.docker.com/r/mitjajez/sonce/)
 
-SONCE is under heavy development and the amount of functionality will grow in the future. Contributions are welcome.
+```
+docker pull mitjajez/sonce:latest
+```
+
 
 # Development
+
+## Status & Contributing
+
+SONCE is under heavy development and the amount of functionality will grow in the future. Contributions are welcome.
 
 ## Quick start for code developers
 Prerequisites:
@@ -32,6 +45,9 @@ cd SONCE
 meteor npm install
 meteor
 ```
+# About SONCE
+
+Meteor version of SONCE is up to be used as educational tool and could be the new way of communication with as./prof./mentor while learning electronics by drawing and testing. Get focus on how circuit work and not how to get simulation result. See topology of circuit, see all available matrixes.
 
 ## Roadmap
 
@@ -47,12 +63,13 @@ meteor
 
 SONCE is slovenian sun.
 
+
 ## License
 
 Note that SONCE is distributed under the [MIT License](http://opensource.org/licenses/MIT).
 
 
-## History
+# History
 
 The idea started in 2007 as need for fast svg circuit editor as plugin for MediaWiki that was used for student's lecture notes. First try was made with svg-only with javascript inside - You can fork [**xeagle** branch](https://github.com/mitjajez/SONCE/tree/xeagle).
 Then my colleague come with C# knowledge and start building new Silverlight version. This source code is avaliabe on [codeplex](http://sonce.codeplex.com/). I was very sceptical about SilverLight as i'm about all products from M$ (or. about close source in general)
