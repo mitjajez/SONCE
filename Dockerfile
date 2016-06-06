@@ -1,4 +1,4 @@
-FROM node:0.10 #TAR problems?
+FROM node:0.10
 #FROM debian:wheezy
 MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 
