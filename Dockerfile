@@ -1,5 +1,5 @@
-#FROM node:0.10 #TAR problems?
-FROM debian:wheezy
+FROM node:0.10 #TAR problems?
+#FROM debian:wheezy
 MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 
 RUN groupadd -r sonce \
