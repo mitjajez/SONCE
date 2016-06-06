@@ -13,10 +13,8 @@ COPY ./ /clone
 RUN /bin/bash $DOCKER/install.sh \
   && /bin/bash $DOCKER/build_app.sh
 
-WORKDIR /app
-VOLUME /app/uploads
-
 USER sonce
+VOLUME /app/uploads
 WORKDIR /app/bundle
 
 ENTRYPOINT bash $DOCKER/run_app.sh
