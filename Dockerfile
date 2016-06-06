@@ -16,4 +16,4 @@ USER sonce
 VOLUME /app/uploads
 #WORKDIR /app/bundle
 
-ENTRYPOINT bash $DOCKER/run_app.sh
+ENTRYPOINT /bin/bash $DOCKER/run_app.sh
