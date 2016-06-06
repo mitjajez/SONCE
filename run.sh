@@ -10,7 +10,7 @@ NAME="sonce"
 VERSION="dev" #latest
 CURRENT_DIR=`basename $PWD`
 DOCKER_TAG="mitjajez/sonce"
-DOMAIN="sonce.se" # .se as shematic editor / .be may be as board editor
+DOMAIN="localhost" # .se as shematic editor / .be may be as board editor
 SERVER="http://${DOMAIN}"
 
 DATA_ROOT='/srv'
@@ -35,14 +35,19 @@ sleep 1
 docker rm "${NAME}" || true
 sleep 1
 
-docker pull ${DOCKER_TAG}:${VERSION}
-docker run -it \
+#docker pull ${DOCKER_TAG}:${VERSION}
+docker run -d \
  --name "${NAME}" --hostname "${NAME}" \
- --env ROOT_URL=${SERVER} --env VIRTUAL_HOST=${DOMAIN} --env VIRTUAL_URL=/ \
+ --env ROOT_URL=${SERVER} \
+ --env PORT=3000 \
+ --publish="3000:3000" \
  --link sonce_mongodb:db \
- --publish="80:3000" \
- --env VIRTUAL_LETSENCRYPT=true \
- --env DELAY=10 \
  ${DOCKER_TAG}:${VERSION}
+
+# --env VIRTUAL_HOST=${DOMAIN} --env VIRTUAL_URL=/
+# --env VIRTUAL_LETSENCRYPT=true \
+# --env DELAY=10 \
+#  --publish="80:3000" \
+# --env PORT=443 \
 
 docker ps -s

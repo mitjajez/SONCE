@@ -15,7 +15,5 @@ export MONGO_URL=mongodb://db:27017/meteor \
     Accounts_AvatarStorePath=/app/uploads
 
 cd /app
-ls -lh
-ls -lh bundle/
 echo "=> Starting meteor app on port:$PORT"
 node bundle/main.js

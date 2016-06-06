@@ -1,0 +1,19 @@
+{
+  "name": "SONCE",
+  "description": "Simple ONline Circuit Editor.",
+  "repository": "https://github.com/mitjajez/SONCE",
+  "logo": "https://raw.githubusercontent.com/RocketChat/Rocket.Chat/master/public/images/logo/512x512.png?v=3",
+  "keywords": ["meteor", "circuit", "engineering", "study"],
+  "website": "https://sonce.se",
+  "env": {
+    "BUILDPACK_URL": "https://github.com/RocketChat/heroku-buildpack-meteor.git",
+    "HEROKU_APP_NAME": {
+      "description": "Please re-enter your App Name from the top.",
+      "required": true
+    }
+  },
+  "addons": [
+    "mongolab",
+    "logentries"
+  ]
+}
