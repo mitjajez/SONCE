@@ -7,7 +7,8 @@ apt-get update && apt-get install -y \
     bzip2 \
     build-essential \
     python \
-    git \
+    git
+
 rm -rf /var/lib/apt/lists/*
 
 #install node
