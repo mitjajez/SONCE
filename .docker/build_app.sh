@@ -1,4 +1,10 @@
-curl https://install.meteor.com | /bin/sh
+#!/bin/bash
+set -e
+
+#curl -sL https://install.meteor.com | sed s/--progress-bar/-sL/g | /bin/sh
+curl -L https://install.meteor.com | /bin/sh
+
+meteor --version
 
 cp -R /clone /source
 cd /source

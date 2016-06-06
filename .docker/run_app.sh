@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 # Set a delay to wait to start meteor container
 if [[ $DELAY ]]; then
   echo "Delaying startup for $DELAY seconds"
