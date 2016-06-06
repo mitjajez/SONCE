@@ -1,19 +1,14 @@
 #!/bin/bash
 set -e
 
-#curl -sL https://install.meteor.com | sed s/--progress-bar/-sL/g | /bin/sh
-curl -L https://install.meteor.com | /bin/sh
-
+curl -sL https://install.meteor.com | sed s/--progress-bar/-sL/g | /bin/sh
 meteor --version
 
 cp -R /clone /source
-cd /source
-npm install
+cd /source && npm install --production
 
-mkdir -p /app/bundle/
 meteor build --architecture=os.linux.x86_64 --directory /app --server=http://localhost:3000
-cd /app/bundle/programs/server/
-npm install
+cd /app/bundle/programs/server/ && npm install
 
 ls -lh /app/bundle
 
