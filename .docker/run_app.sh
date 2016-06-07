@@ -14,6 +14,6 @@ export MONGO_URL=mongodb://db:27017/meteor \
     ROOT_URL=http://localhost:3000 \
     Accounts_AvatarStorePath=/app/uploads
 
-cd /app/bundle/
+cd /app
 echo "=> Starting meteor app on port:$PORT"
-node main.js
+node bundle/main.js

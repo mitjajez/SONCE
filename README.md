@@ -20,10 +20,34 @@
 
 Use the automated build image of our [most recent release](https://hub.docker.com/r/mitjajez/sonce/)
 
-```
+```sh
 docker pull mitjajez/sonce:latest
 ```
 
+## Building from source
+If you have installed node and meteor properly, skip to [Building](#building)
+
+**Debian users** need install newer *node*, and "link" nodejs to node:
+```sh
+curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo apt-get install -y nodejs-legacy
+```
+
+### Building
+```sh
+git clone https://github.com/mitjajez/SONCE.git
+cd SONCE && npm install --production
+meteor build --architecture=os.linux.x86_64 --directory /path/build-dir
+cd /path/build-dir/
+cd bundle/programs/server/ && npm install && cd ../../..
+```
+### Running
+Start your mongod db and run sonce:
+```
+docker run -d --name "sonce_mongodb" mongo
+PORT=3000 MONGO_URL=mongodb://localhost:27017/sonce ROOT_URL=http://localhost node bundle/main.js
+```
 
 # Development
 
@@ -41,8 +65,7 @@ Now just clone and start the app:
 
 ```sh
 git clone https://github.com/mitjajez/SONCE.git
-cd SONCE
-meteor npm install
+cd SONCE && npm install
 meteor
 ```
 # About SONCE

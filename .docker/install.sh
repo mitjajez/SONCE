@@ -3,7 +3,11 @@ set -e
 
 #install base
 apt-get update && apt-get install -y \
-    build-essential
+    curl \
+    bzip2 \
+    build-essential \
+    python \
+    git
 
 apt-get autoremove
 apt-get clean

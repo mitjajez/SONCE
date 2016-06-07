@@ -13,4 +13,6 @@ rm /usr/local/bin/meteor
 rm -rf /source
 
 echo "Building meteor dependencies..."
-cd /app/bundle/programs/server/ && npm install
+cd /app/bundle/programs/server
+npm install
+npm cache clear
