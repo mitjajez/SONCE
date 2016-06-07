@@ -28,8 +28,11 @@ Template.Element_edit_menu.onCreated(function elementEditMenuOnCreated() {
   };
 
   this.rotateElement = (eid, phi) => {
+    console.log( this );
+    this.data.element.transform.rot = phi;
     rotateElement.call ({ eid, phi }, displayError);
-    Tracker.flush();
+//    Tracker.flush();
+    console.log( this );
 
   };
 

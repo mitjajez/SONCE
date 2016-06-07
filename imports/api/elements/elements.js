@@ -56,7 +56,7 @@ Elements.schema = new SimpleSchema({
   "component": { type: String },
   "type": { type: String, optional: true },
   "symbol": { type: String },
-  "added": { type: Date },
+  "added": { type: Date, denyUpdate: true },
   "modified": { type: Date, optional: true },
   "cid": {
     type: String,
@@ -66,7 +66,7 @@ Elements.schema = new SimpleSchema({
   "transform": { type: Object },
   "transform.x": { type: Number },
   "transform.y": { type: Number },
-  "transform.rot": { type: Number, optional: true  },
+  "transform.rot": { type: Number },
   "model": { type: Object, optional: true  },
   "model.name": { type: String },
   "model.options": { type: [String], optional: true  },
@@ -74,6 +74,21 @@ Elements.schema = new SimpleSchema({
 });
 
 Elements.attachSchema(Elements.schema);
+
+
+Elements.publicFields = {
+  "name": 1,
+  "value": 1,
+  "component": 1,
+  "type": 1,
+  "symbol": 1,
+  "added": 1,
+  "modified": 1,
+  "cid": 1,
+  "transform": 1,
+  "model": 1,
+  "mentions": 1,
+};
 
 Elements.helpers({
   circuit() {

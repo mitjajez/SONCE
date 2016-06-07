@@ -81,6 +81,8 @@ Meteor version of SONCE is up to be used as educational tool and could be the ne
 #### Planned
 * Graphviz circuit graph with viz.js
 * Editing wires
+* Mentor mode ("read-only", zoom, pan, mouse)
+* Save circuit view for registered users
 
 ## Ideas
 

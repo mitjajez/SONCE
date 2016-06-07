@@ -31,10 +31,6 @@ Template.Elements_item.helpers({
   symbolsSVG() {
     return Session.get("symbolsSVG");
   },
-  rotation() {
-    r = this.element.transform.rot;
-    return r ? "rotate("+r+")":"";
-  },
   nameLabel() {
     const element = this.element;
     const symbol = this.symbol;

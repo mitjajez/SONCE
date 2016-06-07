@@ -54,7 +54,7 @@ export const rotateElement = new ValidatedMethod({
     phi: { type: Number },
   }).validator(),
   run({ eid, phi }) {
-    console.log( "METHOD elements.insert "+ eid );
+    console.log( "METHOD elements.rotate "+ eid +" ("+ phi +")" );
 
     // This is complex auth stuff - perhaps denormalizing a userId onto elements
     // would be correct here?

@@ -67,7 +67,8 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     menuPosition: false,  // element center | click coords
     wiringMode: "HV",     // HV | VH | LV | LH | L |
     svgOffset: false,
-    zoom: 1,
+    dragOffset: false,
+    zoom: 100,
     pan: "0,0",
     mouse: {x:0, y:0},
   });
@@ -86,6 +87,9 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     }
 
   });
+
+
+// ########## SVG related ######################################################
 
   this.getEventPoint = (event, mode) => {
     const e = event.originalEvent;
@@ -114,10 +118,26 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     const sCircuit = Snap('.js-circuit-canvas').select('.js-circuit');
     const t = sCircuit.transform().globalMatrix.scale(z, z, T.x, T.y);
     sCircuit.transform(t);
+
     const out = t.split()
     this.state.set('zoom', (out.scalex*100).toFixed() );
     this.state.set('pan', (out.dx).toFixed() +", "+ (out.dx).toFixed());
   }
+
+  this.pan = (event) => {
+    console.log( "PAN");
+    const T = this.getEventPoint(event, "svg");
+    const T0 = this.state.get('dragOffset');
+    const sCircuit = Snap('.js-circuit-canvas').select('.js-circuit');
+    const t = sCircuit.transform().globalMatrix.translate(T.x - T0.x, T.y - T0.y);
+    sCircuit.transform(t);
+
+    const out = t.split();
+    this.state.set('pan', (out.dx).toFixed() +", "+ (out.dx).toFixed());
+  }
+
+
+// ########## wiring ###########################################################
 
   this.wiringModes = ["HV", "VH", "LV", "LH", "L"];
 
@@ -145,6 +165,12 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     }
   };
 
+  this.updateCircuitName = (name) => {
+    updateCircuitName.call({
+      cid: this.data.circuit()._id,
+      newName: name,
+    }, displayError);
+  };
   this.deleteCircuit = () => {
     const circuit = this.data.circuit();
     const message = `${TAPi18n.__('Are you sure you want to delete the circuit')} ${circuit.name}?`;
@@ -265,12 +291,46 @@ Template.Circuits_show.events({
     instance.zoom(event);
   },
 
+  'mousedown .js-circuit-canvas'(event, instance){
+    event.preventDefault();
+    Session.set('dragging', "panning"); //panning | moving
+    console.log('drag starts')
+    const T = instance.getEventPoint(event, "svg");
+    instance.state.set('dragOffset', T)
+  },
+
+  'mouseup .js-circuit-canvas'(event, instance){
+    event.preventDefault();
+    Session.set('dragging', false)
+    console.log('drag stops')
+  },
+
+
   'mousemove .js-circuit-canvas'(event, instance) {
+    event.preventDefault();
     const pos = instance.getEventPoint (event);
     instance.state.set('mouse', {x:pos.x, y:pos.y} );
+
+    if( Session.equals("dragging", "panning") ){
+      instance.pan(event);
+    }
   },
 
   // VIEWING -------------------------------------------------------------------
+  'dblclick .viewing .js-circuit-element'(event, instance) {
+    event.preventDefault();
+    instance.state.set('selection', $(event.currentTarget).attr('id'));
+    instance.state.set('active', "element");
+    instance.state.set('acting', "editing");
+  },
+
+  'dblclick .viewing .js-edit-circuit'(event, instance) {
+    event.preventDefault();
+    instance.state.set('acting', "editing");
+    // need to wait here
+    instance.$('input[name=name]').focus();
+    instance.$('input[name=name]').select();
+  },
 
   // ADDING --------------------------------------------------------------------
   'mouseenter .adding .js-circuit-canvas'(event, instance) {
@@ -537,10 +597,16 @@ Template.Circuits_show.events({
     }
   },
 
+  'dblclick .js-edit-form'(event, instance) {
+    instance.state.set('acting', "editing");
+  },
+
   'submit .js-edit-form'(event, instance) {
-    console.log( "SUBMIT TITLE" );
     event.preventDefault();
-    instance.saveCircuit();
+    const name = instance.$('.js-edit-form').find('input[name=name]').val();
+    console.log( "SUBMIT TITLE "+ name );
+    instance.updateCircuitName(name);
+    instance.state.set('acting', "viewing");
   },
 
   // This is for the mobile dropdown
