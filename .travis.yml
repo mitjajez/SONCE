@@ -4,7 +4,7 @@ branches:
   - develop
   - "/^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$/"
 git:
-  depth: 1
+  depth: 2
 node_js:
   - "0.12"
 cache:
@@ -16,10 +16,10 @@ install:
   - export PATH="$HOME/.meteor:$PATH"
 before_script:
   - npm install
-  - mkdir /app
+  - mkdir $HOME/app
 script:
-  - meteor build --architecture=os.linux.x86_64 --directory /app --server=http://localhost:3000
-  - cd /app/bundle/programs/server
+  - meteor build --architecture=os.linux.x86_64 --directory $HOME/app --server=http://localhost:3000
+  - cd $HOME/app/bundle/programs/server
   - npm install
 
 services:
