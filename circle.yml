@@ -7,7 +7,6 @@ general:
     only:
       - master
       - develop
-  build_dir: api
 
 dependencies:
   override:
