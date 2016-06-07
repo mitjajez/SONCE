@@ -15,8 +15,10 @@ before_install:
 install:
   - export PATH="$HOME/.meteor:$PATH"
 before_script:
-  - mkdir /tmp/build
+  - cd SONCE
+  - npm install
+  - mkdir /app
 script:
-  - meteor build /tmp/build
+  - meteor build --architecture=os.linux.x86_64 --directory /app --server=http://localhost:3000
 services:
   - mongodb
