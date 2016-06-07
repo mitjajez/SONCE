@@ -1,15 +1,20 @@
 machine:
   node:
     version: 0.10.35
-  services:
-    - mongodb
+
+general:
+  branches:
+    only:
+      - master
+      - develop
+  build_dir: api
 
 dependencies:
   override:
-    - npm install
+    - npm install --production
     - if [ ! -f $HOME/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
     - meteor build --architecture=os.linux.x86_64 --directory $HOME/app --server=http://localhost:3000
     - cd $HOME/app/bundle/programs/server
     - npm install
   cache_directories:
-    - ../.meteor
+    - $HOME/.meteor
