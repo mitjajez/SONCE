@@ -20,14 +20,12 @@ docker run -d \
   --volume "${MONGODB_DATA}:/data/db" \
   mongo
 
-docker ps -s
-
 docker stop "${NAME}" || true
 sleep 1
 docker rm "${NAME}" || true
 sleep 1
 
-#docker pull ${DOCKER_TAG}:${VERSION}
+docker pull ${DOCKER_TAG}:${VERSION}
 docker run -d \
  --name "${NAME}" --hostname "${NAME}" \
  --env ROOT_URL=${SERVER} \
@@ -35,11 +33,3 @@ docker run -d \
  --publish="3000:3000" \
  --link sonce_mongodb:db \
  ${DOCKER_TAG}:${VERSION}
-
-# --env VIRTUAL_HOST=${DOMAIN} --env VIRTUAL_URL=/
-# --env VIRTUAL_LETSENCRYPT=true \
-# --env DELAY=10 \
-#  --publish="80:3000" \
-# --env PORT=443 \
-
-docker ps -s

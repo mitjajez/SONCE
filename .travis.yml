@@ -1,10 +1,11 @@
 language: node_js
 branches:
   only:
+  - master
   - develop
   - "/^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$/"
 git:
-  depth: 1
+  depth: 2
 node_js:
   - "0.12"
 cache:
@@ -15,8 +16,12 @@ before_install:
 install:
   - export PATH="$HOME/.meteor:$PATH"
 before_script:
-  - mkdir /tmp/build
+  - npm install --production
+  - mkdir $HOME/app
 script:
-  - meteor build /tmp/build
+  - meteor build --architecture=os.linux.x86_64 --directory $HOME/app --server=http://localhost:3000
+  - cd $HOME/app/bundle/programs/server
+  - npm install
+
 services:
   - mongodb

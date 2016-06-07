@@ -7,7 +7,6 @@ aldeed:schema-index@1.0.1
 aldeed:simple-schema@1.5.3
 aldeed:template-extension@4.0.0
 allow-deny@1.0.4
-app-prod-security@0.0.0
 arillo:flow-router-helpers@0.5.1
 autoupdate@1.2.9
 babel-compiler@6.6.4
@@ -17,10 +16,6 @@ binary-heap@1.0.8
 blaze@2.1.7
 blaze-tools@1.0.8
 boilerplate-generator@1.0.8
-browser-policy@1.0.9
-browser-policy-common@1.0.9
-browser-policy-content@1.0.10
-browser-policy-framing@1.0.10
 caching-compiler@1.0.4
 caching-html-compiler@1.0.6
 callback-hook@1.0.8
@@ -52,7 +47,6 @@ factory@1.0.0
 fastclick@1.0.11
 flextab@1.0.0
 flowkey:hotkeys@1.1.1
-force-ssl@1.0.11
 geojson-utils@1.0.8
 hot-code-push@1.0.4
 html-tools@1.0.9

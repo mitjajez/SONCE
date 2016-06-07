@@ -1,0 +1,24 @@
+machine:
+  node:
+    version: 0.10.45
+
+general:
+  branches:
+    only:
+      - master
+      - develop
+
+dependencies:
+  override:
+    - npm install --production
+    - if [ ! -f .meteor/meteor ]; then curl https://install.meteor.com | sh; fi
+    - meteor build --architecture=os.linux.x86_64 --directory app --server=http://localhost:3000
+    - cd app/bundle/programs/server
+    - npm install
+    - cd app/bundle
+  cache_directories:
+    - .meteor
+
+test:
+  override:
+    - cd app/bundle
