@@ -39,14 +39,15 @@ Circuits.deny({
 
 Circuits.schema = new SimpleSchema({
   "name": { type: String },
+  "description": { type: String, optional: true },
   "type": { type: String, optional: true },
-  "created": { type: Date },
-  "modified": { type: Date, optional: true },
   "elements": { type: Number, defaultValue: 0 },
   "members": { type: [String], optional: true },
   "moderators": { type: [String], optional: true },
   "owner": { type: Object, optional: true },
-  userId: { type: String, regEx: SimpleSchema.RegEx.Id, optional: true },
+  "created": { type: Date },
+  "modified": { type: Date, optional: true },
+  "userId": { type: String, regEx: SimpleSchema.RegEx.Id, optional: true }, // to delete
 });
 
 Circuits.attachSchema(Circuits.schema);

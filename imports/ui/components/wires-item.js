@@ -20,5 +20,9 @@ Template.Wires_item.onCreated(function wiresItemOnCreated() {
   });
 });
 
+Template.Wires_item.helpers({
+  selectedClass: () => this.selected ? "selected" : "",
+});
+
 Template.Wires_item.events({
 });

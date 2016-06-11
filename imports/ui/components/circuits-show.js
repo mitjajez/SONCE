@@ -41,6 +41,7 @@ import {
 import {
   insertElement,
   rotateElement,
+  connectElementToNet,
   updateElementText,
   removeElement,
 } from '../../api/elements/methods.js';
@@ -79,13 +80,11 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
       elements: { type: Mongo.Cursor },
       wires: { type: Mongo.Cursor },
       elementsReady: { type: Boolean },
-//      wiresReady: { type: Boolean },
     }).validate(Template.currentData());
 
     if( Session.get( "component2add" ) ){
       this.state.set('acting', "adding");
     }
-
   });
 
 
@@ -121,7 +120,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 
     const out = t.split()
     this.state.set('zoom', (out.scalex*100).toFixed() );
-    this.state.set('pan', (out.dx).toFixed() +", "+ (out.dx).toFixed());
+    this.state.set('pan', (out.dx).toFixed() +", "+ (out.dy).toFixed());
   }
 
   this.pan = (event) => {
@@ -133,7 +132,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     sCircuit.transform(t);
 
     const out = t.split();
-    this.state.set('pan', (out.dx).toFixed() +", "+ (out.dx).toFixed());
+    this.state.set('pan', (out.dx).toFixed() +", "+ (out.dy).toFixed());
   }
 
 
@@ -217,7 +216,8 @@ Template.Circuits_show.helpers({
   wiringMode: () => Template.instance().state.get('wiringMode'),
 
   selectedElement: () => Template.instance().state.equals('active', "element"),
-  selectedWire: () => Template.instance().state.equals('active', "wire"),
+  selectedWire: () => Template.instance().state.equals('active', "wire") ||
+                      Template.instance().state.equals('active', "net"),
 
   cancel() {
     const state = Template.instance().state;
@@ -251,21 +251,25 @@ Template.Circuits_show.helpers({
   elementMenuArgs() {
     const instance = Template.instance();
     const eid = instance.state.get('selection');
-    const element = Elements.findOne({ _id: eid});
     return {
-      element: element,
-      setSelected(select) {
-        instance.state.set('selection', select ? element._id : false);
-        instance.state.set('active', select ? "element" : false);
+      element: Elements.findOne({ _id: eid}),
+      cid: this.circuit()._id,
+      active: instance.state.get('active'),       // migrate to MenuArgs
+      selection: instance.state.get('selection'),
+      menuPosition: instance.state.get('menuPosition'),
+      setSelected(doSelect) {
+        instance.state.set('selection', doSelect ? eid : false);
+        instance.state.set('active', doSelect ? "element" : false);
       },
     }
   },
   wireMenuArgs() {
     const instance = Template.instance();
-    const wid = instance.state.get('selection');
-    const wire = Wires.findOne({ _id: wid});
     return {
-      wire: wire,
+//      wire: wire,
+      cid: this.circuit()._id,
+      active: instance.state.get('active'),       // migrate to MenuArgs
+      selection: instance.state.get('selection'),
       menuPosition: instance.state.get('menuPosition'),
       setSelected(select) {
         instance.state.set('selection', select ? wire._id : false);
@@ -273,17 +277,41 @@ Template.Circuits_show.helpers({
       },
     }
   },
-
 });
+
 
 
 
 Template.Circuits_show.events({
   // SELECTING -----------------------------------------------------------------
-  'click .viewing .js-wire, click .editing .js-wire'(event, instance) {
+  'click .js-select-element'(event, instance) {
+    event.preventDefault();
+    this.selected ? this.setSelected( false ) : this.setSelected( true );
+    const p = this.element.transform;
+    instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
+  },
+
+  'click .viewing .js-wire' (event, instance) {
+    event.preventDefault();
+    const p = instance.getEventPoint(event);
+    instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
+    instance.state.set('selection', this.wire.name);
+    instance.state.set('active', "net");
+  },
+
+  'dblclick .js-wire' (event, instance) {
+    event.preventDefault();
     const p = instance.getEventPoint(event);
     instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
     this.setSelected(true);
+  },
+
+  'click .editing .js-wire' (event, instance) {
+    event.preventDefault();
+    const p = instance.getEventPoint(event);
+    instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
+    instance.state.set('selection', this.wire.name);
+    instance.state.set('active', "net");
   },
 
   // COMMON --------------------------------------------------------------------
@@ -293,10 +321,17 @@ Template.Circuits_show.events({
 
   'mousedown .js-circuit-canvas'(event, instance){
     event.preventDefault();
-    Session.set('dragging', "panning"); //panning | moving
-    console.log('drag starts')
+    if( instance.$(event.target).is('svg.js-circuit-canvas') ){
+      Session.set('dragging', "panning"); //panning | moving
+    }
+    else if ( instance.$(event.target).is('.js-select-element') ) {
+      // copy element to js-active-element
+      Session.set('dragging', "moving"); //panning | moving
+      // instance.$('js-active-element').attr('visibility', "visable");
+    }
     const T = instance.getEventPoint(event, "svg");
     instance.state.set('dragOffset', T)
+    console.log('drag starts')
   },
 
   'mouseup .js-circuit-canvas'(event, instance){
@@ -308,18 +343,22 @@ Template.Circuits_show.events({
 
   'mousemove .js-circuit-canvas'(event, instance) {
     event.preventDefault();
-    const pos = instance.getEventPoint (event);
+    const pos = instance.getEventPoint (event, "svg");
     instance.state.set('mouse', {x:pos.x, y:pos.y} );
 
     if( Session.equals("dragging", "panning") ){
       instance.pan(event);
+    }
+    if( Session.equals("dragging", "moving") ){
+      console.log("to MOVE");
+//      instance.move(event);
     }
   },
 
   // VIEWING -------------------------------------------------------------------
   'dblclick .viewing .js-circuit-element'(event, instance) {
     event.preventDefault();
-    instance.state.set('selection', $(event.currentTarget).attr('id'));
+    instance.state.set('selection', instance.$(event.currentTarget).attr('id'));
     instance.state.set('active', "element");
     instance.state.set('acting', "editing");
   },
@@ -347,16 +386,17 @@ Template.Circuits_show.events({
         type: newElement.type,
         symbol: newElement.symbol,
         cid: this.circuit()._id,
+        pins: newElement.pins,
     };
+
     console.log( "PO $data.element: "+ $data.element.component );
     if( !!$data.element.transform ){
       console.log( $data.element.transform );
     }
-
     if(!$data.element.transform){
-      console.log( "UPDATE T!" );
       $data.element.transform = {x:0, y:0, rot:0};
     }
+
     const s = Snap('.js-active-element').select('use');
     s.attr({ 'xlink:href': symbolsSVG + "#"+ newElement.symbol });
     $active.attr({'visibility': "visible"});
@@ -377,6 +417,7 @@ Template.Circuits_show.events({
   'click .adding .js-circuit-canvas'(event, instance) {
     const newElement = instance.$('.js-active-element').data().element;
     console.log( "CLICK .adding ", newElement.component );
+    console.log( newElement );
     insertElement.call( newElement, displayError);
   },
 
@@ -412,7 +453,7 @@ Template.Circuits_show.events({
     const $active = instance.$('.js-active-pin');
     $active.data({
       'id': $data.id,
-      'element': $data.name,
+      'element': $data.element,
     });
     $active.attr({
       'id': $pin.attr('id'),
@@ -435,39 +476,37 @@ Template.Circuits_show.events({
 
   'click .editing .js-active-pin'(event, instance) {
     const $pin = instance.$('.js-active-pin');
+    const $pData = $pin.data();
     const pid = $pin.attr('id');
-    console.log( "CLICK on .editing PIN "+ pid);
-    const px = $pin.attr('cx');
-    const py = $pin.attr('cy');
-    let d = "";
-    console.log( "--> Start wiring" );
-    instance.$('input[name=command-line]').focus();
-    const cid = instance.data.circuit()._id
-    const $wire = instance.$('.js-active-wire');
-    const $data = $wire.data();
     instance.state.set('startPin', pid);
-    d = "M"+px+" "+py;
-    $data.pins = [pid];
-    $data.cid = cid;
-    $data.d = d;
+    console.log( "CLICK on .editing PIN "+ pid);
+
+    const $wire = instance.$('.js-active-wire');
+    const $wData = $wire.data();
+    $wData.pins = [{e: $pData.element, p: $pData.id}];
+    $wData.cid = instance.data.circuit()._id;
+    $wData.d = "M"+$pin.attr('cx')+" "+$pin.attr('cy');
     $wire.attr({ visibility: "visible" });
+
     instance.state.set('active', "wire");
     instance.state.set('selection', ".js-active-wire");
     instance.state.set('acting', "wiring");
+    instance.$('input[name=command-line]').focus();
+    console.log( "  --> Start wiring" );
   },
 
   'click .wiring .js-active-pin'(event, instance) {
     const $pin = instance.$('.js-active-pin');
+    const $pData = $pin.data();
     const pid = $pin.attr('id');
     console.log( "CLICK on .wiring PIN "+ pid);
     const px = $pin.attr('cx');
     const py = $pin.attr('cy');
-    const wid = instance.state.get('selection');
-    console.log( wid );
+    let wid = instance.state.get('selection');
 
     const $wire = instance.$('.js-active-wire');
     $wire.attr({'visibility': "hidden"});
-    const $data = $wire.data();
+    const $wData = $wire.data();
 
     if( instance.state.equals('startPin', pid) ) {
       console.log( "--> Cancel wiring" );
@@ -477,53 +516,64 @@ Template.Circuits_show.events({
     }
     else {
       console.log( "--> Stop wiring" );
-      $data.d += instance.newWirePoint(px, py);
-      $data.pins.push(pid);
+      $wData.d += instance.newWirePoint(px, py);
+      $wData.pins.push({e: $pData.element, p: $pData.id});
       if(wid && wid !== ".js-active-wire") {
-        updateWireD.call( {wid, newD:$data.d}, displayError);
-        updateWirePins.call( {wid, newPin:pid}, displayError);
+        updateWireD.call({ wid, newD: $wData.d }, displayError);
+        updateWirePins.call({ wid, newPin: pid }, displayError);
       }
       else{
-        console.log( $data );
-        const wire = {
-          d: $data.d,
-          pins: $data.pins,
-          cid: $data.cid,
+        const newWire = {
+          d:    $wData.d,
+          pins: $wData.pins.map(function(pin) { return pin.e +"-"+ pin.p}),
+          cid:  $wData.cid,
         };
-        insertWire.call( wire, displayError);
+        wid = insertWire.call( newWire, displayError);
       }
+      const wire = Wires.findOne({_id: wid});
+      $wData.pins.forEach(function(pin) {
+        connectElementToNet.call({
+          cid:  wire.cid,
+          name: pin.e,
+          pin:  pin.p+"",
+          net:  wire.name,
+        }, displayError);
+      });
     }
     instance.state.set('acting', "editing");
-    instance.state.set('active', "pin");
+    instance.state.set('active', false);
     instance.state.set('selection', false);
     instance.state.set('startPin', false);
   },
 
-  'mousemove .wiring .js-circuit-canvas'(event, instance){
-    const p = instance.getEventPoint(event, "svg");
-    const $wire = instance.$('.js-active-wire');
-    $wire.attr("d", $wire.data('d') + instance.newWirePoint(p.x, p.y));
-  },
-
   'click .wiring .js-active-wire'(event, instance){
     console.log( "CLICK on .wiring ACTIVE WIRE" );
-    const p = instance.getEventPoint(event);
+    const p = instance.getEventPoint(event, "svg");
     const $wire = instance.$('.js-active-wire');
-    const $data = $wire.data();
-    $data.d += instance.newWirePoint(p.x, p.y);
+    const $wData = $wire.data();
+    $wData.d += instance.newWirePoint(p.x, p.y);
     if(instance.state.equals('selection', ".js-active-wire") ) {
       const wire = {
-        d: $data.d,
-        pins: $data.pins,
-        cid: $data.cid,
+        d: $wData.d,
+        pins: $wData.pins.map(function(pin) { return pin.e +"-"+ pin.p}),
+        cid: $wData.cid,
       };
       const wid = insertWire.call( wire, displayError);
+      const wName = Wires.findOne({_id: wid}).name;
+      $wData.pins.forEach(function(pin) {
+        connectElementToNet.call({
+          cid: wire.cid,
+          name: pin.e,
+          pin: pin.p+"",
+          net:wName
+        }, displayError);
+      });
       instance.state.set('active', "wire");
       instance.state.set('selection', wid);
     }
     else {
       const wid = instance.state.get('selection');
-      updateWireD.call( {wid, newD:$data.d}, displayError);
+      updateWireD.call( {wid, newD:$wData.d}, displayError);
     }
     instance.$('input[name=command-line]').focus();
   },
@@ -534,7 +584,8 @@ Template.Circuits_show.events({
     const wid = instance.state.get('selection');
     console.log( "CLICK on .wiring WIRE "+ name + "( wiring: " +wid + ")" );
     const $data = instance.$('.js-active-wire').data();
-    const p = instance.getEventPoint(event);
+    const p = instance.getEventPoint(event, "svg");
+
     if( wid && instance.state.equals('selection', ".js-active-wire") ){
       const wire = {
         name: name,
@@ -547,9 +598,16 @@ Template.Circuits_show.events({
     else {
       updateWireD.call( {wid, newD:$data.d}, displayError);
     }
+    instance.state.set('active', false);
     instance.state.set('selection', false);
     instance.state.set('startPin', false);
     console.log( "Stop wiring" );
+  },
+
+  'mousemove .wiring .js-circuit-canvas'(event, instance){
+    const p = instance.getEventPoint(event, "svg");
+    const $wire = instance.$('.js-active-wire');
+    $wire.attr("d", $wire.data('d') + instance.newWirePoint(p.x, p.y));
   },
 
   'keyup .wiring input[name=command-line]'(event, instance) {

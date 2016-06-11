@@ -93,7 +93,8 @@ Meteor.startup ->
 		action: (event, instance) ->
 			@setSelected false
 			instance.$(".wire-edit-menu").hide()
-			instance.removeWire @wire._id
+#			instance.$(".edit-menu").hide()
+			instance.removeWire @selection
 
 		validation: (wire) ->
 #			return authz.hasAtLeastOnePermission('delete-wire', wire.cid ) or settings.get('Message_AllowDeleting') and wire.u?._id is Meteor.userId()

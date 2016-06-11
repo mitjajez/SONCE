@@ -93,6 +93,12 @@ SONCE is slovenian sun.
 
 Note that SONCE is distributed under the [MIT License](http://opensource.org/licenses/MIT).
 
+# Donate
+SONCE will be free forever, but you can help us speed-up the development!
+
+[![flattr.com](//button.flattr.com/flattr-badge-large.png)](https://flattr.com/submit/auto?fid=w7dn30&url=https%3A%2F%2Fgithub.com%2Fmitjajez%2FSONCE)
+
+
 
 # History
 

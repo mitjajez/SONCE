@@ -16,15 +16,16 @@ Template.Circuit_info.onRendered(function circuitsInfoOnRendered() {
 Template.Circuit_info.helpers({
   circuit() {
     const cid = Session.get("openCircuit");
-    return Circuits.find({ cid });
+    return Circuits.findOne({"_id": cid});
+
   },
   elements() {
     const cid = Session.get("openCircuit");
-    return Elements.find({ cid:cid });
+    return Elements.find({ "cid": cid });
   },
   wires() {
     const cid = Session.get("openCircuit");
-    return Wires.find({ cid:cid });
+    return Wires.find({ "cid": cid });
   }
 });
 

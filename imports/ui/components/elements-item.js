@@ -44,7 +44,4 @@ Template.Elements_item.helpers({
 });
 
 Template.Elements_item.events({
-  'click .js-select-element'(event, instance) {
-    this.selected ? this.setSelected( false ) : this.setSelected( true );
-  },
 });

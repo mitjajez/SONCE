@@ -27,7 +27,7 @@
             <div class="nav-item options-mobile">
               <select class="js-action">
                 <option disabled selected>{{_ 'Select an action'}}</option>
-                {{#if circuit.userId}}
+                {{#if circuit.owner}}
                   <option value="public">{{_ 'Make Public'}}</option>
                 {{else}}
                   <option value="private">{{_ 'Make Private'}}</option>
@@ -44,7 +44,7 @@
               {{/if}}
               {{#if editing}}
               <a class="js-toggle-circuit-privacy nav-item">
-                {{#if circuit.userId}}
+                {{#if circuit.owner}}
                   <span class="icon-lock" title={{_ 'Make circuit public'}}></span>
                 {{else}}
                   <span class="icon-unlock" title={{_ 'Make circuit private'}}></span>
@@ -104,17 +104,6 @@
         {{/each}}
 
         {{> Active_pin}}
-      </g>
-
-        {{#if viewing }}
-          {{#if selectedElement }}
-            {{> Element_info (elementMenuArgs "")}}
-          {{/if}}
-          {{#if selectedWire }}
-            <!-- {{> Wire_info (wireMenuArgs "")}} -->
-          {{/if}}
-
-        {{/if}}
 
         {{#if editing }}
           {{#if selectedElement }}
@@ -128,6 +117,17 @@
 
           {{> Operations}}
         {{/if}}
+      </g>
+
+        {{#if viewing }}
+          {{#if selectedElement }}
+            {{> Element_info (elementMenuArgs "")}}
+          {{/if}}
+          {{#if selectedWire }}
+            <!-- {{> Wire_info (wireMenuArgs "")}} -->
+          {{/if}}
+
+        {{/if}}
       {{else}}
           <text class="title-message">{{_ 'Loading elements...'}}</text>
       {{/if}}
@@ -135,11 +135,16 @@
     <footer>
       <div class="status">
         <div style="float:left;">
-          {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
+          {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}}
         </div>
+        {{#let condition=selection}}
+        {{#if condition}}
         <div style="float:left;">
-          {{active}}: {{selection}}
+          | {{active}}: {{selection}}
+          <button class="js-cancel-selection icon-close" title={{_ 'Cancel'}}></button>
         </div>
+        {{/if}}
+        {{/let}}
 
         <div style="float:right;">
           T: {{mouse.x}}, {{mouse.y}}
@@ -150,11 +155,9 @@
       </div>
       <form class="command-box">
         <input name="command-line" type="text"/>
-<!--        <div class="nav-group right">
-          <a href="#" class="js-cancel nav-item">
-            <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
-          </a>
-        </div>-->
+        <div class="nav-group right">
+          <button class="icon-close js-clear-input" title={{_ 'Clear'}}></button>
+        </div>
       </form>
 
 

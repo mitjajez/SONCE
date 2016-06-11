@@ -18,13 +18,18 @@ export const insertElement = new ValidatedMethod({
     "type": { type: String, optional: true },
     "symbol": { type: String },
     "cid": { type: String, regEx: SimpleSchema.RegEx.Id },
+    "pins": { type: [Object], optional: true  },
+    "pins.$.id": { type: String },
+    "pins.$.x": { type: Number },
+    "pins.$.y": { type: Number },
+    "pins.$.net": { type: String, optional: true  },
     "transform": { type: Object },
     "transform.x": { type: Number },
     "transform.y": { type: Number },
     "transform.rot": { type: Number },
   }).validator(),
 
-  run({ name, component, type, symbol, cid, transform }) {
+  run({ name, component, type, symbol, cid, pins, transform }) {
     console.log( "METHOD elements.insert "+ component );
 
     const circuit = Circuits.findOne(cid);
@@ -40,6 +45,7 @@ export const insertElement = new ValidatedMethod({
       type,
       symbol,
       cid,
+      pins,
       transform
     };
 
@@ -53,21 +59,49 @@ export const rotateElement = new ValidatedMethod({
     eid: { type: String },
     phi: { type: Number },
   }).validator(),
+
   run({ eid, phi }) {
     console.log( "METHOD elements.rotate "+ eid +" ("+ phi +")" );
 
     // This is complex auth stuff - perhaps denormalizing a userId onto elements
     // would be correct here?
-    const element = Elements.findOne(eid);
+    const element = Elements.findOne(
+      { "_id": eid },
+    );
 
     if (!element.editableBy(this.userId)) {
-      throw new Meteor.Error('elements.updateText.accessDenied',
+      throw new Meteor.Error('elements.rotate.accessDenied',
         'Cannot edit elements in a private circuit that is not yours');
     }
 
-    Elements.update(eid, {
-      $set: { "transform.rot": phi },
-    });
+    Elements.update(
+      { "_id": eid },
+      { $set: { "transform.rot": phi } }
+    );
+  },
+});
+
+export const connectElementToNet = new ValidatedMethod({
+  name: 'elements.connectToNet',
+  validate: new SimpleSchema({
+    cid: { type: String, regEx: SimpleSchema.RegEx.Id },
+    name: { type: String },
+    pin: { type: String },
+    net: { type: String },
+  }).validator(),
+  run({ cid, name, pin, net }) {
+    console.log( "METHOD elements.connectToNet "+ name +"-"+ pin + " ("+ net +")" );
+
+    const element = Elements.findOne({ cid: cid, name: name });
+    if (!element.editableBy(this.userId)) {
+      throw new Meteor.Error('elements.connectToNet.accessDenied',
+        'Cannot edit elements in a private circuit that is not yours');
+    }
+
+    Elements.update(
+      { cid: cid, name: name, "pins.id": pin },
+      { $set: { "pins.$.net": net } }
+    );
   },
 });
 
@@ -87,9 +121,10 @@ export const updateElementText = new ValidatedMethod({
         'Cannot edit elements in a private circuit that is not yours');
     }
 
-    Elements.update(eid, {
-      $set: { text: newText },
-    });
+    Elements.update(
+      { "_id": eid },
+      { $set: { text: newText } }
+    );
   },
 });
 
@@ -112,10 +147,11 @@ export const removeElement = new ValidatedMethod({
   },
 });
 
-// Get circuit of all method names on Elements
+// Get list of all method names on Elements
 const ELEMENTS_METHODS = _.pluck([
   insertElement,
   rotateElement,
+  connectElementToNet,
   updateElementText,
   removeElement,
 ], 'name');

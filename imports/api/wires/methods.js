@@ -14,7 +14,7 @@ export const insertWire = new ValidatedMethod({
     "name": { type: String, optional: true },   // generated if empty
     "d": { type: String },                      // path string
     "type": { type: String, optional: true },
-    "pins": { type: [String] },                 //pin names
+    "pins": { type: [String] },                 // pin names
     "cid": { type: String, regEx: SimpleSchema.RegEx.Id },
   }).validator(),
 
@@ -102,9 +102,9 @@ export const updateWirePins = new ValidatedMethod({
         'Cannot edit checked status in a private circuit that is not yours');
     }
 
-    Wires.update(wid, { $addToSet: {
-      pins: newPin,
-    } });
+    Wires.update(wid, {
+      $addToSet: { pins: newPin }
+    });
   },
 });
 

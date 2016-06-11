@@ -42,7 +42,7 @@ Template.Components_item.events({
       "key": this.key,
       "type": this.type,
       "symbol": sym ? sym.svg : "missing! Edit symbols.json",
-//      "pins": ""
+      "pins": sym ? sym.pins : "missing! Edit symbols.json",
     });
   },
 
