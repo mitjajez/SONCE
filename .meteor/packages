@@ -20,7 +20,6 @@ less
 reactive-dict
 reactive-var
 aldeed:template-extension
-percolate:momentum
 momentjs:moment
 
 # data
@@ -74,3 +73,4 @@ flextab
 peerlibrary:blaze-components
 easy:search
 flowkey:hotkeys
+msavin:mongol

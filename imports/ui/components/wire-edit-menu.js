@@ -28,35 +28,47 @@ Template.Wire_edit_menu.onCreated(function wireEditMenuOnCreated() {
     }).validate(Template.currentData());
   });
 
-  this.renameWire = (name) => {
-    removeWire.call({	wid, newName }, displayError);
+  this.rename = (name) => {
+    renameNet.call({ net, newName }, displayError);
   };
 
-  this.removeWire = (selection) => {
+  this.remove = (selection) => {
     console.log("active "+ this.data.active);
     console.log( selection );
 
     if (this.data.active === "wire"){
+      console.log("CALL removeWire");
       removeWire.call(
         {	wid: selection },
         displayError
       );
     }
     else if (this.data.active === "net") {
+      console.log("CALL removeNet");
       // removeNet.call()
+
       Wires.find (
         {"cid":this.data.cid, "name":selection},
         {fields: {"_id": 1} }
 //      ).map(function (wid) {
 //        return wid._id
-      ).forEach(function (wid) {
+      ).forEach(function (w) {
         removeWire.call(
-          {	wid: wid._id },
+          {	wid: w._id },
           displayError
         );
       });
 
-//    } else if (this.data.active === "wire") {
+      Elements.find (
+        {"cid":this.data.cid, "pins.net":selection},
+        {fields: {"_id": 1, "pins":1} }
+//      ).map(function (wid) {
+//        return wid._id
+      ).forEach(function (e) {
+        diconnectElementPin.call(
+          {eid: e._id, "pin":e.pins.net},
+        )
+      });
 
     }
     /*

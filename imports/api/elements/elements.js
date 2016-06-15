@@ -5,6 +5,8 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Circuits } from '../circuits/circuits.js';
 import { Symbols } from '../symbols/symbols.js';
 import { Components } from '../components/components.js';
+console.log( Components.find().count() +" components" );
+
 
 
 class ElementsCollection extends Mongo.Collection {
@@ -88,8 +90,15 @@ Elements.publicFields = {
   "type": 1,
   "symbol": 1,
   "cid": 1,
-  "pins": 1,
-  "transform": 1,
+//  "pins": 1,
+  "pins.id": 1,
+  "pins.x": 1,
+  "pins.y": 1,
+  "pins.net": 1,
+//  "transform": 1,
+  "transform.x": 1,
+  "transform.y": 1,
+  "transform.rot": 1,
   "model": 1,
   "mentions": 1,
   "added": 1,

@@ -29,10 +29,10 @@ Template.Element_edit_menu.onCreated(function elementEditMenuOnCreated() {
   });
 
   this.Action = () => {
-    if( active === "wire" ) {
+    if( this.data.active === "wire" ) {
       return WireAction;
     }
-    else if ( active === "element" ) {
+    else if ( this.data.active === "element" ) {
       return ElementAction;
     }
   };
@@ -42,9 +42,10 @@ Template.Element_edit_menu.onCreated(function elementEditMenuOnCreated() {
   };
 
   this.rotateElement = (eid, phi) => {
-    console.log( this.data.element );
+    console.log( this.data.element._id );
 //    this.data.element.transform.rot = phi;
     rotateElement.call ({ eid, phi }, displayError);
+    console.log( this.data.element._id );
   };
 
 });
@@ -68,7 +69,7 @@ Template.Element_edit_menu.helpers({
 });
 
 Template.Element_edit_menu.events({
-  'click .element-edit-menu .js-menu-action'(e,t) {
+  'click .edit-menu .js-menu-action'(e,t) {
     // packages/rocketchat-ui/views/app/room.coffee
     const el = t.$(e.currentTarget);
     const button = ElementAction.getButtonById ( el.data('id') );

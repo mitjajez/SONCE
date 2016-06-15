@@ -64,7 +64,7 @@ Meteor.startup ->
 		i18nLabel: 'Delete'
 		action: (event, instance) ->
 			@setSelected false
-			instance.$(".element-edit-menu").hide()
+			instance.$(".edit-menu").hide()
 			instance.removeElement @element._id
 			###
 			element = @_arguments[1]
@@ -146,7 +146,7 @@ Meteor.startup ->
 			rot = allowedRotateStep
 			if @element.transform.rot?
 				rot += @element.transform.rot
-			if rot > 360
+			if rot >= 360
 				rot -= 360
 			instance.rotateElement(eid, rot)
 			###

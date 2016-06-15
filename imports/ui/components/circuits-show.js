@@ -11,25 +11,25 @@ import { TAPi18n } from 'meteor/tap:i18n';
 
 import { Hotkeys } from 'meteor/flowkey:hotkeys';
 import Snap from 'snapsvg';
-//import SnapZPD from 'snap.svg.zpd';
 
 import { Elements } from '../../api/elements/elements.js';
 import { Symbols } from '../../api/symbols/symbols.js';
 import { Wires } from '../../api/wires/wires.js';
 
-import './circuits-show.html';
-
 // Component used in the template
 import './elements-item.js';
 import './wires-item.js';
 import './element-info.js';
-//import './wire-info.js';
+//import './info-box.js';
+//import './edit-menu.js';
 import './element-edit-menu.js';
 import './wire-edit-menu.js';
 import './operations.js';
 import './active-element.js';
 import './active-pin.js';
 import './active-wire.js';
+
+import './circuits-show.html';
 
 import {
   updateCircuitName,
@@ -41,8 +41,9 @@ import {
 import {
   insertElement,
   rotateElement,
-  connectElementToNet,
-  updateElementText,
+  connectElementPin,
+  disconnectElementPin,
+  renameElement,
   removeElement,
 } from '../../api/elements/methods.js';
 
@@ -79,8 +80,10 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
       circuit: { type: Function },
       elements: { type: Mongo.Cursor },
       wires: { type: Mongo.Cursor },
-      elementsReady: { type: Boolean },
+      subscriptionsReady: { type: Boolean },
     }).validate(Template.currentData());
+
+    this.data = Template.currentData();
 
     if( Session.get( "component2add" ) ){
       this.state.set('acting', "adding");
@@ -170,14 +173,13 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
       newName: name,
     }, displayError);
   };
+
   this.deleteCircuit = () => {
     const circuit = this.data.circuit();
     const message = `${TAPi18n.__('Are you sure you want to delete the circuit')} ${circuit.name}?`;
 
     if ( confirm(message) ) { // eslint-disable-line no-alert
-      removeCircuit.call({
-        cid: circuit._id,
-      }, displayError);
+      removeCircuit.call( {cid: circuit._id}, displayError);
 
       FlowRouter.go('App.home');
       return true;
@@ -188,7 +190,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 
   this.toggleCircuitPrivacy = () => {
     const circuit = this.data.circuit();
-    if (circuit.userId) {
+    if (circuit.owner) {
       makeCircuitPublic.call({ cid: circuit._id }, displayError);
     } else {
       makeCircuitPrivate.call({ cid: circuit._id }, displayError);
@@ -266,7 +268,6 @@ Template.Circuits_show.helpers({
   wireMenuArgs() {
     const instance = Template.instance();
     return {
-//      wire: wire,
       cid: this.circuit()._id,
       active: instance.state.get('active'),       // migrate to MenuArgs
       selection: instance.state.get('selection'),
@@ -294,21 +295,21 @@ Template.Circuits_show.events({
   'click .viewing .js-wire' (event, instance) {
     event.preventDefault();
     const p = instance.getEventPoint(event);
-    instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
+    instance.state.set('menuPosition', "translate("+p.x+","+p.y+")" );
     instance.state.set('selection', this.wire.name);
     instance.state.set('active', "net");
   },
 
   'dblclick .js-wire' (event, instance) {
     event.preventDefault();
-    const p = instance.getEventPoint(event);
+    const p = instance.getEventPoint(event, "svg");
     instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
     this.setSelected(true);
   },
 
   'click .editing .js-wire' (event, instance) {
     event.preventDefault();
-    const p = instance.getEventPoint(event);
+    const p = instance.getEventPoint(event, "svg");
     instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
     instance.state.set('selection', this.wire.name);
     instance.state.set('active', "net");
@@ -376,11 +377,7 @@ Template.Circuits_show.events({
     const newElement = Session.get("component2add");
     const symbolsSVG = Session.get("symbolsSVG");
     const $active = instance.$('.js-active-element');
-    console.log( "newElement.key: "+ newElement.key );
     const $data = $active.data();
-    if( !!$data.element ){
-      console.log( "$data.element: "+ $data.element.component );
-    }
     $data.element = {
         component: newElement.key,
         type: newElement.type,
@@ -388,11 +385,8 @@ Template.Circuits_show.events({
         cid: this.circuit()._id,
         pins: newElement.pins,
     };
+    $data.element.pins.forEach( (pin) => { pin.net = "open"; } )
 
-    console.log( "PO $data.element: "+ $data.element.component );
-    if( !!$data.element.transform ){
-      console.log( $data.element.transform );
-    }
     if(!$data.element.transform){
       $data.element.transform = {x:0, y:0, rot:0};
     }
@@ -416,7 +410,6 @@ Template.Circuits_show.events({
 
   'click .adding .js-circuit-canvas'(event, instance) {
     const newElement = instance.$('.js-active-element').data().element;
-    console.log( "CLICK .adding ", newElement.component );
     console.log( newElement );
     insertElement.call( newElement, displayError);
   },
@@ -523,22 +516,12 @@ Template.Circuits_show.events({
         updateWirePins.call({ wid, newPin: pid }, displayError);
       }
       else{
-        const newWire = {
+        insertWire.call({
           d:    $wData.d,
-          pins: $wData.pins.map(function(pin) { return pin.e +"-"+ pin.p}),
+          pins: $wData.pins.map( function(pin) { return {e: pin.e, p: pin.p+""} }),
           cid:  $wData.cid,
-        };
-        wid = insertWire.call( newWire, displayError);
+        });
       }
-      const wire = Wires.findOne({_id: wid});
-      $wData.pins.forEach(function(pin) {
-        connectElementToNet.call({
-          cid:  wire.cid,
-          name: pin.e,
-          pin:  pin.p+"",
-          net:  wire.name,
-        }, displayError);
-      });
     }
     instance.state.set('acting', "editing");
     instance.state.set('active', false);
@@ -552,22 +535,14 @@ Template.Circuits_show.events({
     const $wire = instance.$('.js-active-wire');
     const $wData = $wire.data();
     $wData.d += instance.newWirePoint(p.x, p.y);
-    if(instance.state.equals('selection', ".js-active-wire") ) {
-      const wire = {
+    $wData.pins.push({e: pin.e, p: pin.p+""});
+    if ( instance.state.equals('selection', ".js-active-wire") ) {
+      const wid = insertWire.call( {
         d: $wData.d,
-        pins: $wData.pins.map(function(pin) { return pin.e +"-"+ pin.p}),
+        pins: $wData.pins.map( function(pin) { return {e: pin.e, p: pin.p+""} }),
         cid: $wData.cid,
-      };
-      const wid = insertWire.call( wire, displayError);
-      const wName = Wires.findOne({_id: wid}).name;
-      $wData.pins.forEach(function(pin) {
-        connectElementToNet.call({
-          cid: wire.cid,
-          name: pin.e,
-          pin: pin.p+"",
-          net:wName
-        }, displayError);
-      });
+      }, displayError);
+
       instance.state.set('active', "wire");
       instance.state.set('selection', wid);
     }
@@ -582,21 +557,21 @@ Template.Circuits_show.events({
     instance.state.set('acting', "viewing");
     const name = instance.$(event.currentTarget).attr('name');
     const wid = instance.state.get('selection');
-    console.log( "CLICK on .wiring WIRE "+ name + "( wiring: " +wid + ")" );
-    const $data = instance.$('.js-active-wire').data();
+    console.log( "CLICK on .wiring WIRE "+ name + "( wiring: "+ wid + ")" );
+    const $wData = instance.$('.js-active-wire').data();
     const p = instance.getEventPoint(event, "svg");
 
-    if( wid && instance.state.equals('selection', ".js-active-wire") ){
-      const wire = {
+    if ( wid && instance.state.equals('selection', ".js-active-wire") ){
+      insertWire.call( {
         name: name,
-        d: $data.d + instance.newWirePoint(p.x, p.y),
-        pins: $data.pins,
-        cid: $data.cid,
-      };
-      insertWire.call( wire, displayError);
+        d: $wData.d + instance.newWirePoint(p.x, p.y),
+        pins: $wData.pins.map( function(pin) { return {e: pin.e, p: pin.p+""} }),
+        cid: $wData.cid,
+      }, displayError);
     }
     else {
-      updateWireD.call( {wid, newD:$data.d}, displayError);
+      updateWireD.call( {wid, newD:$wData.d}, displayError);
+//      updateWireEnd.call( {wid, newEnd:{e: "node", p: "new"}}, displayError);
     }
     instance.state.set('active', false);
     instance.state.set('selection', false);

@@ -6,6 +6,12 @@ import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 
 import { Wires } from './wires.js';
 import { Circuits } from '../circuits/circuits.js';
+import { Elements } from '../elements/elements.js';
+
+import {
+  connectElementPin,
+  disconnectElementPin
+} from '../elements/methods.js';
 
 export const insertWire = new ValidatedMethod({
   name: 'wires.insert',
@@ -14,7 +20,9 @@ export const insertWire = new ValidatedMethod({
     "name": { type: String, optional: true },   // generated if empty
     "d": { type: String },                      // path string
     "type": { type: String, optional: true },
-    "pins": { type: [String] },                 // pin names
+    "pins": { type: [Object] },                 // connected pins
+    "pins.$.e": { type: String },               // pin element od node
+    "pins.$.p": { type: String },               // pin id      or node id
     "cid": { type: String, regEx: SimpleSchema.RegEx.Id },
   }).validator(),
 
@@ -26,15 +34,17 @@ export const insertWire = new ValidatedMethod({
         'Cannot add wires to a private circuit that is not yours');
     }
 
-    const wire = {
-      name,
-      d,
-      type,
-      pins,
-      cid,
-    };
+    const wire = { name, d, type, pins, cid };
+    const wid = Wires.insert(wire);
 
-    return Wires.insert(wire);
+    // Update all elements connected to this new wire.
+    wire.pins.forEach( function(pin) {
+      connectElementPin.call(
+        {cid: wire.cid, name: pin.e, pin: pin.p, net: wire.name}
+      );
+    });
+
+    return wid;
   },
 });
 

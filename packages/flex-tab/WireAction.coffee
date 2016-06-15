@@ -71,7 +71,7 @@ Meteor.startup ->
 				input.focus()
 			, 200
 		validation: (wire) ->
-			hasPermission = authz.hasAtLeastOnePermission('edit-wire', wire.cid)
+			hasPermission = authz.hasAtLeastOnePermission('edit-wire', wire.wid)
 			isEditAllowed = settings.get 'Message_AllowEditing'
 			editOwn = wire.u?._id is Meteor.userId()
 
@@ -94,7 +94,7 @@ Meteor.startup ->
 			@setSelected false
 			instance.$(".wire-edit-menu").hide()
 #			instance.$(".edit-menu").hide()
-			instance.removeWire @selection
+			instance.remove @selection
 
 		validation: (wire) ->
 #			return authz.hasAtLeastOnePermission('delete-wire', wire.cid ) or settings.get('Message_AllowDeleting') and wire.u?._id is Meteor.userId()

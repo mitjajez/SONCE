@@ -32,9 +32,6 @@
               <i class="icon-trash" title={{_ 'Delete element'}}
                 data-edit="circuitName"></i>
             </span>
-            ({{element.transform.x}},
-            {{element.transform.y}},
-            {{element.transform.rot}})
           </li>
         {{/each}}
         </ul>
@@ -45,7 +42,7 @@
         {{#each wire in wires}}
           <li>
             <span>{{wire.name}}</span>
-            {{wire.pins}}
+            ({{wire.pins.[0].e}}-{{wire.pins.[0].p}}) -> ({{wire.pins.[1].e}}-{{wire.pins.[1].p}})
           </li>
         {{/each}}
         </ul>
@@ -59,6 +56,10 @@
           {{/each}}
           {{#each element in elements}}
             <span>{{element.pins.[0].net}}</span> -> <span>{{element.pins.[1].net}}</span> [label="{{element.name}}"]
+            {{#if false }}
+            <span>{{element.pins.[0].net}}</span> -> <span>{{element.pins.[2].net}}</span> [label="{{element.name}}"]
+            <span>{{element.pins.[1].net}}</span> -> <span>{{element.pins.[2].net}}</span> [label="{{element.name}}"]
+            {{/if}}
           {{/each}}
           }
         </pre>
@@ -67,9 +68,27 @@
         <h3>Danger zone:</h3>
         <ul class="list clearfix">
           <li>
-            <button class="icon-trash" title={{_ 'Delete circuit'}}
-              data-edit="delete"></button>
+            <button
+              class="js-delete-circuit icon-trash"
+              title={{_ 'Delete circuit'}}>
+            </button>
           </li>
+        </ul>
+      </form>
+      <form>
+        <h3>Debug data:</h3>
+        <ul class="list clearfix">
+        {{#each element in elements}}
+          <li>
+            {{element.name}}
+            {{#each pin in element.pins}}
+              <a class="js-select-net" title="{{pin.id}}">{{pin.net}}</a>
+            {{/each}}
+            (transform: {{element.transform.x}},
+            {{element.transform.y}},
+            {{element.transform.rot}})
+          </li>
+        {{/each}}
         </ul>
       </form>
     </div>

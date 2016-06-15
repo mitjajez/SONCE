@@ -57,27 +57,26 @@ Circuits.attachSchema(Circuits.schema);
 // them here to keep them private to the server.
 Circuits.publicFields = {
   name: 1,
-//  incompleteCount: 1,
-//  userId: 1,
+  owner: 1,
 };
 
 Factory.define('circuit', Circuits, {});
 
 Circuits.helpers({
-  // A circuit is considered to be private if it has a userId set
+  // A circuit is considered to be private if it has a owner set
   isPrivate() {
-    return !!this.userId;
+    return !!this.owner;
   },
   isLastPublicCircuit() {
     const publicCircuitCount = Circuits.find({ userId: { $exists: false } }).count();
     return !this.isPrivate() && publicCircuitCount === 1;
   },
   editableBy(userId) {
-    if (!this.userId) {
+    if (!this.owner) {
       return true;
     }
 
-    return this.userId === userId;
+    return this.owner === userId;
   },
   elements() {
     return Elements.find({ cid: this._id }, { sort: { createdAt: -1 } });

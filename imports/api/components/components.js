@@ -47,7 +47,7 @@ Components.schema = new SimpleSchema({
 
 Components.attachSchema(Components.schema);
 
-Factory.define('component', Components, {});
+//Factory.define('component', Components, {});
 
 Components.helpers({
   editableBy(userId) {

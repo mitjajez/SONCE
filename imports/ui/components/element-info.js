@@ -12,6 +12,7 @@ Template.Element_info.onCreated(function elementInfoOnCreated() {
   this.autorun(() => {
     new SimpleSchema({
       element: { type: Elements._helpers },
+      cid: { type: String },
       active: { type: String, optional: true },
       selection: { type: String, optional: true },
       menuPosition: { type: String, optional: true },

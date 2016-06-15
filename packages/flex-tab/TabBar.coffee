@@ -1,4 +1,8 @@
+#exports.TabBar = TabBarCollection 'TabBar'
+
+
 TabBar = new class
+#exports.TabBar = new class
 	$tabBar = {}
 	$tabButtons = {}
 

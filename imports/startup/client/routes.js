@@ -1,13 +1,14 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
+import { TabBar } from 'meteor/flextab';
 
 // Import to load these templates
 import '../../ui/layouts/app-body.js';
 import '../../ui/pages/root-redirector.js';
 import '../../ui/pages/circuits-show-page.js';
-import '../../ui/pages/app-not-found.js';
 import '../../ui/pages/symbols-editor-page.js';
+import '../../ui/pages/app-not-found.js';
 
 // Import to override accounts templates
 import '../../ui/accounts/accounts-templates.js';

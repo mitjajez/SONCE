@@ -15,7 +15,7 @@ Meteor.publishComposite('elements.inCircuit', function elementsInCircuit(cid) {
     find() {
       const query = {
         _id: cid,
-        $or: [{ userId: { $exists: false } }, { userId }],
+        $or: [{ owner: { $exists: false } }, { userId }],
       };
 
       // We only need the _id field in this query, since it's only

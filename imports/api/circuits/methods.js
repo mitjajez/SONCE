@@ -5,6 +5,16 @@ import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 import { _ } from 'meteor/underscore';
 
 import { Circuits } from './circuits.js';
+import { Elements } from '../elements/elements.js';
+import { Wires } from '../wires/wires.js';
+
+import {
+  removeElement,
+} from '../elements/methods.js';
+
+import {
+  removeWire,
+} from '../wires/methods.js';
 
 const CIRCUIT_ID_ONLY = new SimpleSchema({
   cid: { type: String },
@@ -54,6 +64,7 @@ export const makeCircuitPublic = new ValidatedMethod({
     }
 
     const circuit = Circuits.findOne(cid);
+    console.log( "METHOD circuits.makePublic "+ circuit.name );
 
     if (!circuit.editableBy(this.userId)) {
       throw new Meteor.Error('circuits.makePublic.accessDenied',
@@ -70,12 +81,15 @@ export const makeCircuitPublic = new ValidatedMethod({
 
 export const updateCircuitName = new ValidatedMethod({
   name: 'circuits.updateName',
+
   validate: new SimpleSchema({
     cid: { type: String },
     newName: { type: String },
   }).validator(),
+
   run({ cid, newName }) {
     const circuit = Circuits.findOne(cid);
+    console.log( "METHOD circuits.updateName "+ circuit.name +" -> "+ newName);
 
     if (!circuit.editableBy(this.userId)) {
       throw new Meteor.Error('circuits.updateName.accessDenied',
@@ -91,11 +105,43 @@ export const updateCircuitName = new ValidatedMethod({
   },
 });
 
+export const updateCircuitDescription = new ValidatedMethod({
+  name: 'circuits.updateDescription',
+
+  validate: new SimpleSchema({
+    cid: { type: String },
+    newDescription: { type: String },
+  }).validator(),
+
+  run({ cid, newDescription }) {
+    const circuit = Circuits.findOne(cid);
+    console.log( "METHOD circuits.updateDescription "+ circuit.name +" -> "+ newName);
+
+    if (!circuit.editableBy(this.userId)) {
+      throw new Meteor.Error('circuits.updateDescription.accessDenied',
+        'You don\'t have permission to edit this circuit.');
+    }
+
+    // XXX the security check above is not atomic, so in theory a race condition could
+    // result in exposing private data
+
+    Circuits.update(cid, {
+      $set: { description: newDescription },
+    });
+  },
+});
+
 export const removeCircuit = new ValidatedMethod({
   name: 'circuits.remove',
-  validate: CIRCUIT_ID_ONLY,
+
+//  validate: CIRCUIT_ID_ONLY,
+  validate: new SimpleSchema({
+    cid: { type: String },
+  }).validator(),
+
   run({ cid }) {
     const circuit = Circuits.findOne(cid);
+    console.log( "METHOD circuits.remove "+ circuit.name);
 
     if (!circuit.editableBy(this.userId)) {
       throw new Meteor.Error('circuits.remove.accessDenied',
@@ -109,6 +155,14 @@ export const removeCircuit = new ValidatedMethod({
       throw new Meteor.Error('circuits.remove.lastPublicCircuit',
         'Cannot delete the last public circuit.');
     }
+
+    Elements.find({'cid': cid}).forEach(function(e) {
+      removeElement.call({'eid': e._id});
+    });
+
+    Wires.find({'cid': cid}).forEach(function(w) {
+      removeWire.call({'wid': w._id});
+    });
 
     Circuits.remove(cid);
   },
