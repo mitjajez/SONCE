@@ -18,25 +18,6 @@
         </ul>
       </form>
       <form>
-        <h3>Netlist:</h3>
-        <ul class="list clearfix">
-        {{#each element in elements}}
-          <li>
-            {{element.name}}
-            {{#each pin in element.pins}}
-              <a class="js-select-net" title="{{pin.id}}">{{pin.net}}</a>
-            {{/each}}
-            <span class="options">
-              <i class="icon-edit" title={{_ 'Edit element'}}
-                data-edit="circuitName"></i>
-              <i class="icon-trash" title={{_ 'Delete element'}}
-                data-edit="circuitName"></i>
-            </span>
-          </li>
-        {{/each}}
-        </ul>
-      </form>
-      <form>
         <h3>Wires:</h3>
         <ul class="list clearfix">
         {{#each wire in wires}}
@@ -47,23 +28,6 @@
         {{/each}}
         </ul>
       </form>
-      <div>
-        <h3>Dot:</h3>
-        <pre>
-          digraph sonce {
-          {{#each wire in wires}}
-            <span data-net="{{wire.name}}">{{wire.name}}</span> [label="Foo"]
-          {{/each}}
-          {{#each element in elements}}
-            <span>{{element.pins.[0].net}}</span> -> <span>{{element.pins.[1].net}}</span> [label="{{element.name}}"]
-            {{#if false }}
-            <span>{{element.pins.[0].net}}</span> -> <span>{{element.pins.[2].net}}</span> [label="{{element.name}}"]
-            <span>{{element.pins.[1].net}}</span> -> <span>{{element.pins.[2].net}}</span> [label="{{element.name}}"]
-            {{/if}}
-          {{/each}}
-          }
-        </pre>
-      </div>
       <form>
         <h3>Danger zone:</h3>
         <ul class="list clearfix">
@@ -73,22 +37,6 @@
               title={{_ 'Delete circuit'}}>
             </button>
           </li>
-        </ul>
-      </form>
-      <form>
-        <h3>Debug data:</h3>
-        <ul class="list clearfix">
-        {{#each element in elements}}
-          <li>
-            {{element.name}}
-            {{#each pin in element.pins}}
-              <a class="js-select-net" title="{{pin.id}}">{{pin.net}}</a>
-            {{/each}}
-            (transform: {{element.transform.x}},
-            {{element.transform.y}},
-            {{element.transform.rot}})
-          </li>
-        {{/each}}
         </ul>
       </form>
     </div>

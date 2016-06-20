@@ -5,9 +5,6 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Circuits } from '../circuits/circuits.js';
 import { Symbols } from '../symbols/symbols.js';
 import { Components } from '../components/components.js';
-console.log( Components.find().count() +" components" );
-
-
 
 class ElementsCollection extends Mongo.Collection {
   insert(doc, callback) {

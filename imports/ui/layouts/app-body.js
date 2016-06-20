@@ -114,8 +114,8 @@ Template.App_body.events({
     if (ActiveRoute.name('Circuits.show')) {
       // TODO -- test this code path
       const circuit = Circuits.findOne(FlowRouter.getParam('_id'));
-      if (circuit.userId) {
-        FlowRouter.go('Circuits.show', Circuits.findOne({ userId: { $exists: false } }));
+      if (circuit.owner) {
+        FlowRouter.go('Circuits.show', Circuits.findOne({ owner: { $exists: false } }));
       }
     }
   },

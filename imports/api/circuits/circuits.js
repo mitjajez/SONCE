@@ -23,7 +23,6 @@ class CircuitsCollection extends Mongo.Collection {
     return super.insert(ourCircuit, callback);
   }
   remove(selector, callback) {
-    Elements.remove({ cid: selector });
     return super.remove(selector, callback);
   }
 }
