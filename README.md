@@ -53,7 +53,9 @@ PORT=3000 MONGO_URL=mongodb://localhost:27017/sonce ROOT_URL=http://localhost no
 
 ## Status & Contributing
 
-SONCE is under heavy development and the amount of functionality will grow in the future. Contributions are welcome.
+SONCE is under heavy development and the amount of functionality will grow in
+the future. Contributions are welcome. See
+[Contributions](https://github.com/mitjajez/SONCE/blob/develop/CONTRIBUTIONS.md)
 
 ## Quick start for code developers
 Prerequisites:
@@ -110,11 +112,3 @@ SONCE will be free forever, but you can help us speed-up the development!
 
 [![flattr.com](https://button.flattr.com/flattr-badge-large.png)](https://flattr.com/submit/auto?fid=w7dn30&url=https%3A%2F%2Fgithub.com%2Fmitjajez%2FSONCE)
 [![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=X6B3H2HX9C5XN&lc=SI&item_name=Mitja%20Jež&item_number=SONCE&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
-
-
-# History
-
-The idea started in 2007 as need for fast svg circuit editor as plugin for MediaWiki that was used for student's lecture notes. First try was made with svg-only with javascript inside - You can fork [**xeagle** branch](https://github.com/mitjajez/SONCE/tree/xeagle).
-Then my colleague come with C# knowledge and start building new Silverlight version. This source code is avaliabe on [codeplex](http://sonce.codeplex.com/). I was very sceptical about SilverLight as i'm about all products from M$ (or. about close source in general)
-In 2010 I met the jQuery library and it blows my mind, so i made new branch [**SONCEjQ**](https://github.com/mitjajez/SONCE/tree/SONCEjQ). It uses jquery.svg plugin. It generates svg while drawing and also build circuit's XML, but with nodes as root. Just like is needed in matrix to calculate circuit.
-After many years of doing different things I switched from jQuery to nodejs and met meteor. In 2016 it was also deadline to get my degree. So this came up.
