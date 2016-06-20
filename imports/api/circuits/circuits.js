@@ -23,7 +23,6 @@ class CircuitsCollection extends Mongo.Collection {
     return super.insert(ourCircuit, callback);
   }
   remove(selector, callback) {
-    Elements.remove({ cid: selector });
     return super.remove(selector, callback);
   }
 }
@@ -39,14 +38,15 @@ Circuits.deny({
 
 Circuits.schema = new SimpleSchema({
   "name": { type: String },
+  "description": { type: String, optional: true },
   "type": { type: String, optional: true },
-  "created": { type: Date },
-  "modified": { type: Date, optional: true },
   "elements": { type: Number, defaultValue: 0 },
   "members": { type: [String], optional: true },
   "moderators": { type: [String], optional: true },
   "owner": { type: Object, optional: true },
-  userId: { type: String, regEx: SimpleSchema.RegEx.Id, optional: true },
+  "created": { type: Date },
+  "modified": { type: Date, optional: true },
+  "userId": { type: String, regEx: SimpleSchema.RegEx.Id, optional: true }, // to delete
 });
 
 Circuits.attachSchema(Circuits.schema);
@@ -56,27 +56,26 @@ Circuits.attachSchema(Circuits.schema);
 // them here to keep them private to the server.
 Circuits.publicFields = {
   name: 1,
-//  incompleteCount: 1,
-//  userId: 1,
+  owner: 1,
 };
 
 Factory.define('circuit', Circuits, {});
 
 Circuits.helpers({
-  // A circuit is considered to be private if it has a userId set
+  // A circuit is considered to be private if it has a owner set
   isPrivate() {
-    return !!this.userId;
+    return !!this.owner;
   },
   isLastPublicCircuit() {
     const publicCircuitCount = Circuits.find({ userId: { $exists: false } }).count();
     return !this.isPrivate() && publicCircuitCount === 1;
   },
   editableBy(userId) {
-    if (!this.userId) {
+    if (!this.owner) {
       return true;
     }
 
-    return this.userId === userId;
+    return this.owner === userId;
   },
   elements() {
     return Elements.find({ cid: this._id }, { sort: { createdAt: -1 } });

@@ -1,0 +1,45 @@
+<template name="Netlist">
+  <div class="content">
+    <div class="list-view circuit-settings">
+      <div class="status">
+        <h2>{{_ "Netlist"}}</h2>
+      </div>
+      <form>
+        <h3>Instance-based:</h3>
+        <ul class="list clearfix">
+        {{#each element in elements}}
+          <li>
+            {{element.name}}
+            {{#each pin in element.pins}}
+              <a class="js-select-net" title="{{pin.id}}">{{pin.net}}</a>
+            {{/each}}
+            <span class="options">
+              <i class="icon-edit" title={{_ 'Edit element'}}
+                data-edit="circuitName"></i>
+              <i class="icon-trash" title={{_ 'Delete element'}}
+                data-edit="circuitName"></i>
+            </span>
+          </li>
+        {{/each}}
+        </ul>
+      </form>
+      <form>
+        <h3>Net-based:</h3>
+        <ul class="list clearfix">
+        {{#each net in nets}}
+          <li>
+            <span>{{net}}</span>
+            ({{#each wire in wires (net) }}
+            {{#each pin in wire.pins }}
+            {{pin.e}}-{{pin.p}},
+            <!--            {{wire.pins.[0].e}}-{{wire.pins.[0].p}}) -->
+            {{/each}}
+            {{/each}})
+          </li>
+        {{/each}}
+        </ul>
+      </form>
+
+    </div>
+  </div>
+</template>

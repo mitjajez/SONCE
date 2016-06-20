@@ -18,31 +18,25 @@
         </ul>
       </form>
       <form>
-        <h3>Netlist:</h3>
-        <ul class="list clearfix">
-        {{#each element in elements}}
-          <li>
-            {{element.name}}
-            <span class="options">
-              <i class="icon-edit" title={{_ 'Edit element'}}
-                data-edit="circuitName"></i>
-              <i class="icon-trash" title={{_ 'Delete element'}}
-                data-edit="circuitName"></i>
-            </span>
-            {{element.pins}}
-          </li>
-        {{/each}}
-        </ul>
-      </form>
-      <form>
         <h3>Wires:</h3>
         <ul class="list clearfix">
         {{#each wire in wires}}
           <li>
             <span>{{wire.name}}</span>
-            {{wire.pins}}
+            ({{wire.pins.[0].e}}-{{wire.pins.[0].p}}) -> ({{wire.pins.[1].e}}-{{wire.pins.[1].p}})
           </li>
         {{/each}}
+        </ul>
+      </form>
+      <form>
+        <h3>Danger zone:</h3>
+        <ul class="list clearfix">
+          <li>
+            <button
+              class="js-delete-circuit icon-trash"
+              title={{_ 'Delete circuit'}}>
+            </button>
+          </li>
         </ul>
       </form>
     </div>

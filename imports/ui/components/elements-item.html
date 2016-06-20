@@ -1,7 +1,11 @@
 <template name="Elements_item">
   {{#let t=element.transform}}
-  <g id="{{element._id}}" name="{{element.name}}" class="js-circuit-element circuit-element" transform="translate({{t.x}} {{t.y}})">
-    <g class="element-symbol" transform="{{rotation}}">
+  <g id="{{element._id}}" name="{{element.name}}"
+    class="js-circuit-element circuit-element"
+    transform="translate({{t.x}} {{t.y}})">
+    <g class="element-symbol" transform="rotate({{t.rot}})">
+      <!-- FOR DEBUGING: -->
+<!--      <g class="element-symbol"> -->
       <use xlink:href="{{symbolsSVG}}#{{element.symbol}}" />
       {{#each pin in symbol.pins}}
       <circle id="{{element.name}}-{{pin.id}}"
@@ -11,12 +15,6 @@
       {{/each}}
     </g>
     <text class="name-label" x="{{nameLabel.x}}" y="{{nameLabel.y}}">{{element.name}}</text>
-    <!--
-    {{#if element.value}} {{! TODO: AND show-value ... later}}
-    <text class="value-label" x="{{valueLabel.x}}" y="{{valueLabel.y}}">{{element.value}}</text>
-    {{/if}}
-  -->
-
     <circle r="25" class="js-select-element bound">
       {{#if selected }}
       <animate dur="2s" attributeName="fill-opacity" values=".1; .3; .1" repeatCount="indefinite" />

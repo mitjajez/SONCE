@@ -1,4 +1,6 @@
 import '../components/flex-tabs/circuit-info.js';
+import '../components/flex-tabs/netlist.js';
+import '../components/flex-tabs/circuit-graph.js';
 import '../components/flex-tabs/components-list.js';
 import '../components/flex-tabs/symbols-list.js';
 
@@ -13,11 +15,29 @@ TabBar.addButton({
 
 TabBar.addButton({
 	groups: ['circuit'],
+	id: 'netlist',
+	i18nTitle: 'Netlist',
+	icon: 'octicon octicon-info',
+	template: 'Netlist',
+	order: 2
+});
+
+TabBar.addButton({
+	groups: ['circuit'],
+	id: 'circuit-graph',
+	i18nTitle: 'Circuit graph',
+	icon: 'octicon octicon-info',
+	template: 'Circuit_graph',
+	order: 3
+});
+
+TabBar.addButton({
+	groups: ['circuit'],
 	id: 'add-element',
 	i18nTitle: 'Add_Element',
 	icon: 'icon-add',
 	template: 'Components_list',
-	order: 2
+	order: 4
 });
 
 TabBar.addButton({
@@ -26,7 +46,7 @@ TabBar.addButton({
 	i18nTitle: 'View_symbols',
 	icon: 'icon-cog',
 	template: 'Symbols_list',
-	order: 3
+	order: 5
 });
 /*
 TabBar.addButton({

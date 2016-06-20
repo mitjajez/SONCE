@@ -2,52 +2,50 @@
   <section class="page symbols-editor {{editingClass}}">
     <header>
     <nav class="js-title-nav">
-      {{#momentum plugin="fade"}}
-        {{#if editing}}
-          <form class="js-edit-title edit-form">
-            <input type="text" name="name" value="{{symbol.title}}">
-            <div class="nav-group right">
-              <a href="#" class="js-cancel nav-item">
-                <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
-              </a>
-            </div>
-          </form>
-        {{else}}
-          <div class="nav-group">
-            <a href="#" class="js-menu nav-item">
-              <span class="icon-symbol-unordered" title={{_ 'Show Menu'}}></span>
+      {{#if editing}}
+        <form class="js-edit-title edit-form">
+          <input type="text" name="name" value="{{symbol.title}}">
+          <div class="nav-group right">
+            <a href="#" class="js-cancel nav-item">
+              <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
             </a>
           </div>
+        </form>
+      {{else}}
+        <div class="nav-group">
+          <a href="#" class="js-menu nav-item">
+            <span class="icon-symbol-unordered" title={{_ 'Show Menu'}}></span>
+          </a>
+        </div>
 
-          <h1 class="js-edit-symbol title-page">
-            <span class="title-wrapper">{{symbol.title}}</span>
-          </h1>
+        <h1 class="js-edit-symbol title-page">
+          <span class="title-wrapper">{{symbol.title}}</span>
+        </h1>
 
-          <div class="nav-group right">
-            <div class="nav-item options-mobile">
-              <select class="symbol-edit">
-                <option disabled selected>{{_ 'Select an action'}}</option>
-                <option value="delete">{{_ 'Delete'}}</option>
-              </select>
-              <span class="icon-cog"></span>
-            </div>
-            <div class="options-web">
-              {{#if instance.state.get 'editing'}}
-              <a href="#" class="js-cancel nav-item">
-                <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
-              </a>
-              <a class="js-delete-symbol nav-item">
-                <span class="icon-trash" title={{_ 'Delete symbol'}}></span>
-              </a>
-              {{else}}
-              <a class="js-edit-symbol nav-item">
-                <span class="icon-edit" title={{_ 'Edit symbol'}}></span>
-              </a>
-              {{/if}}
-            </div>
+        <div class="nav-group right">
+          <div class="nav-item options-mobile">
+            <select class="symbol-edit">
+              <option disabled selected>{{_ 'Select an action'}}</option>
+              <option value="delete">{{_ 'Delete'}}</option>
+            </select>
+            <span class="icon-cog"></span>
           </div>
-        {{/if}}
-      {{/momentum}}
+          <div class="options-web">
+            {{#if instance.state.get 'editing'}}
+            <a href="#" class="js-cancel nav-item">
+              <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+            </a>
+            <a class="js-delete-symbol nav-item">
+              <span class="icon-trash" title={{_ 'Delete symbol'}}></span>
+            </a>
+            {{else}}
+            <a class="js-edit-symbol nav-item">
+              <span class="icon-edit" title={{_ 'Edit symbol'}}></span>
+            </a>
+            {{/if}}
+          </div>
+        </div>
+      {{/if}}
     </nav>
     </header>
     <div class="editor-body">

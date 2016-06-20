@@ -2,68 +2,66 @@
   <section class="page circuits-show {{actingClass}}">
     <header>
     <nav class="js-title-nav">
-      {{#momentum plugin="fade"}}
-        {{#if editing}}
-          <form class="js-edit-form circuit-edit-form">
-            <input type="text" name="name" value="{{circuit.name}}">
-            <div class="nav-group right">
-              <a href="#" class="js-cancel nav-item">
-                <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
-              </a>
-            </div>
-          </form>
-        {{else}}
-          <div class="nav-group">
-            <a href="#" class="js-menu nav-item">
-              <span class="icon-circuit-unordered" title={{_ 'Show Menu'}}></span>
+      {{#if editing}}
+        <form class="js-edit-form circuit-edit-form">
+          <input type="text" name="name" value="{{circuit.name}}">
+          <div class="nav-group right">
+            <a href="#" class="js-cancel nav-item">
+              <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
             </a>
           </div>
+        </form>
+      {{else}}
+        <div class="nav-group">
+          <a href="#" class="js-menu nav-item">
+            <span class="icon-circuit-unordered" title={{_ 'Show Menu'}}></span>
+          </a>
+        </div>
 
-          <h1 class="js-edit-circuit title-page">
-            <span class="title-wrapper">{{circuit.name}}</span>
-          </h1>
+        <h1 class="js-edit-circuit title-page">
+          <span class="title-wrapper">{{circuit.name}}</span>
+        </h1>
 
-          <div class="nav-group right">
-            <div class="nav-item options-mobile">
-              <select class="js-action">
-                <option disabled selected>{{_ 'Select an action'}}</option>
-                {{#if circuit.userId}}
-                  <option value="public">{{_ 'Make Public'}}</option>
-                {{else}}
-                  <option value="private">{{_ 'Make Private'}}</option>
-                {{/if}}
-                <option value="delete">{{_ 'Delete'}}</option>
-              </select>
-              <span class="icon-cog"></span>
-            </div>
-            <div class="options-web">
-              {{#if cancel}}
-              <a href="#" class="js-cancel nav-item">
-                <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
-              </a>
+        <div class="nav-group right">
+          <div class="nav-item options-mobile">
+            <select class="js-action">
+              <option disabled selected>{{_ 'Select an action'}}</option>
+              {{#if circuit.owner}}
+                <option value="public">{{_ 'Make Public'}}</option>
+              {{else}}
+                <option value="private">{{_ 'Make Private'}}</option>
               {{/if}}
-              {{#if editing}}
-              <a class="js-toggle-circuit-privacy nav-item">
-                {{#if circuit.userId}}
-                  <span class="icon-lock" title={{_ 'Make circuit public'}}></span>
-                {{else}}
-                  <span class="icon-unlock" title={{_ 'Make circuit private'}}></span>
-                {{/if}}
-              </a>
+              <option value="delete">{{_ 'Delete'}}</option>
+            </select>
+            <span class="icon-cog"></span>
+          </div>
+          <div class="options-web">
+            {{#if cancel}}
+            <a href="#" class="js-cancel nav-item">
+              <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+            </a>
+            {{/if}}
+            {{#if editing}}
+            <a class="js-toggle-circuit-privacy nav-item">
+              {{#if circuit.owner}}
+                <span class="icon-lock" title={{_ 'Make circuit public'}}></span>
+              {{else}}
+                <span class="icon-unlock" title={{_ 'Make circuit private'}}></span>
+              {{/if}}
+            </a>
 
               <a class="js-delete-circuit nav-item">
-                <span class="icon-trash" title={{_ 'Delete circuit'}}></span>
-              </a>
-              {{else}}
-              <a class="js-edit nav-item">
-                <span class="icon-edit" title={{_ 'Edit circuit'}}></span>
-              </a>
-              {{/if}}
-            </div>
+              <span class="icon-trash" title={{_ 'Delete circuit'}}></span>
+            </a>
+            {{else}}
+            <a class="js-edit nav-item">
+              <span class="icon-edit" title={{_ 'Edit circuit'}}></span>
+            </a>
+            {{/if}}
           </div>
+        </div>
 
         {{/if}}
-      {{/momentum}}
     </nav>
     </header>
 
@@ -87,7 +85,7 @@
         </marker>
       </defs>
 
-      {{#if elementsReady}}
+      {{#if subscriptionsReady}}
       <g class="js-circuit">
         {{> Active_wire wiring=wiring}}
         {{> Active_element}}
@@ -104,17 +102,6 @@
         {{/each}}
 
         {{> Active_pin}}
-      </g>
-
-        {{#if viewing }}
-          {{#if selectedElement }}
-            {{> Element_info (elementMenuArgs "")}}
-          {{/if}}
-          {{#if selectedWire }}
-            <!-- {{> Wire_info (wireMenuArgs "")}} -->
-          {{/if}}
-
-        {{/if}}
 
         {{#if editing }}
           {{#if selectedElement }}
@@ -128,6 +115,17 @@
 
           {{> Operations}}
         {{/if}}
+      </g>
+
+        {{#if viewing }}
+          {{#if selectedElement }}
+            {{> Element_info (elementMenuArgs "")}}
+          {{/if}}
+          {{#if selectedWire }}
+            <!-- {{> Wire_info (wireMenuArgs "")}} -->
+          {{/if}}
+
+        {{/if}}
       {{else}}
           <text class="title-message">{{_ 'Loading elements...'}}</text>
       {{/if}}
@@ -135,11 +133,16 @@
     <footer>
       <div class="status">
         <div style="float:left;">
-          {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}} |
+          {{actingClass}} {{#if wiring}} {{wiringMode}} {{/if}}
         </div>
+        {{#let condition=selection}}
+        {{#if condition}}
         <div style="float:left;">
-          {{active}}: {{selection}}
+          | {{active}}: {{selection}}
+          <button class="js-cancel-selection icon-close" title={{_ 'Cancel'}}></button>
         </div>
+        {{/if}}
+        {{/let}}
 
         <div style="float:right;">
           T: {{mouse.x}}, {{mouse.y}}
@@ -150,11 +153,9 @@
       </div>
       <form class="command-box">
         <input name="command-line" type="text"/>
-<!--        <div class="nav-group right">
-          <a href="#" class="js-cancel nav-item">
-            <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
-          </a>
-        </div>-->
+        <div class="nav-group right">
+          <button class="icon-close js-clear-input" title={{_ 'Clear'}}></button>
+        </div>
       </form>
 
 

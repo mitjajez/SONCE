@@ -15,7 +15,7 @@ Template.Circuits_show_page.onCreated(function circuitsShowPageOnCreated() {
   this.getCircuitId = () => FlowRouter.getParam('_id');
 
   this.autorun(() => {
-    Session.set("openCircuit", this.getCircuitId());
+//    Session.set("openCircuit", this.getCircuitId());
     this.subscribe('elements.inCircuit', this.getCircuitId());
     this.subscribe('wires.inCircuit', this.getCircuitId());
     this.subscribe('symbols.all');
@@ -47,7 +47,7 @@ Template.Circuits_show_page.helpers({
     const elements = circuit && circuit.elements();
     const wires = circuit && circuit.wires();
     return {
-      elementsReady: instance.subscriptionsReady(),
+      subscriptionsReady: instance.subscriptionsReady(),
       // We pass `circuit` (which contains the full circuit, with all fields, as a function
       // because we want to control reactivity. When you check a element item, the
       // `circuit.incompleteCount` changes. If we didn't do this the entire circuit would
@@ -60,4 +60,7 @@ Template.Circuits_show_page.helpers({
       wires,
     };
   },
+});
+
+Template.Circuits_show_page.events({
 });

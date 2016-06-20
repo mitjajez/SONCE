@@ -21,16 +21,14 @@
         {{> Flex_tab_bar}}
       </div>
       <div class="main-content {{flexOpened}}">
-        {{#momentum plugin="fade"}}
-          {{#if Template.subscriptionsReady}}
-            {{> Template.dynamic template=main}}
-            <section class="flex-tab">
-              {{> Template.dynamic template=flexTemplate data=flexData}}
-            </section>
-          {{else}}
-            {{> App_loading}}
-          {{/if}}
-        {{/momentum}}
+        {{#if Template.subscriptionsReady}}
+          {{> Template.dynamic template=main}}
+          <section class="flex-tab">
+            {{> Template.dynamic template=flexTemplate data=flexData}}
+          </section>
+        {{else}}
+          {{> App_loading}}
+        {{/if}}
       </div>
 
       <aside class="side-nav">

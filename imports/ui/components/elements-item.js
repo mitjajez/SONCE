@@ -1,8 +1,6 @@
 import { Template } from 'meteor/peerlibrary:blaze-components';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Session } from 'meteor/session';
-import { $ } from 'meteor/jquery';
-import { _ } from 'meteor/underscore';
 
 import './elements-item.html';
 import { Elements } from '../../api/elements/elements.js';
@@ -19,6 +17,9 @@ Template.Elements_item.onCreated(function elementsItemOnCreated() {
       selected: { type: Boolean, optional: true },
       setSelected: { type: Function },
     }).validate(Template.currentData());
+//    console.log( Template.currentData() );
+//    console.log( this.data );
+    this.data = Template.currentData();
   });
 
 });
@@ -30,10 +31,6 @@ Template.Elements_item.onRendered(function circuitShowOnRendered() {
 Template.Elements_item.helpers({
   symbolsSVG() {
     return Session.get("symbolsSVG");
-  },
-  rotation() {
-    r = this.element.transform.rot;
-    return r ? "rotate("+r+")":"";
   },
   nameLabel() {
     const element = this.element;
@@ -48,7 +45,4 @@ Template.Elements_item.helpers({
 });
 
 Template.Elements_item.events({
-  'click .js-select-element'(event, instance) {
-    this.selected ? this.setSelected( false ) : this.setSelected( true );
-  },
 });

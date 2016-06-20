@@ -18,19 +18,34 @@ Template.Element_edit_menu.onCreated(function elementEditMenuOnCreated() {
   this.autorun(() => {
     new SimpleSchema({
       element: { type: Elements._helpers },
+      cid: { type: String },
+      active: { type: String, optional: true },
+      selection: { type: String, optional: true },
       menuPosition: { type: String, optional: true },
       setSelected: { type: Function },
     }).validate(Template.currentData());
+
+    console.log( this.data.selection );
   });
+
+  this.Action = () => {
+    if( this.data.active === "wire" ) {
+      return WireAction;
+    }
+    else if ( this.data.active === "element" ) {
+      return ElementAction;
+    }
+  };
 
   this.removeElement = (eid) => {
     removeElement.call ({ eid }, displayError);
   };
 
   this.rotateElement = (eid, phi) => {
+    console.log( this.data.element._id );
+//    this.data.element.transform.rot = phi;
     rotateElement.call ({ eid, phi }, displayError);
-    Tracker.flush();
-
+    console.log( this.data.element._id );
   };
 
 });
@@ -54,7 +69,7 @@ Template.Element_edit_menu.helpers({
 });
 
 Template.Element_edit_menu.events({
-  'click .element-edit-menu .js-menu-action'(e,t) {
+  'click .edit-menu .js-menu-action'(e,t) {
     // packages/rocketchat-ui/views/app/room.coffee
     const el = t.$(e.currentTarget);
     const button = ElementAction.getButtonById ( el.data('id') );
