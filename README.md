@@ -54,8 +54,8 @@ PORT=3000 MONGO_URL=mongodb://localhost:27017/sonce ROOT_URL=http://localhost no
 ## Status & Contributing
 
 SONCE is under heavy development and the amount of functionality will grow in
-the future. Contributions are welcome. See
-[Contributions](https://github.com/mitjajez/SONCE/blob/develop/CONTRIBUTIONS.md)
+the future. Contributions are welcome. Please see
+[CONTRIBUTING.md](https://github.com/mitjajez/SONCE/blob/master/CONTRIBUTING.md)
 
 ## Quick start for code developers
 Prerequisites:
@@ -72,7 +72,10 @@ meteor
 ```
 # About SONCE
 
-Meteor version of SONCE is up to be used as educational tool and could be the new way of communication with as./prof./mentor while learning electronics by drawing and testing. Get focus on how circuit work and not how to get simulation result. See topology of circuit, see all available matrixes.
+Meteor version of SONCE is up to be used as educational tool and could be the
+new way of communication with as./prof./mentor while learning electronics by
+drawing and testing. Get focus on how circuit work and not how to get simulation
+result. See topology of circuit, see all available matrixes.
 
 ## Roadmap
 
@@ -96,7 +99,8 @@ Meteor version of SONCE is up to be used as educational tool and could be the ne
 * Embeding MediaWiki, Moodle, ...
 
 #### Wishlist
-Submit issue for wanted features on [Github Issues](https://github.com/mitjajez/SONCE/issues)
+Submit issue for wanted features on
+[Github Issues](https://github.com/mitjajez/SONCE/issues)
 
 ## Ideas
 
