@@ -127,6 +127,7 @@ templating@1.1.11
 templating-tools@1.0.4
 tmeasday:test-reporter-helpers@0.2.1
 tracker@1.0.14
+twbs:bootstrap@3.3.6
 ui@1.0.11
 underscore@1.0.9
 url@1.0.10

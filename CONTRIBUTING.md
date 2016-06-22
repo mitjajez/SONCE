@@ -1,4 +1,5 @@
-# How to contribute
+# Contributing
+First, thank you for contributing!
 
 We love pull requests from everyone.
 

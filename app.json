@@ -2,13 +2,14 @@
   "name": "SONCE",
   "description": "Simple ONline Circuit Editor.",
   "repository": "https://github.com/mitjajez/SONCE",
-  "logo": "https://raw.githubusercontent.com/RocketChat/Rocket.Chat/master/public/images/logo/512x512.png?v=3",
+  "logo": "https://raw.githubusercontent.com/mitjajez/SONCE/master/public/icon/sonce-150.png?v=0",
   "keywords": ["meteor", "circuit", "engineering", "study"],
-  "website": "https://sonce.se",
+  "website": "https://github.com/mitjajez/SONCE",
   "env": {
-    "BUILDPACK_URL": "https://github.com/RocketChat/heroku-buildpack-meteor.git",
-    "HEROKU_APP_NAME": {
-      "description": "Please re-enter your App Name from the top.",
+    "BUILDPACK_URL": "https://github.com/AdmitHub/meteor-buildpack-horse.git",
+    "ROOT_URL": {
+      "description": "IMPORTANT! Please replace <App Name> with the value provided on the top. This will be the full URL of your Wekan app.",
+      "value": "https://<App Name>.herokuapp.com",
       "required": true
     }
   },
