@@ -9,7 +9,8 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [*.{js,coffee,html}]
-indent_style = tab
+indent_style = space
+indent_size = 2
 
 [*.md]
 trim_trailing_whitespace = false

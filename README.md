@@ -5,7 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/mitjajez/SONCE/badges/gpa.svg)](https://codeclimate.com/github/mitjajez/SONCE)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/mitjajez/SONCE/master/LICENCE.md)
 
-[![dockeri.co](http://dockeri.co/image/mitjajez/sonce)](https://registry.hub.docker.com/mitjajez/sonce/)
+[![dockeri.co](http://dockeri.co/image/mitjajez/sonce)]([docker_image])
 
 * [Deployment](#deployment)
 * [Development](#development)
@@ -15,6 +15,8 @@
 * [Donate](#donate)
 
 # Deployment
+
+[![Deploy][heroku_button]][heroku_deploy]
 
 ## Docker
 
@@ -116,3 +118,7 @@ SONCE will be free forever, but you can help us speed-up the development!
 
 [![flattr.com](https://button.flattr.com/flattr-badge-large.png)](https://flattr.com/submit/auto?fid=w7dn30&url=https%3A%2F%2Fgithub.com%2Fmitjajez%2FSONCE)
 [![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=X6B3H2HX9C5XN&lc=SI&item_name=Mitja%20Jež&item_number=SONCE&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
+
+[docker_image]: https://hub.docker.com/r/mitjajez/sonce/
+[heroku_button]: https://www.herokucdn.com/deploy/button.png
+[heroku_deploy]: https://heroku.com/deploy?template=https://github.com/mitjajez/SONCE/tree/master

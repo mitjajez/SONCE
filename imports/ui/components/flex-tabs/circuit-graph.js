@@ -28,12 +28,12 @@ Template.Circuit_graph.helpers({
   elements() {
     const instance = Template.instance();
     const cid = instance.getCircuitId();
-    return Elements.find({ "cid": cid });
+    return Elements.find({ 'cid': cid });
   },
   wires() {
     const instance = Template.instance();
     const cid = instance.getCircuitId();
-    return Wires.find({ "cid": cid });
+    return Wires.find({ 'cid': cid });
   }
 
 });
