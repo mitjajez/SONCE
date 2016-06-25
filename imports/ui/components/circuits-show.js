@@ -316,6 +316,21 @@ Template.Circuits_show.events({
   },
 
   // COMMON --------------------------------------------------------------------
+  'click .js-view-circuit' (event, instance) {
+    event.preventDefault();
+    instance.state.set('acting', "viewing");
+  },
+
+  'click .js-edit-circuit' (event, instance) {
+    event.preventDefault();
+    instance.state.set('acting', "editing");
+  },
+
+  'click .js-wire-circuit' (event, instance) {
+    event.preventDefault();
+    instance.state.set('acting', "wiring");
+  },
+
   'wheel .js-circuit-canvas'(event, instance) {
     instance.zoom(event);
   },

@@ -103,7 +103,7 @@ Template.App_body.events({
     event.stopImmediatePropagation();
   },
 
-  'click #menu a'(event, instance) {
+  'click #menu button'(event, instance) {
     instance.state.set('menuOpen', false);
   },
 

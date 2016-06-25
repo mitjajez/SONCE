@@ -2,37 +2,65 @@
 
 // Generic nav positioning and styles
 nav {
-  .position(absolute, 0, 0, auto, 0);
+//  .position(absolute, 0, 0, auto, 0);
   transform: translate3d(0,0,0);
   transition: all 200ms ease-out;
-  z-index: 10;
 
   .nav-item {
-    .font-m1;
+//    .font-m1;
     color: @color-ancillary;
-    display: inline-block;
-    height: 3rem;
-    text-align: center;
-    width: 3rem;
-
     &:active { opacity: .5; }
 
-    [class^="icon-"],
-    [class*=" icon-"] {
-      line-height: 3rem;
-      vertical-align: middle;
-    }
-  }
-  .nav-group {
-    .position(absolute, 0, auto, auto, 0);
-    z-index: 1;
-
-    &.right {
-      left: auto;
-      right: 0;
-    }
   }
 }
+// Custom nav for.circuits-show
+nav {
+  background: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);
+
+  .title-page {
+//      white-space: nowrap;
+
+    .title-wrapper {
+      .ellipsized;
+      color: @color-ancillary;
+    }
+  }
+  form.element-new {
+    input[type="text"] {
+      background: transparent;
+    }
+  }
+  form.circuit-edit-form {
+    input[type="text"] {
+      background: transparent;
+      font-size: 1.125em; // 18px
+    }
+  }
+
+  select.circuit-edit {
+    .font-s2;
+//    .position(absolute, 0,0,0,0);
+    background: transparent;
+    opacity: 0; // allows the cog to appear
+  }
+
+  .options-web {
+//    display: none;
+
+    .nav-item {
+      .font-s3;
+//      &:last-child { margin-right: .5rem; }
+    }
+  }
+
+  // Hide & show options and nav icons
+  @media screen and (min-width: 40em) {
+    .nav-group:not(.right) { display: none !important; }
+    .options-mobile { display: none; }
+    .options-web {  display: block; }
+  }
+}
+
 
 // Custom nav for auth
 @media screen and (min-width: 40em) {

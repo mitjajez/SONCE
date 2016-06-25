@@ -7,6 +7,7 @@
 
 [![dockeri.co](http://dockeri.co/image/mitjajez/sonce)]([docker_image])
 
+# Table of Contents
 * [Deployment](#deployment)
 * [Development](#development)
   * [Quick Start](#quick-start-for-code-developers)
@@ -117,7 +118,8 @@ Note that SONCE is distributed under the [MIT License](http://opensource.org/lic
 SONCE will be free forever, but you can help us speed-up the development!
 
 [![flattr.com](https://button.flattr.com/flattr-badge-large.png)](https://flattr.com/submit/auto?fid=w7dn30&url=https%3A%2F%2Fgithub.com%2Fmitjajez%2FSONCE)
-[![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=X6B3H2HX9C5XN&lc=SI&item_name=Mitja%20Jež&item_number=SONCE&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
+[![PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=X6B3H2HX9C5XN&lc=SI&item_name=Mitja%20Jež&item_number=SONCE&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
+[![Gratipay Team](https://img.shields.io/gratipay/team/SONCE.svg?maxAge=2592000)](https://gratipay.com/SONCE/)
 
 [docker_image]: https://hub.docker.com/r/mitjajez/sonce/
 [heroku_button]: https://www.herokucdn.com/deploy/button.png
