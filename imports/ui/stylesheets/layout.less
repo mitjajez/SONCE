@@ -22,8 +22,9 @@ body {
 }
 
 .main-content {
-  .position(fixed, 0, 0, 0, @menu-width, auto);
-  transition: all 200ms ease-out;
+  .position(fixed, 0, 0, 0, 0, auto);
+  transform: translateX(0);
+//  transition: all 200ms ease-out;
   margin-right: 40px;
   background: @color-tertiary;
   opacity: 1;
@@ -43,7 +44,7 @@ body {
 
   // Toggle menu on mobile
   .menu-open & {
-    transform: translate3d(@menu-width, 0, 0);
+    transform: translateX(@menu-width);
     opacity: .85;
     left: 0;
 

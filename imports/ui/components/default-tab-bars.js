@@ -8,7 +8,7 @@ TabBar.addButton({
 	groups: ['circuit'],
 	id: 'circuit-info',
 	i18nTitle: 'Circuit info',
-	icon: 'octicon octicon-info',
+	icon: 'icon-info-circled',
 	template: 'Circuit_info',
 	order: 1
 });
@@ -17,7 +17,7 @@ TabBar.addButton({
 	groups: ['circuit'],
 	id: 'netlist',
 	i18nTitle: 'Netlist',
-	icon: 'octicon octicon-info',
+	icon: 'icon-list',
 	template: 'Netlist',
 	order: 2
 });
@@ -26,7 +26,7 @@ TabBar.addButton({
 	groups: ['circuit'],
 	id: 'circuit-graph',
 	i18nTitle: 'Circuit graph',
-	icon: 'octicon octicon-info',
+	icon: 'icon-share',
 	template: 'Circuit_graph',
 	order: 3
 });
@@ -35,7 +35,7 @@ TabBar.addButton({
 	groups: ['circuit'],
 	id: 'add-element',
 	i18nTitle: 'Add_Element',
-	icon: 'icon-add',
+	icon: 'icon-plus',
 	template: 'Components_list',
 	order: 4
 });
@@ -44,7 +44,7 @@ TabBar.addButton({
 	groups: ['circuit', 'symbols'],
 	id: 'view-symbols',
 	i18nTitle: 'View_symbols',
-	icon: 'icon-cog',
+	icon: 'icon-vector',
 	template: 'Symbols_list',
 	order: 5
 });

@@ -2,7 +2,32 @@
   {{#HammerTouchArea gestureMap=templateGestures}}
     <div id="sonce" class="{{menuOpen}} {{cordova}}">
 
-      <div class="connection-status">
+      <aside id="menu" class="side-nav">
+        {{#if currentUser}}
+          <div class="btns-group-vertical">
+            <button href="#" class="js-user-menu btn btn-secondary">
+              {{#if userMenuOpen}}
+                <span class="icon-arrow-up"></span>
+                {{else}}
+                <span class="icon-arrow-down"></span>
+              {{/if}}
+
+              {{emailLocalPart}}
+            </button>
+            {{#if userMenuOpen}}
+              <button class="js-logout btn btn-secondary">{{_ 'Logout'}}</button>
+            {{/if}}
+          </div>
+        {{else}}
+          <div class="btns-group">
+            <button href="{{pathFor 'signin'}}" class="btn btn-secondary">{{_ 'Sign In'}}</button>
+            <button href="{{pathFor 'join'}}" class="btn btn-secondary">{{_ 'Join'}}</button>
+          </div>
+        {{/if}}
+
+        {{> Circuits_list}}
+      </aside>
+
       {{#unless connected}}
         <div class="notifications">
           <div class="notification">
@@ -14,12 +39,9 @@
           </div>
         </div>
       {{/unless}}
-      </div>
+
       <div class="content-overlay"></div>
 
-      <div class="flex-tab-bar" role="toolbar">
-        {{> Flex_tab_bar}}
-      </div>
       <div class="main-content {{flexOpened}}">
         {{#if Template.subscriptionsReady}}
           {{> Template.dynamic template=main}}
@@ -31,31 +53,10 @@
         {{/if}}
       </div>
 
-      <aside class="side-nav">
-        {{#if currentUser}}
-          <div class="btns-group-vertical">
-            <a href="#" class="js-user-menu btn-secondary">
-              {{#if userMenuOpen}}
-                <span class="icon-arrow-up"></span>
-                {{else}}
-                <span class="icon-arrow-down"></span>
-              {{/if}}
+      <div class="flex-tab-bar" role="toolbar">
+        {{> Flex_tab_bar}}
+      </div>
 
-              {{emailLocalPart}}
-            </a>
-            {{#if userMenuOpen}}
-              <a class="js-logout btn-secondary">{{_ 'Logout'}}</a>
-            {{/if}}
-          </div>
-        {{else}}
-          <div class="btns-group">
-            <a href="{{pathFor 'signin'}}" class="btn-secondary">{{_ 'Sign In'}}</a>
-            <a href="{{pathFor 'join'}}" class="btn-secondary">{{_ 'Join'}}</a>
-          </div>
-        {{/if}}
-
-        {{> Circuits_list}}
-      </aside>
     </div>
   {{/HammerTouchArea}}
 </template>

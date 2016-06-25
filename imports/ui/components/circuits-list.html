@@ -2,13 +2,13 @@
   <div class="circuits-list">
     <a class="js-new-circuit link-circuit-new">
       {{_ "New Circuit"}}
-      <span class="icon-plus"></span>
+      <span class="icon-magic"></span>
     </a>
 
     {{#each circuit in circuits}}
       <a href="{{pathFor 'Circuits.show' _id=circuit._id}}" title="{{circuit.name}}"
           class="circuit-element {{activeCircuitClass circuit}}">
-        {{#if circuit.userId}}
+        {{#if circuit.owner}}
           <span class="icon-lock"></span>
         {{/if}}
 
