@@ -13,11 +13,11 @@
       {{/each}}
     </g>
     <text class="name-label" x="{{nameLabel.x}}" y="{{nameLabel.y}}">{{element.name}}</text>
-    <circle r="25" class="js-select-element bound">
-      {{#if selected }}
-      <animate dur="2s" attributeName="fill-opacity" values=".1; .3; .1" repeatCount="indefinite" />
-      {{/if}}
-    </circle>
+    {{#if selected }}
+    <circle r="25" class="js-select-element bound animate-pulse" />
+    {{else}}
+    <circle r="25" class="js-select-element bound" />
+    {{/if}}
   </g>
   {{/let}}
 </template>

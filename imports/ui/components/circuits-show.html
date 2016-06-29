@@ -13,16 +13,16 @@
 
         <div class="collapse navbar-collapse" id="top-navigation">
           {{#if editing}}
-          <form class="navbar-form navbar-left" role="edit-title">
+          <form class="js-edit-title navbar-form navbar-left" role="edit-title">
             <div class="form-group">
               <input type="text" class="form-control" name="name" value="{{circuit.name}}">
             </div>
-            <button type="submit" class="btn btn-default">
+            <button class="btn btn-default" type="text">
               <span class="icon-cancel js-cancel" title={{_ 'Cancel'}}></span>
             </button>
           </form>
           {{else}}
-          <p class="navbar-text js-title">
+          <p class="navbar-text">
             <a class="js-favourite-circuit" href="#" title="{{_ 'Favourite Circuit'}}">
               <span class="icon-star-empty {{favourite}}"></span>
             </a>

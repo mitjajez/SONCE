@@ -197,9 +197,11 @@ export const removeWire = new ValidatedMethod({
           console.log( nodes +" nodes" );
         }
         else {
-          disconnectElementPin.call(
-            {cid: wire.cid, name: pin.e, pin: pin.p}
-          );
+          if(Elements.findOne({ cid: cid, name: name })) {
+            disconnectElementPin.call(
+              {cid: wire.cid, name: pin.e, pin: pin.p}
+            );            
+          }
         }
       });
 

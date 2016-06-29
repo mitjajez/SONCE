@@ -156,12 +156,12 @@ export const removeCircuit = new ValidatedMethod({
         'Cannot delete the last public circuit.');
     }
 
-    Elements.find({'cid': cid}).forEach(function(e) {
-      removeElement.call({'eid': e._id});
-    });
-
     Wires.find({'cid': cid}).forEach(function(w) {
       removeWire.call({'wid': w._id});
+    });
+
+    Elements.find({'cid': cid}).forEach(function(e) {
+      removeElement.call({'eid': e._id});
     });
 
     Circuits.remove(cid);

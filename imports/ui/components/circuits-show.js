@@ -82,8 +82,6 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
       subscriptionsReady: { type: Boolean },
     }).validate(Template.currentData());
 
-    this.data = Template.currentData();
-
     if( Session.get( "component2add" ) ){
       this.state.set('acting', "adding");
     }
@@ -745,7 +743,7 @@ Template.Circuits_show.events({
     instance.state.set('acting', "editing");
   },
 
-  'submit .js-edit-form'(event, instance) {
+  'submit .js-edit-title'(event, instance) {
     event.preventDefault();
     const name = instance.$('.js-edit-form').find('input[name=name]').val();
     console.log( "SUBMIT TITLE "+ name );
