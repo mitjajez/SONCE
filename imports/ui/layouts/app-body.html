@@ -1,6 +1,13 @@
 <template name="App_body">
   {{#HammerTouchArea gestureMap=templateGestures}}
     <div id="sonce" class="{{menuOpen}} {{cordova}}">
+      <div class="navbar-header">
+        <button type="button" class="js-menu navbar-toggle collapsed"
+        data-toggle="collapse" data-target="#menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-menu" title={{_ 'Show Menu'}}></span>
+        </button>
+      </div>
 
       <aside id="menu" class="side-nav">
         {{#if currentUser}}

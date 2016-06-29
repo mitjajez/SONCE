@@ -1,14 +1,11 @@
 <template name="Circuits_show">
   <section class="page circuits-show {{actingClass}}">
     <header>
-    <nav class="navbar navbar-default js-title-nav">
+    <nav class="navbar">
       <div class="container-fluid">
-        <button class="js-menu btn btn-default navbar-btn" title={{_ 'Show Menu'}} type="text">
-          <span class="icon-menu"></span>
-        </button>
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed"
-          data-toggle="collapse" data-target="#menu" aria-expanded="false">
+          data-toggle="collapse" data-target="#top-navigation" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-menu" title={{_ 'Show Menu'}}></span>
           </button>
@@ -21,30 +18,21 @@
               <input type="text" class="form-control" name="name" value="{{circuit.name}}">
             </div>
             <button type="submit" class="btn btn-default">
-              <span class="icon-close js-cancel" title={{_ 'Cancel'}}></span>
+              <span class="icon-cancel js-cancel" title={{_ 'Cancel'}}></span>
             </button>
           </form>
           {{else}}
-          <ul class="nav navbar-nav">
-            <li class="{{#if editing}}active{{/if}}">
-              <button class="js-favourite-circuit btn btn-default navbar-btn" type="text">
-                <span class="icon-star-empty"></span>
-              </button>
-            </li>
-          </ul>
-          <p class="navbar-text">{{circuit.name}}</p>
-          <ul class="nav navbar-nav">
-            <li class=" title-page">
-              <button class="js-edit-circuit btn btn-default navbar-btn" type="text">
-                <span class="icon-pencil-1"></span>
-              </button>
-            </li>
-            <li class="{{#if editing}}active{{/if}}">
-              <button class="btn btn-default navbar-btn" type="text">
-                <span class="icon-pencil-1"></span>
-              </button>
-            </li>
-          </ul>
+          <p class="navbar-text js-title">
+            <a class="js-favourite-circuit" href="#" title="{{_ 'Favourite Circuit'}}">
+              <span class="icon-star-empty {{favourite}}"></span>
+            </a>
+          </p>
+          <p class="navbar-text js-title">
+            {{circuit.name}}
+            <a class="js-edit-circuit" href="#">
+              <span class="icon-edit"></span>
+            </a>
+          </p>
           {{/if}}
 
 
@@ -57,27 +45,21 @@
             </button>
           </div>
 
-          <ul class="nav navbar-nav navbar-right">
-            <li class="">
+          <div class="nav navbar-nav navbar-right btn-toolbar" role="toolbar" aria-label="...">
+            <div class="btn-group" role="group-sm" aria-label="...">
               <button class="js-view-circuit btn btn-default navbar-btn {{#if viewing}}active{{/if}}" type="text">
                 <span class="icon-eye"></span>
               </button>
-            </li>
-            <li class="">
               <button class="js-edit-circuit btn btn-default navbar-btn {{#if editing}}active{{/if}}" type="text">
-                <span class="icon-pencil-1"></span>
+                <span class="icon-edit"></span>
               </button>
-            </li>
-            <li class="">
               <button class="js-wire-circuit btn btn-default navbar-btn {{#if wiring}}active{{/if}}" type="text">
                 <span class="icon-chart"></span>
               </button>
-            </li>
-            <li class="">
-              <button class="js-new-circuit btn btn-default navbar-btn {{#if adding}}active{{/if}}" type="text">
-                <span class="icon-magic"></span>
-              </button>
-            </li>
+            </div>
+          </div>
+
+          <ul class="nav navbar-nav navbar-right">
           </ul>
 
           <div class="nav navbar-nav navbar-right options-mobile">
@@ -100,7 +82,7 @@
                 {{#if circuit.owner}}
                 <span class="icon-lock" title={{_ 'Make circuit public'}}></span>
                 {{else}}
-                <span class="icon-lock-open-alt" title={{_ 'Make circuit private'}}></span>
+                <span class="icon-lock-open" title={{_ 'Make circuit private'}}></span>
                 {{/if}}
               </button>
               {{/if}}
@@ -134,7 +116,9 @@
 
       {{#if subscriptionsReady}}
       <g class="js-circuit">
-        {{> Active_wire wiring=wiring}}
+        <path
+        class="js-active-wire active-wire wire"
+        marker-end="url(#activeWireEnd)" />
         {{> Active_element}}
 
         {{#each wire in wires}}
@@ -178,64 +162,84 @@
       {{/if}}
     </svg>
     <footer>
-        <div class="row">
-          <div class="col-lg-4">
-            <p class="navbar-text">
-              <i class="icon-target"></i> {{mouse.x}}, {{mouse.y}}
-            </p>
-            <p class="navbar-text">{{#if wiring}} {{wiringMode}} |{{/if}}</p>
-            {{#let condition=selection}}
-            {{#if condition}}
-            <p class="navbar-text">{{active}}: {{selection}}</p>
-            <button class="js-cancel-selection btn btn-default navbar-btn" title={{_ 'Cancel'}}>
-              <span class="icon-close"></span>
+      <nav class="navbar">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+            data-toggle="collapse" data-target="#status-row" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-menu" title={{_ 'Show status row'}}></span>
             </button>
-            {{/if}}
-            {{/let}}
-            <p class="navbar-text">{{pan}}</p>
           </div>
-          <div class="col-lg-4">
+          <div class="collapse navbar-collapse" id="status-row">
+            <div class="row">
 
-            <form class="js-set-zoom zoom-box navbar-form navbar-left">
-            <div class="input-group">
-              <div class="input-group-btn">
-                <button class="js-zoom-out btn btn-default" title={{_ 'Go'}}>
-                  <span class="icon-zoom-out"></span>
-                </button>
+              <div class="col-lg-4 col-md-6 col-xs-12">
+                <p class="navbar-text">
+                  <span class="icon-target"></span> {{mouse.x}}, {{mouse.y}}
+                </p>
+
+                {{#if wiring}}
+                <p class="navbar-text">
+                  {{wiringMode}}
+                </p>
+                {{/if}}
+
+                {{#let condition=selection}}
+                {{#if condition}}
+                <p class="navbar-text">
+                  <span class="icon-marquee" title="{{active}}: {{selection}}"></span>
+                  <span class="js-cancel-selection icon-cancel" title={{_ 'Cancel'}}></span>
+                </p>
+                {{/if}}
+                {{/let}}
               </div>
-              <input class="form-control" name="zoom" type="text" value="{{zoom}} %">
-              <div class="input-group-btn">
-                <button class="js-zoom-in btn btn-default" title={{_ 'Go'}}>
-                  <span class="icon-zoom-in"></span>
-                </button>
+
+              <div class="col-lg-4 col-md-6 col-xs-12">
+                <form class="js-set-zoom zoom-box navbar-form navbar-left">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-btn">
+                    <button class="js-zoom-out btn btn-default" title={{_ 'Go'}}>
+                      <span class="icon-zoom-out"></span>
+                    </button>
+                  </div>
+                  <input class="form-control" name="zoom" type="text" value="{{zoom}} %">
+                  <div class="input-group-btn">
+                    <button class="js-zoom-in btn btn-default" title={{_ 'Go'}}>
+                      <span class="icon-zoom-in"></span>
+                    </button>
+                  </div>
+                </div>
+                </form>
+                <p class="navbar-text">
+                  {{pan}}
+                </p>
+              </div>
+
+              <div class="col-lg-4 col-md-12">
+                <form class="command-box navbar-form navbar-left">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-addon">
+                    <span class="icon-terminal"></span>
+                  </span>
+                  <input class="form-control" name="command-line" type="text">
+                  <div class="input-group-btn">
+                    <button class="js-go btn btn-default" title={{_ 'Go'}}>
+                      <span class="icon-run"></span>
+                    </button>
+                    <button class="js-clear-input btn btn-default" title={{_ 'Clear'}}>
+                      <span class="icon-eraser"></span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+
               </div>
             </div>
-          </form>
-
-          </div>
-          <div class="col-lg-4">
-
-            <form class="command-box navbar-form navbar-left">
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="icon-terminal"></span>
-              </span>
-              <input class="form-control" name="command-line" type="text">
-              <div class="input-group-btn">
-                <button class="js-go btn btn-default" title={{_ 'Go'}}>
-                  <span class="icon-rocket"></span>
-                </button>
-                <button class="js-clear-input btn btn-default" title={{_ 'Clear'}}>
-                  <span class="icon-eraser"></span>
-                </button>
-              </div>
-            </div>
-          </form>
 
           </div>
         </div>
-
-
+      </nav>
     </footer>
 
   </section>

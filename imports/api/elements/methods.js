@@ -122,7 +122,7 @@ export const disconnectElementPin = new ValidatedMethod({
 
     Elements.update(
       { cid: cid, name: name, "pins.id": pin },
-      { $unset: { "pins.$.net": "" } }
+      { $set: { "pins.$.net": name + "_"+ pin +"_open" } }
     );
   },
 });

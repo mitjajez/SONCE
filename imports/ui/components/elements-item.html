@@ -4,8 +4,6 @@
     class="js-circuit-element circuit-element"
     transform="translate({{t.x}} {{t.y}})">
     <g class="element-symbol" transform="rotate({{t.rot}})">
-      <!-- FOR DEBUGING: -->
-<!--      <g class="element-symbol"> -->
       <use xlink:href="{{symbolsSVG}}#{{element.symbol}}" />
       {{#each pin in symbol.pins}}
       <circle id="{{element.name}}-{{pin.id}}"

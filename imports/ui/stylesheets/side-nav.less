@@ -1,6 +1,7 @@
 @import './utils.less';
 
 .side-nav {
+  .position(absolute, 0, 0, 0, 0, @menu-width);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
@@ -40,7 +41,7 @@
       line-height: 20px;
     }
   }
-  
+
   .circuits-list {
     a {
       box-shadow: rgba(255,255,255,.15) 0 1px 0 0;
@@ -53,10 +54,16 @@
     [class^="icon-"],
     [class*=" icon-"] {
       .font-s2;
+      float: left;
+      margin-left: -1.5rem;
+      margin-right: .5rem;
+      margin-top: .1rem;
+      width: 1em;
     }
 
     .icon-lock {
       .font-s1;
+      margin-top: .2rem;
       opacity: .8;
     }
 
@@ -67,7 +74,7 @@
       &:active,
       &.active {
         color: @color-empty;
-        .count-circuit { background: @color-primary; }
+        text-decoration: none;
       }
 
       .cordova &:hover {
@@ -84,7 +91,7 @@
   cursor: pointer;
 
   .menu-open & {
-    transform: translate3d(@menu-width, 0, 0);
+    transform: translateX(@menu-width);
     z-index: 1;
   }
 
