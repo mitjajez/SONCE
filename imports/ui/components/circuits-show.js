@@ -31,13 +31,6 @@ import './active-pin.js';
 import './circuits-show.html';
 
 import {
-  updateCircuitName,
-  makeCircuitPublic,
-  makeCircuitPrivate,
-  removeCircuit,
-} from '../../api/circuits/methods.js';
-
-import {
   insertElement,
   rotateElement,
   connectElementPin,
@@ -164,43 +157,9 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     }
   };
 
-  this.updateCircuitName = (name) => {
-    updateCircuitName.call({
-      cid: this.data.circuit()._id,
-      newName: name,
-    }, displayError);
-  };
-
-  this.deleteCircuit = () => {
-    const circuit = this.data.circuit();
-    const message = `${TAPi18n.__('Are you sure you want to delete the circuit')} ${circuit.name}?`;
-
-    if ( confirm(message) ) { // eslint-disable-line no-alert
-      removeCircuit.call( {cid: circuit._id}, displayError);
-
-      FlowRouter.go('App.home');
-      return true;
-    }
-
-    return false;
-  };
-
-  this.toggleCircuitPrivacy = () => {
-    const circuit = this.data.circuit();
-    if (circuit.owner) {
-      makeCircuitPublic.call({ cid: circuit._id }, displayError);
-    } else {
-      makeCircuitPrivate.call({ cid: circuit._id }, displayError);
-    }
-  };
-
   this.focusCli = () => {
     Template.instance().$('.js-command-line input').focus();
   }
-
-
-
-
 
 });
 
@@ -728,7 +687,7 @@ Template.Circuits_show.events({
     if(Session.get( "component2add" )){
       Session.set( "component2add", false );
       instance.state.set('acting', "viewing");
-      instance.$('.js-active-element').attr('visibility',"hidden");
+      instance.$('.js-active-element').attr({'visibility': "hidden"});
     }
     else if ( instance.state.get('active') || instance.state.get('selection')) {
       instance.state.set('active', false);
@@ -737,18 +696,6 @@ Template.Circuits_show.events({
     else {
       instance.state.set('acting', "viewing");
     }
-  },
-
-  'dblclick .js-edit-form'(event, instance) {
-    instance.state.set('acting', "editing");
-  },
-
-  'submit .js-edit-title'(event, instance) {
-    event.preventDefault();
-    const name = instance.$('.js-edit-form').find('input[name=name]').val();
-    console.log( "SUBMIT TITLE "+ name );
-    instance.updateCircuitName(name);
-    instance.state.set('acting', "viewing");
   },
 
   // This is for the mobile dropdown

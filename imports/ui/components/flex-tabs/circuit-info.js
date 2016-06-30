@@ -19,10 +19,31 @@ import './circuit-info.html';
 Template.Circuit_info.onCreated(function circuitsInfoOnCreated() {
   this.getCircuitId = () => FlowRouter.getParam('_id');
 
+  this.state = new ReactiveDict();
+  this.state.setDefault({
+    'editing': false,
+  });
+
   this.autorun(() => {
     this.subscribe('elements.inCircuit', this.getCircuitId());
     this.subscribe('wires.inCircuit', this.getCircuitId());
   });
+
+  this.updateCircuitName = (name) => {
+    updateCircuitName.call({
+      cid: this.getCircuitId(),
+      newName: name,
+    }, displayError);
+  };
+
+  this.toggleCircuitPrivacy = () => {
+    const circuit = Circuits.findOne({ _id: this.getCircuitId() });
+    if (circuit.owner) {
+      makeCircuitPublic.call({ cid: this.getCircuitId() }, displayError);
+    } else {
+      makeCircuitPrivate.call({ cid: this.getCircuitId() }, displayError);
+    }
+  };
 
   this.deleteCircuit = () => {
     const cid = this.getCircuitId();
@@ -45,6 +66,9 @@ Template.Circuit_info.onRendered(function circuitsInfoOnRendered() {
 });
 
 Template.Circuit_info.helpers({
+  editingName() {
+
+  }
   circuit() {
     const instance = Template.instance();
     const cid = instance.getCircuitId();
@@ -64,10 +88,23 @@ Template.Circuit_info.helpers({
 });
 
 Template.Circuit_info.events({
-  'click .js-delete-circuit'(event, instance) {
+  'click .js-delete-circuit' (event, instance) {
     event.preventDefault();
     console.log( "CLICK DELETE" );
     instance.deleteCircuit();
   },
 
+  'click .js-edit-circuit-name' (event, instance) {
+    event.preventDefault();
+    console.log( "CLICK EDIT NAME" );
+    instance.state.set('editing', "editing");
+  }
+
+  'submit .js-edit-circuit-name' (event, instance) {
+    event.preventDefault();
+    const name = instance.$('.js-edit-form').find('input[name=name]').val();
+    console.log( "SUBMIT NAME "+ name );
+    instance.updateCircuitName(name);
+    instance.state.set('editing', false);
+  }
 });

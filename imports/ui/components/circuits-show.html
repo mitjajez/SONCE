@@ -12,28 +12,15 @@
         </div>
 
         <div class="collapse navbar-collapse" id="top-navigation">
-          {{#if editing}}
-          <form class="js-edit-title navbar-form navbar-left" role="edit-title">
-            <div class="form-group">
-              <input type="text" class="form-control" name="name" value="{{circuit.name}}">
-            </div>
-            <button class="btn btn-default" type="text">
-              <span class="icon-cancel js-cancel" title={{_ 'Cancel'}}></span>
-            </button>
-          </form>
-          {{else}}
           <p class="navbar-text">
-            <a class="js-favourite-circuit" href="#" title="{{_ 'Favourite Circuit'}}">
+            <a class="js-favourite-circuit" href="#favourite"
+            title="{{_ 'Favourite Circuit'}}">
               <span class="icon-star-empty {{favourite}}"></span>
             </a>
           </p>
           <p class="navbar-text js-title">
             {{circuit.name}}
-            <a class="js-edit-circuit" href="#">
-              <span class="icon-edit"></span>
-            </a>
           </p>
-          {{/if}}
 
 
           <!-- right part of navigation -->
@@ -58,36 +45,6 @@
               </button>
             </div>
           </div>
-
-          <ul class="nav navbar-nav navbar-right">
-          </ul>
-
-          <div class="nav navbar-nav navbar-right options-mobile">
-            <select class="js-action">
-              <option disabled selected>{{_ 'Select an action'}}</option>
-              {{#if circuit.owner}}
-              <option value="public">{{_ 'Make Public'}}</option>
-              {{else}}
-              <option value="private">{{_ 'Make Private'}}</option>
-              {{/if}}
-              <option value="delete">{{_ 'Delete'}}</option>
-            </select>
-            <span class="icon-cog"></span>
-          </div>
-
-          <ul class="nav navbar-nav navbar-right"> <!-- options-web -->
-            <li>
-              {{#if editing}}
-              <button class="js-toggle-circuit-privacy btn btn-default navbar-btn" type="text">
-                {{#if circuit.owner}}
-                <span class="icon-lock" title={{_ 'Make circuit public'}}></span>
-                {{else}}
-                <span class="icon-lock-open" title={{_ 'Make circuit private'}}></span>
-                {{/if}}
-              </button>
-              {{/if}}
-            </li>
-          </ul>
 
         </div>
       </div>
