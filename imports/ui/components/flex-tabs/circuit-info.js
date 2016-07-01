@@ -66,9 +66,9 @@ Template.Circuit_info.onRendered(function circuitsInfoOnRendered() {
 });
 
 Template.Circuit_info.helpers({
-  editingName() {
+  editingName: () => Template.instance().state.equals('editing', "name"),
+  editingDescription: () => Template.instance().state.equals('editing', "description"),
 
-  }
   circuit() {
     const instance = Template.instance();
     const cid = instance.getCircuitId();
@@ -98,7 +98,7 @@ Template.Circuit_info.events({
     event.preventDefault();
     console.log( "CLICK EDIT NAME" );
     instance.state.set('editing', "editing");
-  }
+  },
 
   'submit .js-edit-circuit-name' (event, instance) {
     event.preventDefault();
