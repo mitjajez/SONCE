@@ -1,7 +1,7 @@
 # Simple ONline Circuit Editor
 
 [![Build Status](https://travis-ci.org/mitjajez/SONCE.svg?branch=master)](https://travis-ci.org/mitjajez/SONCE)
-[![CircleCI](https://circleci.com/gh/mitjajez/SONCE/tree/master.svg?style=svg)](https://circleci.com/gh/mitjajez/SONCE/tree/master)
+[![CircleCI](https://circleci.com/gh/mitjajez/SONCE.svg?style=svg)](https://circleci.com/gh/mitjajez/SONCE)
 [![Code Climate](https://codeclimate.com/github/mitjajez/SONCE/badges/gpa.svg)](https://codeclimate.com/github/mitjajez/SONCE)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/mitjajez/SONCE/master/LICENCE.md)
 
@@ -40,10 +40,10 @@ sudo apt-get install -y nodejs-legacy
 ### Building
 ```sh
 git clone https://github.com/mitjajez/SONCE.git
-cd SONCE && npm install
+cd SONCE && npm install --production
 meteor build --architecture=os.linux.x86_64 --directory /path/build-dir
 cd /path/build-dir/
-cd bundle/programs/server/ && npm install --production && cd ../../..
+cd bundle/programs/server/ && npm install && cd ../../..
 ```
 ### Running
 Start your mongod db and run sonce:

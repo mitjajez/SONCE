@@ -49,7 +49,7 @@ export const makeCircuitPrivate = new ValidatedMethod({
     }
 
     Circuits.update(cid, {
-      $set: { owner: this.userId },
+      $set: { userId: this.userId },
     });
   },
 });
@@ -74,7 +74,7 @@ export const makeCircuitPublic = new ValidatedMethod({
     // XXX the security check above is not atomic, so in theory a race condition could
     // result in exposing private data
     Circuits.update(cid, {
-      $unset: { owner: true },
+      $unset: { userId: true },
     });
   },
 });

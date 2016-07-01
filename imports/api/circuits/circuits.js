@@ -67,7 +67,7 @@ Circuits.helpers({
     return !!this.owner;
   },
   isLastPublicCircuit() {
-    const publicCircuitCount = Circuits.find({ owner: { $exists: false } }).count();
+    const publicCircuitCount = Circuits.find({ userId: { $exists: false } }).count();
     return !this.isPrivate() && publicCircuitCount === 1;
   },
   editableBy(userId) {

@@ -4,24 +4,24 @@ import { Session } from 'meteor/session'
 
 import './active-element.html';
 
-Template.Active_element.onCreated (function activeElementOnCreated() {
+Template.Active_element.onCreated(function activeElementOnCreated() {
   this.state = new ReactiveDict();
-  this.state.setDefault ({
+  this.state.setDefault({
     visibility: "hidden",  // element center | click coords
   });
 
   this.show = () => {
-    this.state.set ('visibility', "visible");
+    this.state.set('visibility', "visible");
   };
 
   this.hide = () => {
-    this.state.set ('visibility', "hidden");
+    this.state.set('visibility', "hidden");
   };
 
 });
 
 
-Template.Active_element.helpers ({
+Template.Active_element.helpers({
   visibility() {
     const instance = Template.instance();
     return instance.state.get('visibility');
