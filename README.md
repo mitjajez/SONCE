@@ -1,7 +1,7 @@
 # Simple ONline Circuit Editor
 
 [![Build Status](https://travis-ci.org/mitjajez/SONCE.svg?branch=master)](https://travis-ci.org/mitjajez/SONCE)
-[![CircleCI](https://circleci.com/gh/mitjajez/SONCE.svg?style=svg)](https://circleci.com/gh/mitjajez/SONCE)
+[![CircleCI](https://circleci.com/gh/mitjajez/SONCE/tree/master.svg?style=svg)](https://circleci.com/gh/mitjajez/SONCE/tree/master)
 [![Code Climate](https://codeclimate.com/github/mitjajez/SONCE/badges/gpa.svg)](https://codeclimate.com/github/mitjajez/SONCE)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/mitjajez/SONCE/master/LICENCE.md)
 
@@ -40,10 +40,10 @@ sudo apt-get install -y nodejs-legacy
 ### Building
 ```sh
 git clone https://github.com/mitjajez/SONCE.git
-cd SONCE && npm install --production
+cd SONCE && npm install
 meteor build --architecture=os.linux.x86_64 --directory /path/build-dir
 cd /path/build-dir/
-cd bundle/programs/server/ && npm install && cd ../../..
+cd bundle/programs/server/ && npm install --production && cd ../../..
 ```
 ### Running
 Start your mongod db and run sonce:
@@ -118,7 +118,7 @@ Note that SONCE is distributed under the [MIT License](http://opensource.org/lic
 SONCE will be free forever, but you can help us speed-up the development!
 
 [![flattr.com](https://button.flattr.com/flattr-badge-large.png)](https://flattr.com/submit/auto?fid=w7dn30&url=https%3A%2F%2Fgithub.com%2Fmitjajez%2FSONCE)
-[![PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=X6B3H2HX9C5XN&lc=SI&item_name=Mitja%20Jež&item_number=SONCE&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
+[![PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=X6B3H2HX9C5XN&lc=SI&item_name=Mitja%20Jež&item_number=SONCE&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
 [![Gratipay Team](https://img.shields.io/gratipay/team/SONCE.svg?maxAge=2592000)](https://gratipay.com/SONCE/)
 
 [docker_image]: https://hub.docker.com/r/mitjajez/sonce/

@@ -3,12 +3,6 @@
 .flex-tab-bar {
     background: #fcfcfc none repeat scroll 0 0;
     border-left: 1px solid #eaeaea;
-    height: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 40px;
-    z-index: 130;
     .tab-button {
         background: #fcfcfc none repeat scroll 0 0;
         border-bottom: 1px solid #eaeaea;
@@ -24,17 +18,16 @@
 }
 
 .flex-tab {
-  .position(fixed, 0, 0, 0, auto, 90%);
-  border-left: 1px solid;
-  max-width: 400px;
-  overflow-x: visible;
-  transform: translateX(100%);
+  background-color: #315481;
+  background-image: linear-gradient(to bottom, #315481, #918e82 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
   transition:
     -webkit-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1) 0s,
     -moz-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1) 0s,
     -o-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1) 0s,
     transform 0.25s cubic-bezier(0.5, 0, 0.1, 1) 0s;
-  z-index: 110;
   .content{
     overflow-x: hidden;
     overflow-y: auto;
@@ -64,7 +57,7 @@
   }
 }
 .flex-tab {
-/*    background-color: #f4f4f4; */
+    background-color: #f4f4f4;
     border-left-color: #eaeaea;
     li {
       color: rgba(255, 255, 255, 0.4);
@@ -77,12 +70,5 @@
     }
     li:hover .options{
       visibility: visible;
-    }
-}
-.main-content.flex-opened {
-    right: 400px;
-    .flex-tab {
-        right: 40px;
-        transform: translateX(0px);
     }
 }

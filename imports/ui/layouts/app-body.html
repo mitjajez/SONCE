@@ -1,37 +1,23 @@
 <template name="App_body">
   {{#HammerTouchArea gestureMap=templateGestures}}
     <div id="sonce" class="{{menuOpen}} {{cordova}}">
+      <div class="navbar-header">
+        <button type="button" class="js-menu navbar-toggle collapsed"
+        data-toggle="collapse" data-target="#menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-menu" title={{_ 'Show Menu'}}></span>
+        </button>
+      </div>
 
       <aside id="menu" class="side-nav">
-        {{#if currentUser}}
-          <div class="btns-group-vertical">
-            <button href="#" class="js-user-menu btn btn-secondary">
-              {{#if userMenuOpen}}
-                <span class="icon-arrow-up"></span>
-                {{else}}
-                <span class="icon-arrow-down"></span>
-              {{/if}}
-
-              {{emailLocalPart}}
-            </button>
-            {{#if userMenuOpen}}
-              <button class="js-logout btn btn-secondary">{{_ 'Logout'}}</button>
-            {{/if}}
-          </div>
-        {{else}}
-          <div class="btns-group">
-            <button href="{{pathFor 'signin'}}" class="btn btn-secondary">{{_ 'Sign In'}}</button>
-            <button href="{{pathFor 'join'}}" class="btn btn-secondary">{{_ 'Join'}}</button>
-          </div>
-        {{/if}}
-
+        {{> Account_box}}
         {{> Circuits_list}}
       </aside>
 
       {{#unless connected}}
         <div class="notifications">
           <div class="notification">
-            <span class="icon-sync"></span>
+            <span class="icon-refresh animate-spin"></span>
             <div class="meta">
               <div class="title-notification">Trying to connect</div>
               <div class="description">There seems to be a connection issue</div>

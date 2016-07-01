@@ -40,18 +40,18 @@
 
 .viewing {
   .pin-connector {
-    visibility: hidden;
+    display: none;
   }
 }
 .editing {
+  .pin-connector {
+    visibility: hidden;
+  }
   .circuit-element:hover .bound{
     fill-opacity: .1;
   }
   .circuit-wire:hover {
     stroke-width: 3;
-    cursor: url("/img/cursor-select-line.png"), pointer;
-  }
-  .active-pin:hover {
     cursor: url("/img/cursor-select-line.png"), pointer;
   }
 }
@@ -64,59 +64,9 @@
   }
   .active-wire {
     stroke-width: 3;
+    fill-opacity: .5;
   }
-}
-
-.circuit-items .circuit-item {
-  .font-s2;
-
-  // Layout of circuit-item children
-  display: flex;
-  flex-wrap: wrap;
-  height: 3rem;
-  width: 100%;
-
-  .checkbox {
-    flex: 0, 0, 44px;
-    cursor: pointer;
+  .active-pin:hover {
+    cursor: url("/img/cursor-select-line.png"), pointer;
   }
-  input[type="text"] { flex: 1; }
-  .delete-item { flex: 0, 0, 3rem; }
-
-
-  // Style of circuit-item children
-  input[type="text"] {
-    background: transparent;
-    cursor: pointer;
-
-    &:focus { cursor: text; }
-  }
-
-  .delete-item {
-    color: @color-medium-rare;
-    line-height: 3rem;
-    text-align: center;
-
-    &:hover { color: @color-primary; }
-    &:active { color: @color-well; }
-    .icon-trash { font-size: 1.1em; }
-  }
-
-
-  // Border between circuit items
-  & + .circuit-item { border-top: 1px solid #f0f9fb; }
-
-  // Checked
-  &.checked {
-    input[type="text"] {
-      color: @color-medium-rare;
-      text-decoration: line-through;
-    }
-
-    .delete-item { display: inline-block; }
-  }
-
-  // Editing
-  .delete-item { display: none; }
-  &.editing .delete-item { display: inline-block; }
 }

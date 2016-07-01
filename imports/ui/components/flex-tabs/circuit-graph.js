@@ -21,17 +21,19 @@ Template.Circuit_graph.onCreated(function circuitsGraphOnCreated() {
   this.dot = () => {
     const cid = this.getCircuitId();
     let dot = "graph circuit_"+ cid +" {";
-//    dot += "overlap=false; splines=curved;";
-    dot += "node [shape=point]";
-    dot += "edge [fontsize=10]";
-    Wires.find({ 'cid': cid }).forEach((w) => {
-      dot += " "+ w.name + " [label="+w.name+"];";
+    dot += " node [shape=point];";
+    dot += " edge [fontsize=10];";
+    const nets = _.uniq(Wires.find({ 'cid': cid }).map((w) => {
+      return w.name;
+    }));
+    nets.forEach((n) => {
+      dot += " "+ n + " [label="+n+"];";
     });
     Elements.find({ 'cid': cid }).forEach((e) => {
-      dot += " "+ e.pins[0].net +"--"+ e.pins[1].net +" [label="+ e.name +"];";
+      dot += " "+ e.pins[0].net +" -- "+ e.pins[1].net +" [label="+ e.name +"];";
       if( false ) {
-        dot += e.pins[0].net +"--"+ e.pins[2].net +" [label="+ e.name +"];";
-        dot += e.pins[1].net +"--"+ e.pins[2].net +" [label="+ e.name +"];";
+        dot += e.pins[0].net +" -- "+ e.pins[2].net +" [label="+ e.name +"];";
+        dot += e.pins[1].net +" -- "+ e.pins[2].net +" [label="+ e.name +"];";
       }
     });
     dot += " }";
@@ -60,7 +62,8 @@ Template.Circuit_graph.helpers({
   },
   graph() {
     const instance = Template.instance();
-    const graph = Viz(instance.dot(), { engine: "twopi" });
+//    const graph = Viz(instance.dot(), { engine: "twopi" });
+    const graph = Viz(instance.dot(), { engine: "neato" });
     const s = graph.indexOf("<svg");
     return graph.substring(s);
   },

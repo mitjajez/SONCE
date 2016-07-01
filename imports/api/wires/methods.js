@@ -17,13 +17,13 @@ export const insertWire = new ValidatedMethod({
   name: 'wires.insert',
 
   validate: new SimpleSchema({
-    "name": { type: String, optional: true },   // generated if empty
-    "d": { type: String },                      // path string
-    "type": { type: String, optional: true },
-    "pins": { type: [Object] },                 // connected pins
-    "pins.$.e": { type: String },               // pin element od node
-    "pins.$.p": { type: String },               // pin id      or node id
-    "cid": { type: String, regEx: SimpleSchema.RegEx.Id },
+    'name': { type: String, optional: true },   // generated if empty
+    'd': { type: String },                      // path string
+    'type': { type: String, optional: true },
+    'pins': { type: [Object] },                 // connected pins
+    'pins.$.e': { type: String },               // pin element od node
+    'pins.$.p': { type: String },               // pin id      or node id
+    'cid': { type: String, regEx: SimpleSchema.RegEx.Id },
   }).validator(),
 
   run({ name, d, type, pins, cid}) {
@@ -31,17 +31,41 @@ export const insertWire = new ValidatedMethod({
 
     if (circuit.isPrivate() && circuit.userId !== this.userId) {
       throw new Meteor.Error('wires.insert.accessDenied',
-        'Cannot add wires to a private circuit that is not yours');
+        "Cannot add wires to a private circuit that is not yours");
     }
 
     const wire = { name, d, type, pins, cid };
+    wire.pins.forEach((pin) => {
+      if (pin.e !== "node") {
+
+        Elements.findOne(
+          { 'cid': wire.cid, 'name': pin.e },
+          { fields: { 'pins.id': 1, 'pins.net': 1 } }
+        ).pins.map((p) => {
+          if(p.id === pin.p){
+            if( p.net.indexOf("open") === -1 ) {
+              console.log( "NAME = "+ p.net );
+              wire.name = p.net;
+            }
+          }
+        });
+
+      }
+    });
+
     const wid = Wires.insert(wire);
 
     // Update all elements connected to this new wire.
     wire.pins.forEach( function(pin) {
-      connectElementPin.call(
-        {cid: wire.cid, name: pin.e, pin: pin.p, net: wire.name}
-      );
+      if (pin.e === "node") {
+        const nodes = Wires.find({ 'cid': wire.cid, 'pins.e': "node" }).count();
+        console.log( nodes +" nodes" );
+      }
+      else {
+        connectElementPin.call(
+          {cid: wire.cid, name: pin.e, pin: pin.p, net: wire.name}
+        );
+      }
     });
 
     return wid;
@@ -94,15 +118,42 @@ export const updateWireName = new ValidatedMethod({
   },
 });
 
-export const updateWirePins = new ValidatedMethod({
-  name: 'wires.updatePins',
+export const updateNetName = new ValidatedMethod({
+  name: 'wires.updateNetName',
   validate: new SimpleSchema({
-    wid: { type: String },
-    newPin: { type: String },
+    net: { type: String },
+    newName: { type: String },
+    cid: { type: String, regEx: SimpleSchema.RegEx.Id },
   }).validator(),
-  run({ wid, newPin }) {
+  run({ wid, newName, cid }) {
+    // This is complex auth stuff - perhaps denormalizing a userId onto wires
+    // would be correct here?
+    const circuit = Circuits.findOne(cid);
+
+    if (!circuit.editableBy(this.userId)) {
+      throw new Meteor.Error('wires.updateNetName.accessDenied',
+        'Cannot edit wires in a private circuit that is not yours');
+    }
+
+    Wires.update(
+      {cid, name: net},
+      {$set: { name: newName }}
+    );
+  },
+});
+
+export const updateWireEnd = new ValidatedMethod({
+  name: 'wires.updateEnd',
+  validate: new SimpleSchema({
+    'wid': { type: String },
+    'newEnd': { type: Object },                 // connected pins
+    'newEnd.e': { type: String },               // pin element od node
+    'newEnd.p': { type: String },               // pin id      or node id
+  }).validator(),
+  run({ wid, newEnd }) {
+
     const wire = Wires.findOne(wid);
-    if (wire.pins.indexOf(newPin) !== -1) {
+    if (wire.pins.indexOf(newEnd) !== -1) {
       // The status is already what we want, let's not do any extra work
       return;
     }
@@ -113,8 +164,12 @@ export const updateWirePins = new ValidatedMethod({
     }
 
     Wires.update(wid, {
-      $addToSet: { pins: newPin }
+      $addToSet: { pins: newEnd }
     });
+
+    connectElementPin.call(
+      {cid: wire.cid, name: newEnd.e, pin: newEnd.p, net: wire.name}
+    );
   },
 });
 
@@ -133,16 +188,35 @@ export const removeWire = new ValidatedMethod({
     }
 
     if(wire) {
+
+      // Update all elements connected to this new wire.
+      wire.pins.forEach( function(pin) {
+        if (pin.e === "node") {
+          // disconnectNode
+          const nodes = Wires.find({ 'cid': wire.cid, 'pins.e': "node" }).count();
+          console.log( nodes +" nodes" );
+        }
+        else {
+          if(Elements.findOne({ cid: cid, name: name })) {
+            disconnectElementPin.call(
+              {cid: wire.cid, name: pin.e, pin: pin.p}
+            );            
+          }
+        }
+      });
+
       return Wires.remove(wid);
     }
   },
 });
 
-// Get circuit of all method names on Wires
+// Get list of all method names on Wires
 const WIRES_METHODS = _.pluck([
   insertWire,
   updateWireD,
   updateWireName,
+  updateNetName,
+  updateWireEnd,
   removeWire,
 ], 'name');
 

@@ -26,7 +26,7 @@ TabBar.addButton({
 	groups: ['circuit'],
 	id: 'circuit-graph',
 	i18nTitle: 'Circuit graph',
-	icon: 'icon-share',
+	icon: 'icon-circuit-graph',
 	template: 'Circuit_graph',
 	order: 3
 });

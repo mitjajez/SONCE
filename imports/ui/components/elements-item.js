@@ -12,14 +12,11 @@ Template.Elements_item.onCreated(function elementsItemOnCreated() {
   this.autorun(() => {
     new SimpleSchema({
       element: { type: Elements._helpers },
-      symbol: { type: Symbols._helpers },
+      symbol: { type: Symbols._helpers, optional: true }, //TODO: bugfix
       editing: { type: Boolean, optional: true },
       selected: { type: Boolean, optional: true },
       setSelected: { type: Function },
     }).validate(Template.currentData());
-//    console.log( Template.currentData() );
-//    console.log( this.data );
-    this.data = Template.currentData();
   });
 
 });

@@ -9,7 +9,13 @@ class WiresCollection extends Mongo.Collection {
     ourDoc.added = ourDoc.added || new Date();
 
     if (!ourDoc.name) {
-      let nextNumber = Wires.find({'cid': ourDoc.cid }).count();
+      const nodes = Wires.find(
+        { 'cid': ourDoc.cid },
+        { fields: { 'name': 1 } }
+      ).map((n) => {
+        return n.name;
+      });
+      let nextNumber = _.uniq( nodes ).length;
       nextNumber = nextNumber ? nextNumber + 1 : 1;
       ourDoc.name = `w${nextNumber}`;
 
@@ -39,15 +45,15 @@ Wires.deny({
 });
 
 Wires.schema = new SimpleSchema({
-  "name": { type: String },
-  "d": { type: String },
-  "type": { type: String, optional: true },
-  "pins": { type: [Object] },                 // connected pins
-  "pins.$.e": { type: String },               // pin element or node
-  "pins.$.p": { type: String },               // pin id      or node id
-  "added": { type: Date },
-  "modified": { type: Date, optional: true },
-  "cid": {
+  'name': { type: String },
+  'd': { type: String },
+  'type': { type: String, optional: true },
+  'pins': { type: [Object] },                 // connected pins
+  'pins.$.e': { type: String },               // pin element or node
+  'pins.$.p': { type: String },               // pin id      or node id
+  'added': { type: Date },
+  'modified': { type: Date, optional: true },
+  'cid': {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
     denyUpdate: true,

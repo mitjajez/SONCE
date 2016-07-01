@@ -49,7 +49,7 @@ export const makeCircuitPrivate = new ValidatedMethod({
     }
 
     Circuits.update(cid, {
-      $set: { userId: this.userId },
+      $set: { owner: this.userId },
     });
   },
 });
@@ -74,7 +74,7 @@ export const makeCircuitPublic = new ValidatedMethod({
     // XXX the security check above is not atomic, so in theory a race condition could
     // result in exposing private data
     Circuits.update(cid, {
-      $unset: { userId: true },
+      $unset: { owner: true },
     });
   },
 });
@@ -156,12 +156,12 @@ export const removeCircuit = new ValidatedMethod({
         'Cannot delete the last public circuit.');
     }
 
-    Elements.find({'cid': cid}).forEach(function(e) {
-      removeElement.call({'eid': e._id});
-    });
-
     Wires.find({'cid': cid}).forEach(function(w) {
       removeWire.call({'wid': w._id});
+    });
+
+    Elements.find({'cid': cid}).forEach(function(e) {
+      removeElement.call({'eid': e._id});
     });
 
     Circuits.remove(cid);
