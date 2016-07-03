@@ -14,10 +14,11 @@
     },
     "MONGO_URL": {
       "description": "If you don't have credit card, register account on https://mlab.com and replace with your <App Name> with the value from your DB.",
-      "value": "mongodb://<userDB>:<pwDB>@<yourID>.mlab.com:19634/<yourDB>",
+      "value": "mongodb://<userDB>:<pwDB>@<yourID>.mlab.com:19634/<yourDB>"
     }
   },
   "addons": [
     "logentries"
-  ]
+  ],
+
 }

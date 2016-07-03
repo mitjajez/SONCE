@@ -176,7 +176,7 @@ export const updateWireEnd = new ValidatedMethod({
 });
 
 export const openWireEnd = new ValidatedMethod({
-  name: 'wires.unpinEnd',
+  name: 'wires.openEnd',
   validate: new SimpleSchema({
     'wid': { type: String },
     'end': { type: Object },                 // connected pins
@@ -192,7 +192,7 @@ export const openWireEnd = new ValidatedMethod({
     }
 
     if (!wire.editableBy(this.userId)) {
-      throw new Meteor.Error('wires.setCheckedStatus.accessDenied',
+      throw new Meteor.Error('wires.openEnd.accessDenied',
         'Cannot edit checked status in a private circuit that is not yours');
     }
 
