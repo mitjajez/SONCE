@@ -172,13 +172,12 @@ export const removeElement = new ValidatedMethod({
       throw new Meteor.Error('elements.remove.accessDenied',
         'Cannot remove elements in a private circuit that is not yours');
     }
-    const wid = Wires.find({ 'cid': element.cid, 'ends.e': element.name })._id;
+    const wid = Wires.findOne({ 'cid': element.cid, 'ends.e': element.name })._id;
     openWireEnd.call({
       'wid': wid,
       'end.e': element.name,
       'end.p': p.net
     })
-    console.log( wire.ends );
 
     Elements.remove(eid);
   },

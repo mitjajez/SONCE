@@ -54,8 +54,21 @@
   }
   .thumbnail {
     background: transparent;
+    margin:0;
+  }
+
+  ul > li {
+    margin: 10px;
+    &:first-child, &:nth-last-of-type(4n+2) {
+      margin-left: 0;
+    }
+    &:nth-last-of-type(4n+3) {
+      margin-right: 0;
+    }
   }
 }
+
+
 .flex-tab {
     background-color: #f4f4f4;
     border-left-color: #eaeaea;

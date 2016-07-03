@@ -184,9 +184,9 @@ export const openWireEnd = new ValidatedMethod({
     'end.p': { type: String },               // pin id      or node id
   }).validator(),
   run({ wid, end }) {
-
+    console.log( "METHOD wires.openEnd "+ wid + " (" +end.e +"-"+ end.p +")" );
     const wire = Wires.findOne(wid);
-    if (wire.pins.indexOf(newEnd) !== -1) {
+    if (wire.ends.indexOf(newEnd) !== -1) {
       // The status is already what we want, let's not do any extra work
       return;
     }

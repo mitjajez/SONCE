@@ -32,6 +32,13 @@ Template.Components_list.onCreated(function componentsListOnCreated() {
 });
 
 Template.Components_list.helpers({
+  inputAttributes: () => {
+    return {
+      class: 'form-control',
+      name: 'filter',
+    };
+  },
+
   componentsIndex: () => Components.index,
 
   view_grid: () => Template.instance().state.equals('view', 'grid'),
