@@ -5,6 +5,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 
 import { Elements } from './elements.js';
+import { Wires } from '../wires/wires.js';
 import { Circuits } from '../circuits/circuits.js';
 import { Components } from '../components/components.js';
 
@@ -167,6 +168,19 @@ export const removeElement = new ValidatedMethod({
       throw new Meteor.Error('elements.remove.accessDenied',
         'Cannot remove elements in a private circuit that is not yours');
     }
+    console.log( element );
+    const wire = Wires.find({ 'cid': element.cid, 'ends.e': element.name }).fetch();
+    console.log( wire );
+    //unpinWireEnd( 'wid':wid, 'element': element.name, 'pin': p.net)
+    console.log( wire.ends );
+
+    console.log( element.pins ); //pins.$.net
+    element.pins.map((p) => {
+      console.log( p.net );
+    });
+
+//    {cid: wire.cid, name: newEnd.e, pin: newEnd.p, net: wire.name}
+
 
     Elements.remove(eid);
   },

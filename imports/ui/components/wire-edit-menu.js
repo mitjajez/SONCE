@@ -14,8 +14,12 @@ import { displayError } from '../lib/errors.js';
 
 import {
   removeWire,
-//  removeNet,
+  removeNet,
 } from '../../api/wires/methods.js';
+
+import {
+  disconnectElementPin,
+} from '../../api/elements/methods.js';
 
 Template.Wire_edit_menu.onCreated(function wireEditMenuOnCreated() {
   this.autorun(() => {
@@ -65,7 +69,7 @@ Template.Wire_edit_menu.onCreated(function wireEditMenuOnCreated() {
 //      ).map(function (wid) {
 //        return wid._id
       ).forEach(function (e) {
-        diconnectElementPin.call(
+        disconnectElementPin.call(
           {eid: e._id, "pin":e.pins.net},
         )
       });

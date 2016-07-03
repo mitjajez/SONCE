@@ -48,9 +48,9 @@ Wires.schema = new SimpleSchema({
   'name': { type: String },
   'd': { type: String },
   'type': { type: String, optional: true },
-  'pins': { type: [Object] },                 // connected pins
-  'pins.$.e': { type: String },               // pin element or node
-  'pins.$.p': { type: String },               // pin id      or node id
+  'ends': { type: [Object] },                 // connected pins
+  'ends.$.e': { type: String },               // pin element or node
+  'ends.$.p': { type: String },               // pin id      or node id
   'added': { type: Date },
   'modified': { type: Date, optional: true },
   'cid': {

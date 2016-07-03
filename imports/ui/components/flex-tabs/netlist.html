@@ -30,8 +30,8 @@
           <li>
             <span>{{net}}</span>
             ({{#each wire in wires (net) }}
-            {{#each pin in wire.pins }}
-            {{pin.e}}-{{pin.p}},
+            {{#each end in wire.ends }}
+            {{end.e}}-{{end.p}},
             <!--            {{wire.pins.[0].e}}-{{wire.pins.[0].p}}) -->
             {{/each}}
             {{/each}})

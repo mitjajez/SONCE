@@ -37,11 +37,11 @@ Template.Circuit_info.onCreated(function circuitsInfoOnCreated() {
   };
 
   this.toggleCircuitPrivacy = () => {
-    const circuit = Circuits.findOne({ _id: this.getCircuitId() });
+    const circuit = Circuits.findOne({ '_id': this.getCircuitId() });
     if (circuit.owner) {
-      makeCircuitPublic.call({ cid: this.getCircuitId() }, displayError);
+      makeCircuitPublic.call({ 'cid': this.getCircuitId() }, displayError);
     } else {
-      makeCircuitPrivate.call({ cid: this.getCircuitId() }, displayError);
+      makeCircuitPrivate.call({ 'cid': this.getCircuitId() }, displayError);
     }
   };
 
@@ -52,7 +52,9 @@ Template.Circuit_info.onCreated(function circuitsInfoOnCreated() {
     const message = `${TAPi18n.__('Are you sure you want to delete the circuit')} ${circuit.name}?`;
 
     if ( confirm(message) ) { // eslint-disable-line no-alert
-      removeCircuit.call( { cid: circuit._id }, displayError);
+      removeCircuit.call({
+        cid: circuit._id
+      }, displayError);
       FlowRouter.go('App.home');
       return true;
     }
@@ -62,7 +64,7 @@ Template.Circuit_info.onCreated(function circuitsInfoOnCreated() {
 
 });
 
-Template.Circuit_info.onRendered(function circuitsInfoOnRendered() {
+Template.Circuit_info.onRendered(function circuitInfoOnRendered() {
 });
 
 Template.Circuit_info.helpers({
@@ -72,28 +74,22 @@ Template.Circuit_info.helpers({
   circuit() {
     const instance = Template.instance();
     const cid = instance.getCircuitId();
-    return Circuits.findOne({"_id": cid});
+    return Circuits.findOne({ '_id': cid });
 
   },
   elements() {
     const instance = Template.instance();
     const cid = instance.getCircuitId();
-    return Elements.find({ "cid": cid });
+    return Elements.find({ 'cid': cid });
   },
   wires() {
     const instance = Template.instance();
     const cid = instance.getCircuitId();
-    return Wires.find({ "cid": cid });
+    return Wires.find({ 'cid': cid });
   }
 });
 
 Template.Circuit_info.events({
-  'click .js-delete-circuit' (event, instance) {
-    event.preventDefault();
-    console.log( "CLICK DELETE" );
-    instance.deleteCircuit();
-  },
-
   'click .js-edit-circuit-name' (event, instance) {
     event.preventDefault();
     console.log( "CLICK EDIT NAME" );
@@ -106,5 +102,16 @@ Template.Circuit_info.events({
     console.log( "SUBMIT NAME "+ name );
     instance.updateCircuitName(name);
     instance.state.set('editing', false);
-  }
+  },
+
+  'click .js-toggle-circuit-privacy'(event, instance) {
+    instance.toggleCircuitPrivacy();
+  },
+
+  'click .js-delete-circuit' (event, instance) {
+    event.preventDefault();
+    console.log( "CLICK DELETE" );
+    instance.deleteCircuit();
+  },
+
 });
