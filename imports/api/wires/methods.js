@@ -175,17 +175,14 @@ export const updateWireEnd = new ValidatedMethod({
   },
 });
 
-//unpinWireEnd( 'cid': element.cid, 'element': element.name, 'pin': p.net)
-export const unpinWireEnd = new ValidatedMethod({
+export const openWireEnd = new ValidatedMethod({
   name: 'wires.unpinEnd',
   validate: new SimpleSchema({
     'wid': { type: String },
-//    'i': { type: Number, maxNumber: 1 },
     'end': { type: Object },                 // connected pins
     'end.e': { type: String },               // pin element od node
     'end.p': { type: String },               // pin id      or node id
   }).validator(),
-//  run({ wid, i, end }) {
   run({ wid, end }) {
 
     const wire = Wires.findOne(wid);

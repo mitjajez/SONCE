@@ -11,10 +11,13 @@
       "description": "IMPORTANT! Please replace <App Name> with the value provided on the top. This will be the full URL of your Wekan app.",
       "value": "https://<App Name>.herokuapp.com",
       "required": true
+    },
+    "MONGO_URL": {
+      "description": "If you don't have credit card, register account on https://mlab.com and replace with your <App Name> with the value from your DB.",
+      "value": "mongodb://<userDB>:<pwDB>@<yourID>.mlab.com:19634/<yourDB>",
     }
   },
   "addons": [
-    "mongolab",
     "logentries"
   ]
 }

@@ -9,6 +9,10 @@ import { Wires } from '../wires/wires.js';
 import { Circuits } from '../circuits/circuits.js';
 import { Components } from '../components/components.js';
 
+import {
+  openWireEnd,
+} from '../wires/methods.js';
+
 
 export const insertElement = new ValidatedMethod({
   name: 'elements.insert',
@@ -171,7 +175,11 @@ export const removeElement = new ValidatedMethod({
     console.log( element );
     const wire = Wires.find({ 'cid': element.cid, 'ends.e': element.name }).fetch();
     console.log( wire );
-    //unpinWireEnd( 'wid':wid, 'element': element.name, 'pin': p.net)
+    openWireEnd.call({
+      'wid':wid,
+      'end.e': element.name,
+      'end.p': p.net
+    })
     console.log( wire.ends );
 
     console.log( element.pins ); //pins.$.net
