@@ -62,14 +62,30 @@ Template.Circuit_info.onCreated(function circuitsInfoOnCreated() {
     return false;
   };
 
+  this.saveSetting = () => {
+    switch (this.state.get('editing')) {
+      case 'circuitName':
+        const name = this.$('input[name=circuitName]').val();
+        console.log("circuitName" + name);
+        this.updateCircuitName(name);
+        break;
+      case 'circuitDescription':
+          const text = this.$('input[name=circuitDescription]').val();
+          console.log("circuitDescription" + text);
+          this.updateCircuitDescription(text);
+          break;
+      default:
+        console.log("default");
+    }
+  };
+
 });
 
 Template.Circuit_info.onRendered(function circuitInfoOnRendered() {
 });
 
 Template.Circuit_info.helpers({
-  editingName: () => Template.instance().state.equals('editing', "name"),
-  editingDescription: () => Template.instance().state.equals('editing', "description"),
+  editing: (field) => Template.instance().state.equals ('editing', field),
 
   circuit() {
     const instance = Template.instance();
@@ -90,17 +106,22 @@ Template.Circuit_info.helpers({
 });
 
 Template.Circuit_info.events({
-  'click .js-edit-circuit-name' (event, instance) {
+  'click [data-edit]' (event, instance) {
     event.preventDefault();
-    console.log( "CLICK EDIT NAME" );
-    instance.state.set('editing', "editing");
+    instance.state.set('editing', $(event.currentTarget).data('edit'));
+    setTimeout(function() {
+      instance.$('input.js-editing').focus().select();
+    }, 100);
   },
 
-  'submit .js-edit-circuit-name' (event, instance) {
+  'click .js-save, submit js-editing' (event, instance) {
     event.preventDefault();
-    const name = instance.$('.js-edit-form').find('input[name=name]').val();
-    console.log( "SUBMIT NAME "+ name );
-    instance.updateCircuitName(name);
+    instance.saveSetting ();
+    instance.state.set('editing', false);
+  },
+
+  'click .js-cancel' (event, instance) {
+    event.preventDefault();
     instance.state.set('editing', false);
   },
 

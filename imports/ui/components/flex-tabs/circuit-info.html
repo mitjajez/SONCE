@@ -4,27 +4,59 @@
       <div class="status">
         <h2>{{_ "Circuit_Info"}}</h2>
       </div>
-      <form>
+      <form class="js-form">
         <ul class="list clearfix">
           <li>
             <label>Name</label>
-            {{#if editingName}}
-            <form class="js-edit-circuit-name navbar-form navbar-left" role="edit-title">
-              <div class="form-group">
-                <input type="text" class="form-control" name="name" value="{{circuit.name}}">
+            {{#if editing 'circuitName'}}
+            <div class="input-group">
+              <input type="text" class="form-control js-editing"
+              name="circuitName" value="{{circuit.name}}">
+              <div class="input-group-btn">
+                <button class="btn btn-default js-cancel"
+                title={{_ 'Cancel'}} type="button">
+                  <span class="icon-cancel"></span>
+                </button>
+                <button class="btn btn-default js-save"
+                title={{_ 'Save'}} type="button">
+                  <span class="icon-ok"></span>
+                </button>
               </div>
-              <button class="btn btn-default" type="reset">
-                <span class="icon-cancel" title={{_ 'Cancel'}}></span>
-              </button>
-              <button class="btn btn-default" type="submit">
-                <span class="icon-ok" title={{_ 'Save'}}></span>
-              </button>
-            </form>
+            </div>
             {{else}}
             <div>
               {{circuit.name}}
-              <span class="js-edit-circuit-name icon-edit"
-              title={{_ 'Edit circuit name'}}></span>
+              <a href="#" data-edit="circuitName"
+              title={{_ 'Edit circuit name'}} >
+                <span class="icon-edit"></span>
+              </a>
+            </div>
+            {{/if}}
+          </li>
+          <li>
+            <label>Description</label>
+            {{#if editing 'circuitDescription'}}
+            <div class="input-group">
+              <input type="text" class="form-control js-editing"
+              name="circuitDescription" value="{{circuit.description}}">
+              <div class="input-group-btn">
+                <button class="btn btn-default js-cancel"
+                title={{_ 'Cancel'}} type="button">
+                  <span class="icon-cancel"></span>
+                </button>
+                <button class="btn btn-default js-save"
+                title={{_ 'Save'}} type="button">
+                  <span class="icon-ok"></span>
+                </button>
+              </div>
+            </div>
+            {{else}}
+            <div>
+              {{circuit.description}}
+              <a href="#" data-edit="circuitDescription"
+              title={{_ 'Edit circuit description'}} >
+                <span class="icon-edit"></span>
+              </a>
             </div>
             {{/if}}
           </li>
@@ -36,7 +68,7 @@
         {{#each wire in wires}}
           <li>
             <span>{{wire.name}}</span>
-            ({{wire.pins.[0].e}}-{{wire.pins.[0].p}}) -> ({{wire.pins.[1].e}}-{{wire.pins.[1].p}})
+            ({{wire.ends.[0].e}}-{{wire.ends.[0].p}}) -> ({{wire.ends.[1].e}}-{{wire.ends.[1].p}})
           </li>
         {{/each}}
         </ul>
