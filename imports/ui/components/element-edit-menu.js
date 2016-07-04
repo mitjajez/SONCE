@@ -42,10 +42,7 @@ Template.Element_edit_menu.onCreated(function elementEditMenuOnCreated() {
   };
 
   this.rotateElement = (eid, phi) => {
-    console.log( this.data.element._id );
-//    this.data.element.transform.rot = phi;
     rotateElement.call ({ eid, phi }, displayError);
-    console.log( this.data.element._id );
   };
 
 });

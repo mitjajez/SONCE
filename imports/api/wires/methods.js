@@ -20,7 +20,7 @@ export const insertWire = new ValidatedMethod({
     'name': { type: String, optional: true },   // generated if empty
     'd': { type: String },                      // path string
     'type': { type: String, optional: true },
-    'ends': { type: [Object], maxCount: 2},                 // connected pins
+    'ends': { type: [Object], maxCount: 2},     // connected pins
     'ends.$.e': { type: String },               // pin element od node
     'ends.$.p': { type: String },               // pin id      or node id
     'cid': { type: String, regEx: SimpleSchema.RegEx.Id },
@@ -74,24 +74,27 @@ export const insertWire = new ValidatedMethod({
 
 export const updateWireD = new ValidatedMethod({
   name: 'wires.updateD',
+
   validate: new SimpleSchema({
     wid: { type: String, regEx: SimpleSchema.RegEx.Id },
     newD: { type: String },
   }).validator(),
+
   run({ wid, newD }) {
     const wire = Wires.findOne(wid);
+    console.log( "METHOD wires.updateWireD "+ wire.name + ":  \"" + newD + "\"" );
+
     if (wire.d === newD) {
       // The status is already what we want, let's not do any extra work
       return;
     }
 
     if (!wire.editableBy(this.userId)) {
-      throw new Meteor.Error('wires.setCheckedStatus.accessDenied',
-        'Cannot edit checked status in a private circuit that is not yours');
+      throw new Meteor.Error('wires.updateD.accessDenied',
+        'Cannot update wire d in a private circuit that is not yours');
     }
 
-    Wires.update (
-      { 'wid':wid },
+    Wires.update (wid,
       { $set: { 'd': newD } },
     );
   },
@@ -99,22 +102,23 @@ export const updateWireD = new ValidatedMethod({
 
 export const updateWireName = new ValidatedMethod({
   name: 'wires.updateName',
+
   validate: new SimpleSchema({
     wid: { type: String, regEx: SimpleSchema.RegEx.Id },
     newName: { type: String },
   }).validator(),
+
   run({ wid, newName }) {
-    // This is complex auth stuff - perhaps denormalizing a userId onto wires
-    // would be correct here?
     const wire = Wires.findOne(wid);
+    console.log( "METHOD wires.updateName "+ wire.name + " -> " + newName );
+
 
     if (!wire.editableBy(this.userId)) {
       throw new Meteor.Error('wires.updateName.accessDenied',
-        'Cannot edit wires in a private circuit that is not yours');
+        'Cannot update wire name in a private circuit that is not yours');
     }
 
-    Wires.update (
-      { 'wid': wid },
+    Wires.update (wid,
       { $set: { 'name': newName } },
     );
   },
@@ -122,12 +126,16 @@ export const updateWireName = new ValidatedMethod({
 
 export const updateNetName = new ValidatedMethod({
   name: 'wires.updateNetName',
+
   validate: new SimpleSchema({
     net: { type: String },
     newName: { type: String },
     cid: { type: String, regEx: SimpleSchema.RegEx.Id },
   }).validator(),
-  run({ wid, newName, cid }) {
+
+  run({ net, newName, cid }) {
+    console.log( "METHOD wires.updateNetName "+ net + " -> " + newName );
+
     // This is complex auth stuff - perhaps denormalizing a userId onto wires
     // would be correct here?
     const circuit = Circuits.findOne (cid);
@@ -144,29 +152,32 @@ export const updateNetName = new ValidatedMethod({
   },
 });
 
-export const updateWireEnd = new ValidatedMethod({
-  name: 'wires.updateEnd',
+export const addWireEnd = new ValidatedMethod({
+  name: 'wires.addEnd',
+
   validate: new SimpleSchema({
     'wid': { type: String },
     'newEnd': { type: Object },                 // connected pins
     'newEnd.e': { type: String },               // pin element od node
     'newEnd.p': { type: String },               // pin id      or node id
   }).validator(),
-  run({ wid, newEnd }) {
 
+  run({ wid, newEnd }) {
     const wire = Wires.findOne(wid);
+    console.log( "METHOD wires.addEnd "+ wid + " (" + wire.name +")" );
+
     if (wire.ends.indexOf(newEnd) !== -1) {
       // The status is already what we want, let's not do any extra work
       return;
     }
 
     if (!wire.editableBy(this.userId)) {
-      throw new Meteor.Error('wires.setCheckedStatus.accessDenied',
-        'Cannot edit checked status in a private circuit that is not yours');
+      throw new Meteor.Error('wires.addEnd.accessDenied',
+        'Cannot add wire end in a private circuit that is not yours');
     }
 
     Wires.update(wid, {
-      $addToSet: { pins: newEnd }
+      $addToSet: { ends: newEnd }
     });
 
     connectElementPin.call(
@@ -177,26 +188,29 @@ export const updateWireEnd = new ValidatedMethod({
 
 export const openWireEnd = new ValidatedMethod({
   name: 'wires.openEnd',
+
   validate: new SimpleSchema({
-    'wid': { type: String },
+    'cid': { type: String },
     'end': { type: Object },                 // connected pins
     'end.e': { type: String },               // pin element od node
     'end.p': { type: String },               // pin id      or node id
   }).validator(),
-  run({ wid, end }) {
-    console.log( "METHOD wires.openEnd "+ wid + " (" +end.e +"-"+ end.p +")" );
-    const wire = Wires.findOne(wid);
-    if (wire.ends.indexOf(newEnd) !== -1) {
+
+  run({ cid, end }) {
+    const wire = Wires.findOne({'cid': cid, 'ends.e': end.e, 'ends.p': end.p});
+    console.log( "METHOD wires.openEnd "+ wire._id + " { " + wire.name +" }" + " { " +end.e +"-"+ end.p +" }" );
+
+    if (wire.ends.indexOf(end) !== -1) {
       // The status is already what we want, let's not do any extra work
       return;
     }
 
     if (!wire.editableBy(this.userId)) {
       throw new Meteor.Error('wires.openEnd.accessDenied',
-        'Cannot edit checked status in a private circuit that is not yours');
+        'Cannot open wire end in a private circuit that is not yours');
     }
 
-    Wires.update({'wid': wid, 'ends.e': end.e, 'ends.p': end.p}, {
+    Wires.update({'cid': cid, 'ends.e': end.e, 'ends.p': end.p}, {
       $set: { 'ends.$': { 'e':"open", 'p': "open"} }
     });
 
@@ -206,12 +220,14 @@ export const openWireEnd = new ValidatedMethod({
 
 export const removeWire = new ValidatedMethod({
   name: 'wires.remove',
+
   validate: new SimpleSchema({
     wid: { type: String },
   }).validator(),
+
   run({ wid }) {
-    console.log( "METHOD wires.remove "+ wid );
     const wire = Wires.findOne(wid);
+    console.log( "METHOD wires.remove "+ wid + " ("+wire.name+")");
 
     if (!wire.editableBy(this.userId)) {
       throw new Meteor.Error('wires.remove.accessDenied',
@@ -225,13 +241,14 @@ export const removeWire = new ValidatedMethod({
         if (end.e === "node") {
           // disconnectNode
           const nodes = Wires.find({ 'cid': wire.cid, 'ends.e': "node" }).count();
-          console.log( nodes +" nodes" );
+          console.log( nodes + " nodes" );
         }
-        else {
+        else if (end.e !== "open") {
           const element = Elements.findOne({ 'cid': wire.cid, 'name': end.e});
-          console.log( element );
 
           if( element ) {
+            console.log(" -> disconnect " + end.e + "-" + end.p);
+
             disconnectElementPin.call(
               {cid: wire.cid, name: end.e, pin: end.p}
             );
@@ -239,7 +256,6 @@ export const removeWire = new ValidatedMethod({
           else {
             // if element doesn't exist
             console.log( end.e + " ne obstaja");
-
           }
         }
       });
@@ -255,7 +271,8 @@ const WIRES_METHODS = _.pluck([
   updateWireD,
   updateWireName,
   updateNetName,
-  updateWireEnd,
+  addWireEnd,
+  openWireEnd,
   removeWire,
 ], 'name');
 

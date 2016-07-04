@@ -44,7 +44,7 @@ import {
   updateWireD,
   updateWireName,
   updateNetName,
-  updateWireEnd,
+  addWireEnd,
   removeWire,
 } from '../../api/wires/methods.js';
 
@@ -265,27 +265,11 @@ Template.Circuits_show.events({
     instance.focusCli();
   },
 
-  'click .viewing .js-wire' (event, instance) {
+  'click .viewing .js-wire, click .editing .js-wire' (event, instance) {
     event.preventDefault();
-    const p = instance.getEventPoint(event);
+    const p = instance.getEventPoint(event, "svg");
     instance.state.set('menuPosition', "translate("+p.x+","+p.y+")" );
-    instance.state.set('selection', this.wire.name);
-    instance.state.set('active', "net");
-  },
-
-  'dblclick .js-wire' (event, instance) {
-    event.preventDefault();
-    const p = instance.getEventPoint(event, "svg");
-    instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
     this.setSelected(true);
-  },
-
-  'click .editing .js-wire' (event, instance) {
-    event.preventDefault();
-    const p = instance.getEventPoint(event, "svg");
-    instance.state.set( 'menuPosition', "translate("+p.x+","+p.y+")" );
-    instance.state.set('selection', this.wire.name);
-    instance.state.set('active', "net");
   },
 
   // COMMON --------------------------------------------------------------------
@@ -507,7 +491,7 @@ Template.Circuits_show.events({
           insertWire.call({
             name: w.name,
             d:    w.d,
-            pins: w.ends.map( function(end) { return {e: end.e, p: end.p+""} }),
+            ends: w.ends.map( function(end) { return {e: end.e, p: end.p+""} }),
             cid:  w.cid,
           }, displayError);
         }
@@ -515,7 +499,7 @@ Template.Circuits_show.events({
           // update exist wire
           wid = instance.state.get('selection');
           updateWireD.call({ wid, newD: w.d }, displayError);
-          updateWireEnd.call({
+          addWireEnd.call({
             wid, newEnd: {e: pData.e, p: pData.p+""}
           }, displayError);
         }
@@ -531,7 +515,7 @@ Template.Circuits_show.events({
       // start new wire
       instance.state.set('startWire', p.id);
       $wire.data().wire = {
-        pins: [{e: pData.e, p: pData.p+""}],
+        ends: [{e: pData.e, p: pData.p+""}],
         cid: instance.data.circuit()._id,
         d: "M"+p.x+","+p.y,
       }
@@ -551,7 +535,7 @@ Template.Circuits_show.events({
     if ( instance.state.equals('selection', ".js-active-wire") ) {
       const wid = insertWire.call ({
         d: w.d,
-        pins: w.ends.map( function(end) { return {e: end.e, p: end.p+""} }),
+        ends: w.ends.map( function(end) { return {e: end.e, p: end.p+""} }),
         cid: w.cid,
       }, displayError);
       instance.state.set('selection', wid);
@@ -577,6 +561,12 @@ Template.Circuits_show.events({
       // end this wire
       console.log( "--> Stop wiring" );
       const start = instance.state.get('startWire')
+      console.log( "start: " + start );
+      console.log( "selection: " + instance.state.get('selection') );
+      console.log( "name: " + name);
+      console.log( "w.name: " + w.name);
+
+
       if ( !instance.state.equals('selection', ".js-active-wire")
       && w.name !== name) {
         console.log("CONFLICT: "+ w.name +" !== "+ name +"; merge to?");
@@ -595,7 +585,7 @@ Template.Circuits_show.events({
         insertWire.call({
           name: w.name,
           d: w.d,
-          pins: w.ends.map( function(end) { return {e: end.e, p: end.p+""} }),
+          ends: w.ends.map( function(end) { return {e: end.e, p: end.p+""} }),
           cid: w.cid,
         }, displayError);
       }
@@ -603,9 +593,8 @@ Template.Circuits_show.events({
         // instance.endWire(d,end);
         const wid = instance.state.get('selection');
         updateWireD.call({ wid, newD: w.d}, displayError);
-        updateWireEnd.call({
+        addWireEnd.call({
           'wid': wid,
-//          'i': 1,
           newEnd: { e: "node", p: "new" },
         }, displayError);
         updateWireName.call({
@@ -625,9 +614,8 @@ Template.Circuits_show.events({
       // start new wire
       console.log( "  --> Start wiring" );
       instance.state.set('startWire', name);
-      w.name = name;
       $wData.wire = {
-        name: w.name,
+        name: name,
         ends: [{e: "node", p: "new"}],
         cid: instance.data.circuit()._id,
         d: "M"+p.x+","+p.y,

@@ -77,8 +77,7 @@ export const rotateElement = new ValidatedMethod({
         'Cannot edit elements in a private circuit that is not yours');
     }
 
-    Elements.update(
-      { "_id": eid },
+    Elements.update(eid,
       { $set: { "transform.rot": phi } }
     );
   },
@@ -102,8 +101,8 @@ export const connectElementPin = new ValidatedMethod({
     }
 
     Elements.update(
-      { cid: cid, name: name, "pins.id": pin },
-      { $set: { "pins.$.net": net } }
+      { cid: cid, name: name, 'pins.id': pin },
+      { $set: { 'pins.$.net': net } }
     );
   },
 });
@@ -127,7 +126,7 @@ export const disconnectElementPin = new ValidatedMethod({
 
     Elements.update(
       { cid: cid, name: name, "pins.id": pin },
-      { $set: { "pins.$.net": name + "_"+ pin +"_open" } }
+      { $set: { "pins.$.net": "open" } }
     );
   },
 });
@@ -144,14 +143,14 @@ export const renameElement = new ValidatedMethod({
     // This is complex auth stuff - perhaps denormalizing a userId onto elements
     // would be correct here?
     const element = Elements.findOne(eid);
+    console.log( "METHOD elements.rename "+ element.name + " -> " + newName);
 
     if (!element.editableBy(this.userId)) {
       throw new Meteor.Error('elements.updateName.accessDenied',
         'Cannot edit elements in a private circuit that is not yours');
     }
 
-    Elements.update(
-      { "_id": eid },
+    Elements.update(eid,
       { $set: { name: newName } }
     );
   },
@@ -172,12 +171,15 @@ export const removeElement = new ValidatedMethod({
       throw new Meteor.Error('elements.remove.accessDenied',
         'Cannot remove elements in a private circuit that is not yours');
     }
-    const wid = Wires.findOne({ 'cid': element.cid, 'ends.e': element.name })._id;
-    openWireEnd.call({
-      'wid': wid,
-      'end.e': element.name,
-      'end.p': p.net
-    })
+
+    element.pins.map((p) => {
+      if(p.net !== "open"){
+        openWireEnd.call({
+          'cid': element.cid,
+          'end': { 'e': element.name, 'p': p.id },
+        });        
+      }
+    });
 
     Elements.remove(eid);
   },
