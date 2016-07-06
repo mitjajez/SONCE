@@ -38,7 +38,7 @@
                 <span class="icon-eye"></span>
               </button>
               <button class="js-edit-circuit btn btn-default navbar-btn {{#if editing}}active{{/if}}" type="text">
-                <span class="icon-edit"></span>
+                <span class="icon-pencil"></span>
               </button>
               <button class="js-wire-circuit btn btn-default navbar-btn {{#if wiring}}active{{/if}}" type="text">
                 <span class="icon-chart"></span>
@@ -80,7 +80,7 @@
         {{/if}}
 
         {{#if adding}}
-        {{> Active_element}}
+          {{> Active_element}}
         {{/if}}
 
         {{#each wire in wires}}
@@ -126,39 +126,35 @@
     <footer>
       <nav class="navbar">
         <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-            data-toggle="collapse" data-target="#status-row" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-menu" title={{_ 'Show status row'}}></span>
-            </button>
-          </div>
-          <div class="collapse navbar-collapse" id="status-row">
-            <div class="row">
+          <div class="row">
+            <div class="navbar-header">
+              {{>Command_box}}
 
-              <div class="col-lg-4 col-md-6 col-xs-12">
-                <p class="navbar-text">
-                  <span class="icon-target"></span> {{mouse.x}}, {{mouse.y}}
-                </p>
+              <button type="button" class="navbar-toggle collapsed"
+              data-toggle="collapse" data-target="#status-row" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-menu" title={{_ 'Show status row'}}></span>
+              </button>
+            </div>
+            <div class="collapse navbar-collapse" id="status-row">
+              <p class="navbar-text">
+                <span class="icon-target"></span> {{mouse.x}}, {{mouse.y}}
+              </p>
 
-                {{#if wiring}}
-                <p class="navbar-text">
-                  {{wiringMode}}
-                </p>
-                {{/if}}
+              {{#if wiring}}
+              <p class="navbar-text">
+                {{wiringMode}}
+              </p>
+              {{/if}}
 
-                {{#let condition=selection}}
-                {{#if condition}}
-                <p class="navbar-text">
-                  <span class="icon-marquee" title="{{active}}: {{selection}}"></span>
-                  <span class="js-cancel-selection icon-cancel" title={{_ 'Cancel'}}></span>
-                </p>
-                {{/if}}
-                {{/let}}
-              </div>
+              {{#if selection}}
+              <p class="navbar-text">
+                <span class="icon-marquee" title="{{active}}: {{selection}}"></span>
+                <span class="js-cancel-selection icon-cancel" title={{_ 'Cancel'}}></span>
+              </p>
+              {{/if}}
 
-              <div class="col-lg-4 col-md-6 col-xs-12">
-                <form class="js-set-zoom zoom-box navbar-form navbar-left">
+              <form class="js-set-zoom zoom-box navbar-form navbar-right">
                 <div class="input-group input-group-sm">
                   <div class="input-group-btn">
                     <button class="js-zoom-out btn btn-default" title={{_ 'Go'}}>
@@ -172,33 +168,11 @@
                     </button>
                   </div>
                 </div>
-                </form>
-                <p class="navbar-text">
-                  {{pan}}
-                </p>
-              </div>
-
-              <div class="col-lg-4 col-md-12">
-                <form class="command-box navbar-form navbar-left">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-addon">
-                    <span class="icon-terminal"></span>
-                  </span>
-                  <input class="form-control" name="command-line" type="text">
-                  <div class="input-group-btn">
-                    <button class="js-go btn btn-default" title={{_ 'Go'}}>
-                      <span class="icon-run"></span>
-                    </button>
-                    <button class="js-clear-input btn btn-default" title={{_ 'Clear'}}>
-                      <span class="icon-eraser"></span>
-                    </button>
-                  </div>
-                </div>
               </form>
-
-              </div>
+              <p class="navbar-text navbar-right">
+                {{pan}}
+              </p>
             </div>
-
           </div>
         </div>
       </nav>

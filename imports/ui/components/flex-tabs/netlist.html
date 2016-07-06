@@ -39,6 +39,18 @@
         {{/each}}
         </ul>
       </form>
+      <form>
+        <h3>Wires:</h3>
+        <ul class="list clearfix">
+        {{#each wire in wires}}
+          <li>
+            <span>{{wire.name}}</span>
+            ({{wire.ends.[0].e}}-{{wire.ends.[0].p}}) -> ({{wire.ends.[1].e}}-{{wire.ends.[1].p}})
+          </li>
+        {{/each}}
+        </ul>
+      </form>
+
 
     </div>
   </div>
