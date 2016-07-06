@@ -50,7 +50,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     active: false,        // element | wire | net | node
     selection: false,     //
     menuPosition: false,  // element center | click coords on wire
-    wiringMode: 'HV',     // HV | VH | LV | LH | L |
+    wiringMode: 'axis-x', // ['a-x', 'a-l', 'l', 'l-a', 'a-y']
     svgOffset: false,
     dragOffset: false,
     zoom: 100,
@@ -122,7 +122,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 
 // ########## wiring ###########################################################
 
-  this.wiringModes = ['axis', 'axis-line', 'line-axis', 'line'];
+  this.wiringModes = ['axis-x', 'axis-line', 'line', 'line-axis', 'axis-y'];
 
   this.getWiringMode = () => {
     return this.state.get('wiringMode');
@@ -172,7 +172,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     return p;
   };
 
-  this.newWirePathPoint = (x, y) => { // HV | VH | LV | LH | L |
+  this.newWirePathPoint = (x, y) => { // ['a-x', 'a-l', 'l', 'l-a', 'a-y']
     const d = this.$('.js-active-wire').data().wire.d;
     let p = {x:0, y:0};
     if(d) {
@@ -182,21 +182,25 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     let str = '';
     let dl = 0;
     switch (this.state.get('wiringMode')) {
-    case 'axis':
-      if(Math.abs(x-p.x) > Math.abs(y-p.y)) {
-        str = ` V${y} H${x}`;
-      }
-      else {
-        str = ` H${x} V${y}`;
-      }
+    case 'axis-x':
+      str = ` H${x} V${y}`;
       break;
     case 'axis-line':
       if( Math.abs(x-p.x) > Math.abs(y-p.y) ) {
-        str = ` V${y-(x-p.x)} l${x-p.x},${x-p.x}`;
+        dl = Math.abs(y-p.y);
+        str = x > p.x ? ` H${x-dl}` : ` H${x+dl}`;
+        str += x > p.x ? ` l${dl}` : ` l${-dl}`;
+        str += y > p.y ? `,${dl}` : `,${-dl}`;
       }
       else {
-        str = ` H${x-(y-p.y)} l${y-p.y},${y-p.y}`;
+        dl = Math.abs(x-p.x);
+        str = y > p.y ? ` V${y-dl}` : ` V${y+dl}`;
+        str += x > p.x ? ` l${dl}` : ` l${-dl}`;
+        str += y > p.y ? `,${dl}` : `,${-dl}`;
       }
+      break;
+    case 'line':
+      str = ` L${x},${y}`;
       break;
     case 'line-axis':
       if(Math.abs(x-p.x) > Math.abs(y-p.y)){ // LH ...
@@ -212,8 +216,8 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
         str += ` V${y}`;
       }
       break;
-    case 'line':
-      str = ` L${x},${y}`;
+    case 'axis-y':
+      str = ` V${y} H${x}`;
       break;
     default:
     }
@@ -221,7 +225,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
   };
 
   this.focusCli = () => {
-    Template.instance().$('.js-command-line input').focus();
+    this.$('.command-box input[name=command-line]').focus();
   };
 
 });
@@ -579,6 +583,12 @@ Template.Circuits_show.events({
       instance.state.set('selection', '.js-active-wire');
       instance.focusCli();
       console.log( '  --> Start wiring' );
+    }
+  },
+  'click .wiring .js-circuit-canvas' (event, instance) {
+    if(instance.$(event.currentTarget).is('.js-circuit-canvas') &&
+    !instance.state.equals('startWire', false) ) {
+      console.log( 'CLICK on SVG ACTIVE WIRE' ); // testing
     }
   },
 
