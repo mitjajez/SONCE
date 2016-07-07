@@ -4,11 +4,18 @@
       <div class="status">
         <h2>{{_ "Components_List"}}</h2>
       </div>
-			{{> EasySearch.Input index=componentsIndex }}
+
+      <div class="input-group input-group-sm">
+        <span class="input-group-addon">
+          <span class="icon-filter"></span>
+        </span>
+				{{> EasySearch.Input index=componentsIndex attributes=inputAttributes }}
+      </div>
+
 				<ul class="list clearfix lines {{viewClass}}">
 		    {{#EasySearch.Each index=componentsIndex }}
 
-					<li class="component-symbol">
+					<li class="component-symbol {{viewClass}}-item">
 					{{#if view_grid}}
 
 						{{#if types}}
@@ -28,22 +35,6 @@
 	      	</li>
 	    	{{/EasySearch.Each}}
 	  		</ul>
-
-
-
-<!--      {{#if Template.subscriptionsReady}} -->
-<!--        {{#if hasComponents}}
-          <h2>{{_ "Components_list_empty"}}</h2>
-        {{else}} -->
-          <div class="control">
-            <div class="search-form">
-              <div class="input-line filter">
-<!--                {{> inputAutocomplete settings=autocompleteSettingsAddUser id="component-add-filter" class="filter" placeholder=tFilter}} -->
-              </div>
-            </div>
-          </div>
-<!--        {{/if}} -->
-<!--      {{/if}} -->
     </div>
   </div>
 </template>

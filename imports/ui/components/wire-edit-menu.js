@@ -14,8 +14,12 @@ import { displayError } from '../lib/errors.js';
 
 import {
   removeWire,
-//  removeNet,
+  removeNet,
 } from '../../api/wires/methods.js';
+
+import {
+  disconnectElementPin,
+} from '../../api/elements/methods.js';
 
 Template.Wire_edit_menu.onCreated(function wireEditMenuOnCreated() {
   this.autorun(() => {
@@ -45,46 +49,8 @@ Template.Wire_edit_menu.onCreated(function wireEditMenuOnCreated() {
     }
     else if (this.data.active === "net") {
       console.log("CALL removeNet");
-      // removeNet.call()
-
-      Wires.find (
-        {"cid":this.data.cid, "name":selection},
-        {fields: {"_id": 1} }
-//      ).map(function (wid) {
-//        return wid._id
-      ).forEach(function (w) {
-        removeWire.call(
-          {	wid: w._id },
-          displayError
-        );
-      });
-
-      Elements.find (
-        {"cid":this.data.cid, "pins.net":selection},
-        {fields: {"_id": 1, "pins":1} }
-//      ).map(function (wid) {
-//        return wid._id
-      ).forEach(function (e) {
-        diconnectElementPin.call(
-          {eid: e._id, "pin":e.pins.net},
-        )
-      });
 
     }
-    /*
-    if (_.isArray(selection) ) {
-      selection.forEach(function(wid) {
-        removeWire.call({	wid }, displayError);
-      })
-    }
-    else if (_.isString(selection)) {
-      removeWire.call({	selection }, displayError);
-    }
-    else {
-      console.log("What to remove?");
-      console.log(selection);
-    }
-    */
   };
 
 });

@@ -5,7 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/mitjajez/SONCE/badges/gpa.svg)](https://codeclimate.com/github/mitjajez/SONCE)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/mitjajez/SONCE/master/LICENCE.md)
 
-[![dockeri.co](http://dockeri.co/image/mitjajez/sonce)]([docker_image])
+[![dockeri.co](http://dockeri.co/image/mitjajez/sonce)][docker_image]
 
 # Table of Contents
 * [Deployment](#deployment)

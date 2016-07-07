@@ -1,31 +1,11 @@
 <template name="Circuit_graph">
   <div class="content">
-    <div class="list-view circuit-settings">
+    <div class="panel panel-default">
+      <div class="panel-heading">{{_ "Circuit_graph"}}</div>
 
-      <div class="status">
-        <h2>{{_ "Circuit_graph"}}</h2>
-      </div>
-
-      <div>
+      <div class="panel-body">
         <h3>Dot:</h3>
         <code>
-<!--          graph sonce { <br>
-          {{#each wire in wires}}
-            <span data-net="{{wire.name}}">{{wire.name}}</span> [shape=point] <br>
-          {{/each}} <br>
-          <br>
-          {{#each element in elements}}
-            <span>{{element.pins.[0].net}}</span> - - <span>{{element.pins.[1].net}}</span> [label="{{element.name}}"] <br>
-            {{#if false }}
-            <span>{{element.pins.[0].net}}</span> - - <span>{{element.pins.[2].net}}</span>
-            [label="{{element.name}}"] <br>
-            <span>{{element.pins.[1].net}}</span> - - <span>{{element.pins.[2].net}}</span>
-            [label="{{element.name}}"] <br>
-            {{/if}}
-          {{/each}}
-          } <br>
-          <br>
-          <br> -->
           {{{htmlDot}}}
         </code>
       </div>

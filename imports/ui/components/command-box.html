@@ -1,0 +1,18 @@
+<template name="Command_box">
+  <form class="command-box navbar-form navbar-left">
+    <div class="input-group input-group-sm">
+      <span class="input-group-addon">
+        <span class="icon-terminal"></span>
+      </span>
+      <input class="form-control" name="command-line" type="text">
+      <div class="input-group-btn">
+        <button class="js-go btn btn-default" title={{_ 'Go'}}>
+          <span class="icon-run"></span>
+        </button>
+        <button class="js-clear-input btn btn-default" title={{_ 'Clear'}}>
+          <span class="icon-eraser"></span>
+        </button>
+      </div>
+    </div>
+  </form>
+</template>

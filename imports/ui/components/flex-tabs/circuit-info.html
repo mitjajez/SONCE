@@ -1,72 +1,105 @@
 <template name="Circuit_info">
   <div class="content">
     <div class="list-view circuit-settings">
-      <div class="status">
-        <h2>{{_ "Circuit_Info"}}</h2>
-      </div>
-      <form>
+      <div class="panel-heading">{{_ "Circuit_Info"}}</div>
+      <div class="panel-body">
+      <form class="js-form">
         <ul class="list clearfix">
           <li>
             <label>Name</label>
-            {{#if editingName}}
-            <form class="js-edit-circuit-name navbar-form navbar-left" role="edit-title">
-              <div class="form-group">
-                <input type="text" class="form-control" name="name" value="{{circuit.name}}">
+            {{#if editing 'circuitName'}}
+            <div class="input-group">
+              <input type="text" class="form-control js-editing"
+              name="circuitName" value="{{circuit.name}}">
+              <div class="input-group-btn">
+                <button class="btn btn-default js-cancel"
+                title={{_ 'Cancel'}} type="button">
+                  <span class="icon-cancel"></span>
+                </button>
+                <button class="btn btn-default js-save"
+                title={{_ 'Save'}} type="button">
+                  <span class="icon-ok"></span>
+                </button>
               </div>
-              <button class="btn btn-default" type="reset">
-                <span class="icon-cancel" title={{_ 'Cancel'}}></span>
-              </button>
-              <button class="btn btn-default" type="submit">
-                <span class="icon-ok" title={{_ 'Save'}}></span>
-              </button>
-            </form>
+            </div>
             {{else}}
             <div>
               {{circuit.name}}
-              <span class="js-edit-circuit-name icon-edit"
-              title={{_ 'Edit circuit name'}}></span>
+              <a href="#" data-edit="circuitName"
+              title={{_ 'Edit circuit name'}} >
+                <span class="icon-pencil"></span>
+              </a>
             </div>
             {{/if}}
           </li>
-        </ul>
-      </form>
-      <form>
-        <h3>Wires:</h3>
-        <ul class="list clearfix">
-        {{#each wire in wires}}
           <li>
-            <span>{{wire.name}}</span>
-            ({{wire.pins.[0].e}}-{{wire.pins.[0].p}}) -> ({{wire.pins.[1].e}}-{{wire.pins.[1].p}})
+            <label>Description</label>
+            {{#if editing 'circuitDescription'}}
+            <div class="input-group">
+              <input type="text" class="form-control js-editing"
+              name="circuitDescription" value="{{circuit.description}}">
+              <div class="input-group-btn">
+                <button class="btn btn-default js-cancel"
+                title={{_ 'Cancel'}} type="button">
+                  <span class="icon-cancel"></span>
+                </button>
+                <button class="btn btn-default js-save"
+                title={{_ 'Save'}} type="button">
+                  <span class="icon-ok"></span>
+                </button>
+              </div>
+            </div>
+            {{else}}
+            <div>
+              {{circuit.description}}
+              <a href="#" data-edit="circuitDescription"
+              title={{_ 'Edit circuit description'}} >
+                <span class="icon-pencil"></span>
+              </a>
+            </div>
+            {{/if}}
           </li>
-        {{/each}}
-        </ul>
-      </form>
-      <form>
-        <h3>Access:</h3>
-        <ul class="list clearfix">
           <li>
-            {{#if editing}}
-            <button class="js-toggle-circuit-privacy btn btn-default navbar-btn" type="text">
+            <label>{{_ "Access"}}</label>
+            <button class="js-toggle-circuit-privacy btn btn-default" type="text">
               {{#if circuit.owner}}
               <span class="icon-lock" title={{_ 'Make circuit public'}}></span>
               {{else}}
               <span class="icon-lock-open" title={{_ 'Make circuit private'}}></span>
               {{/if}}
             </button>
+            {{#if editing 'circuitPrivacy'}}
+            <label>
+              <input type="radio" name="circuitPrivacy" class="editing"
+              value="c" checked="{{$eq circuitPrivacy 'c'}}" />
+              {{_ "Public_Circuit"}}
+            </label>
+            <label>
+              <input type="radio" name="circuitPrivacy"
+              value="p" checked="{{$eq circuitPrivacy 'p'}}" />
+              {{_ "Private_Circuit"}}
+            </label>
+            <button type="button" class="button secondary cancel">
+              {{_ "Cancel"}}
+            </button>
+            <button type="button" class="button primary save">
+              {{_ "Save"}}
+            </button>
+            {{else}}
+            {{circuitPrivacyDescription}}
+            <span class="icon-pencil" data-edit="circuitPrivacy"></span>
             {{/if}}
           </li>
         </ul>
       </form>
-      <form>
-        <h3>Danger zone:</h3>
-        <ul class="list clearfix">
-          <li>
-            <button class="js-delete-circuit btn btn-default" title={{_ 'Delete circuit'}}>
-              <span class="icon-trash"></span>
-            </button>
-          </li>
-        </ul>
-      </form>
+      <h3>{{_ "Danger_zone"}}</h3>
+      <nav>
+        <button class='js-delete-circuit btn btn-default red'
+        title={{_ 'Delete circuit'}}>
+          <span class='icon-trash'>{{_ "Delete"}}</span>
+        </button>
+      </nav>
+      </div>
     </div>
   </div>
 </template>

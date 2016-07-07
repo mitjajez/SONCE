@@ -30,8 +30,8 @@
           <li>
             <span>{{net}}</span>
             ({{#each wire in wires (net) }}
-            {{#each pin in wire.pins }}
-            {{pin.e}}-{{pin.p}},
+            {{#each end in wire.ends }}
+            {{end.e}}-{{end.p}},
             <!--            {{wire.pins.[0].e}}-{{wire.pins.[0].p}}) -->
             {{/each}}
             {{/each}})
@@ -39,6 +39,18 @@
         {{/each}}
         </ul>
       </form>
+      <form>
+        <h3>Wires:</h3>
+        <ul class="list clearfix">
+        {{#each wire in wires}}
+          <li>
+            <span>{{wire.name}}</span>
+            ({{wire.ends.[0].e}}-{{wire.ends.[0].p}}) -> ({{wire.ends.[1].e}}-{{wire.ends.[1].p}})
+          </li>
+        {{/each}}
+        </ul>
+      </form>
+
 
     </div>
   </div>

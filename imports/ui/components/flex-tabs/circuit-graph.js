@@ -30,7 +30,16 @@ Template.Circuit_graph.onCreated(function circuitsGraphOnCreated() {
       dot += " "+ n + " [label="+n+"];";
     });
     Elements.find({ 'cid': cid }).forEach((e) => {
-      dot += " "+ e.pins[0].net +" -- "+ e.pins[1].net +" [label="+ e.name +"];";
+      if( e.pins[0].net === "open") {
+        dot += e.name + "_" + e.pins[0].id + "_";
+      }
+      dot += e.pins[0].net;
+      dot += " -- ";
+      if( e.pins[1].net === "open") {
+        dot += e.name + "_" + e.pins[1].id + "_";
+      }
+      dot += e.pins[1].net
+      dot += " [label="+ e.name +"];";
       if( false ) {
         dot += e.pins[0].net +" -- "+ e.pins[2].net +" [label="+ e.name +"];";
         dot += e.pins[1].net +" -- "+ e.pins[2].net +" [label="+ e.name +"];";
