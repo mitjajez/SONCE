@@ -1,3 +1,5 @@
+import { TabBar } from 'meteor/flextab';
+
 import '../components/flex-tabs/circuit-info.js';
 import '../components/flex-tabs/netlist.js';
 import '../components/flex-tabs/circuit-graph.js';

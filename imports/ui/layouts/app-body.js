@@ -5,12 +5,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { Template } from 'meteor/peerlibrary:blaze-components';
 
-import { ActiveRoute } from 'meteor/zimme:active-route';
-import { FlowRouter } from 'meteor/kadira:flow-router';
-import { TAPi18n } from 'meteor/tap:i18n';
-
-import { insertCircuit } from '../../api/circuits/methods.js';
-import { Circuits } from '../../api/circuits/circuits.js';
+import { TabBar } from 'meteor/flextab';
 
 import '../components/loading.js';
 import '../components/default-tab-bars.js';
@@ -55,7 +50,6 @@ Template.App_body.helpers({
     if (showConnectionIssue.get()) {
       return Meteor.status().connected;
     }
-
     return true;
   },
   templateGestures: {
@@ -67,27 +61,19 @@ Template.App_body.helpers({
     },
   },
   flexOpened() {
-    if (TabBar.isFlexOpen()) {
-      return 'flex-opened';
-    }
+    return TabBar.isFlexOpen() ? 'flex-opened' : '';
   },
   flexTemplate() {
     return TabBar.getTemplate();
   },
   flexData() {
     return TabBar.getData();
-  }
-
+  },
 });
 
 Template.App_body.events({
   'click .js-menu'(event, instance) {
     instance.state.set('menuOpen', !instance.state.get('menuOpen'));
-  },
-
-  'click .content-overlay'(event, instance) {
-    instance.state.set('menuOpen', false);
-    event.preventDefault();
   },
 
   'click #menu button'(event, instance) {

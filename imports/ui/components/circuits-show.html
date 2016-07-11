@@ -4,6 +4,9 @@
     <nav class="navbar">
       <div class="container-fluid">
         <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+            <img alt="SONCE" src="/sonce-150.png" height="20px">
+          </a>
           <button type="button" class="navbar-toggle collapsed"
           data-toggle="collapse" data-target="#top-navigation" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
@@ -17,21 +20,11 @@
             title="{{_ 'Favourite Circuit'}}">
               <span class="icon-star-empty {{favourite}}"></span>
             </a>
-          </p>
-          <p class="navbar-text js-title">
             {{circuit.name}}
           </p>
 
 
           <!-- right part of navigation -->
-          <div class="navbar-header navbar-right">
-            <button type="button" class="navbar-toggle collapsed"
-            data-toggle="collapse" data-target="#top-navigation" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-menu" title={{_ 'Show Menu'}}></span>
-            </button>
-          </div>
-
           <div class="nav navbar-nav navbar-right btn-toolbar" role="toolbar" aria-label="...">
             <div class="btn-group" role="group-sm" aria-label="...">
               <button class="js-view-circuit btn btn-default navbar-btn {{#if viewing}}active{{/if}}" type="text">
@@ -90,8 +83,12 @@
         {{#each element in elements}}
           {{> Elements_item (elementArgs element)}}
         {{else}}
-          <text class="title-message">{{_ 'No elements here'}}</text>
-          <text class="subtitle-message">{{_ 'Add new elements using the field above'}}</text>
+          <text class="title-message" transform="translate(50,150)">
+            {{_ 'No elements here'}}
+          </text>
+          <text class="subtitle-message" transform="translate(50,200)">
+            {{_ 'Add new elements using the \'+\' button in tools bar'}}
+          </text>
         {{/each}}
 
         {{> Active_pin}}

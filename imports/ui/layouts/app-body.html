@@ -1,14 +1,6 @@
 <template name="App_body">
   {{#HammerTouchArea gestureMap=templateGestures}}
     <div id="sonce" class="{{menuOpen}} {{cordova}}">
-      <div class="navbar-header">
-        <button type="button" class="js-menu navbar-toggle collapsed"
-        data-toggle="collapse" data-target="#menu" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-menu" title={{_ 'Show Menu'}}></span>
-        </button>
-      </div>
-
       <aside id="menu" class="side-nav">
         {{> Account_box}}
         {{> Circuits_list}}
@@ -26,8 +18,6 @@
         </div>
       {{/unless}}
 
-      <div class="content-overlay"></div>
-
       <div class="main-content {{flexOpened}}">
         {{#if Template.subscriptionsReady}}
           {{> Template.dynamic template=main}}
@@ -41,6 +31,18 @@
 
       <div class="flex-tab-bar" role="toolbar">
         {{> Flex_tab_bar}}
+      </div>
+
+      <div class="content-overlay">
+        <button type="button" class="js-menu pull-left navbar-toggle collapsed"
+        data-toggle="collapse" data-target="#menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          {{#if menuOpen}}
+          <span class="icon-left" title={{_ 'Show Menu'}}></span>
+          {{else}}
+          <span class="icon-right" title={{_ 'Show Menu'}}></span>
+          {{/if}}
+        </button>
       </div>
 
     </div>

@@ -84,17 +84,3 @@
     }
   }
 }
-
-// Transparent screen to prevent interactions on content when menu is open
-.content-overlay {
-  .position(absolute, 0, 0, 0, 0);
-  cursor: pointer;
-
-  .menu-open & {
-    transform: translateX(@menu-width);
-    z-index: 1;
-  }
-
-  // Hide overlay on desktop
-  @media screen and (min-width: 40em) { display: none; }
-}

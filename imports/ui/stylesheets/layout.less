@@ -44,7 +44,6 @@ header {
   opacity: 1;
   transition: width 0.25s cubic-bezier(0.5, 0, 0.1, 1) 0s;
 
-//  @media screen and (min-width: 40em) {
   @media screen and (min-width: 780px) {
     left: @menu-width;
   }
@@ -63,15 +62,15 @@ header {
     opacity: .85;
     left: 0;
 
-    @media screen and (min-width: 40em) {
+    @media screen and (min-width: 780px) {
       // Show menu on desktop, negate .menu-open
+      transform: translateX(0);
       opacity: 1;
       left: @menu-width;
     }
   }
   &.flex-opened {
     opacity: .85;
-//    @media screen and (min-width: 40em) {
     @media screen and (min-width: 1100px) {
       right: @flex-width+40px;
     }
@@ -96,8 +95,11 @@ header {
 }
 // Transparent screen to prevent interactions on content when menu is open
 .content-overlay {
-  .position(absolute, 0, 0, 0, 0);
+  .position(absolute, 0, auto, auto, 0);
   cursor: pointer;
+  button {
+    padding: 8px;
+  }
 
   .menu-open & {
     transform: translateX(@menu-width);
@@ -105,7 +107,7 @@ header {
   }
 
   // Hide overlay on desktop
-  @media screen and (min-width: 40em) { display: none; }
+  @media screen and (min-width: 780px) { display: none; }
 }
 
 
