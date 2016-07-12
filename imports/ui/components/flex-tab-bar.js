@@ -6,11 +6,31 @@ import { TAPi18n } from 'meteor/tap:i18n';
 
 import './flex-tab-bar.html';
 
+Template.Flex_tab_bar.onCreated(function() {
+  this.autorun(() => {
+    const visibleGroup = TabBar.getVisibleGroup();
+    Tracker.nonreactive(function() {
+      const openedTemplate = TabBar.getTemplate();
+      let exists = false;
+      TabBar.getButtons().forEach(function(button) {
+        if (button.groups.indexOf(visibleGroup) !== -1 &&
+        openedTemplate === button.template) {
+          exists = true;
+        }
+      });
+      if (!exists) {
+        TabBar.closeFlex();
+      }
+    });
+  });
+});
+
 Template.Flex_tab_bar.helpers({
   buttons() {
     return TabBar.getButtons();
   },
 });
+
 Template.Flex_tab_button.helpers({
   active (button) {
     return button.template === TabBar.getTemplate() && TabBar.isFlexOpen()
@@ -33,17 +53,17 @@ Template.Flex_tab_bar.events({
       TabBar.closeFlex();
       $('.flex-tab').css('max-width', '');
     } else {
-      if ((button.openClick === null) || button.openClick(e, t)) {
-        if (button.width !== null) {
-          $('.flex-tab').css('max-width', `${button.width}px`);
-        } else {
-          $('.flex-tab').css('max-width', '');
-        }
-      }
+  //    if ((button.openClick === null) || button.openClick(e, t)) {
+  //      if (button.width !== null) {
+  //        $('.flex-tab').css('max-width', `${button.width}px`);
+  //      } else {
+  //        $('.flex-tab').css('max-width', '');
+  //      }
+  //    }
       TabBar.setTemplate(button.template, function() {
         const ref = $('.flex-tab');
         if (ref !== null) {
-          const ref1 = ref.find('input[type=text]:first');
+          const ref1 = ref.find('input[type="text"]:first');
           if (ref1 !== null) { ref1.focus(); }
         }
         const ref2 = $('.flex-tab .content');
@@ -51,23 +71,4 @@ Template.Flex_tab_bar.events({
       });
     }
   },
-});
-
-Template.Flex_tab_bar.onCreated(function() {
-  this.autorun(() => {
-    const visibleGroup = TabBar.getVisibleGroup();
-    Tracker.nonreactive(function() {
-      const openedTemplate = TabBar.getTemplate();
-      let exists = false;
-      TabBar.getButtons().forEach(function(button) {
-        if (button.groups.indexOf(visibleGroup) !== -1 &&
-        openedTemplate === button.template) {
-          exists = true;
-        }
-      });
-      if (!exists) {
-        TabBar.closeFlex();
-      }
-    });
-  });
 });

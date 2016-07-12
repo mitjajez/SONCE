@@ -89,8 +89,8 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
       Y = e.layerY;
     }
     return {
-      x: Math.round(X/gridSpace) * 10,
-      y: Math.round(Y/gridSpace) * 10,
+      x: Math.round(X/gridSpace) * gridSpace,
+      y: Math.round(Y/gridSpace) * gridSpace,
     };
   };
 
@@ -225,7 +225,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
   };
 
   this.focusCli = () => {
-    this.$('.command-box input[name=command-line]').focus();
+    this.$('.command-box input[name="command-line"]').focus();
   };
 
 });
@@ -339,33 +339,28 @@ Template.Circuits_show.events({
   },
 
   // COMMON --------------------------------------------------------------------
-  'drag .js-circuit-canvas' (event, instance) {
-    console.log( 'DRAG event' );
+  /*
+  'touchstart .js-circuit-canvas' (event, instance) {
+    console.log( 'touchstart event' );
+    console.log( event );
   },
 
-  'dragenter .js-circuit-canvas' (event, instance) {
-    console.log( 'DRAGENTER event' );
+  'touchend .js-circuit-canvas' (event, instance) {
+    console.log( 'touchend event' );
+    console.log( event );
+    console.log( event.changedTouches );
   },
 
-  'dragstart .js-circuit-canvas' (event, instance) {
-    console.log( 'DRAGSTART event' );
+  'touchmove .js-circuit-canvas' (event, instance) {
+    console.log( 'touchmove event' );
+    console.log( event );
   },
 
-  'dragover .js-circuit-canvas' (event, instance) {
-    console.log( 'DRAGOVER event' );
+  'touchcancel .js-circuit-canvas' (event, instance) {
+    console.log( 'touchcancel event' );
+    console.log( event );
   },
-
-  'drop .js-circuit-canvas' (event, instance) {
-    console.log( 'DROP event' );
-  },
-
-  'dragend .js-circuit-canvas' (event, instance) {
-    console.log( 'DRAGEND event' );
-  },
-
-  'dragleave .js-circuit-canvas' (event, instance) {
-    console.log( 'DRAGLEAVE event' );
-  },
+  */
 
   'click .js-view-circuit' (event, instance) {
     event.preventDefault();
@@ -391,7 +386,7 @@ Template.Circuits_show.events({
     instance.zoom(event);
   },
 
-  'mousedown .js-circuit-canvas'(event, instance){
+  'mousedown, touchstart .js-circuit-canvas'(event, instance){
     event.preventDefault();
     if( instance.$(event.target).is('svg.js-circuit-canvas') ){
       Session.set('dragging', 'panning'); //panning | moving
@@ -406,14 +401,14 @@ Template.Circuits_show.events({
     console.log('drag starts');
   },
 
-  'mouseup .js-circuit-canvas'(event, instance){
+  'mouseup, touchend .js-circuit-canvas'(event, instance){
     event.preventDefault();
     Session.set('dragging', false);
     console.log('drag stops');
   },
 
 
-  'mousemove .js-circuit-canvas'(event, instance) {
+  'mousemove, touchmove .js-circuit-canvas'(event, instance) {
     event.preventDefault();
     const pos = instance.getEventPoint(event, 'svg');
     instance.state.set('mouse', {x:pos.x, y:pos.y} );
