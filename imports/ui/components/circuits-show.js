@@ -49,12 +49,13 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     acting: 'viewing',    // viewing | editing | adding | wiring
     active: false,        // element | wire | net | node
     selection: false,     //
+    dragging: false,      // panning | dragging
     menuPosition: false,  // element center | click coords on wire
     wiringMode: 'axis-x', // ['a-x', 'a-l', 'l', 'l-a', 'a-y']
     svgOffset: false,
     dragOffset: false,
-    zoom: 100,
-    pan: '0,0',
+    zoom: 1,
+    pan: {x:0, y:0},
     mouse: {x:0, y:0},
   });
 
@@ -75,18 +76,48 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 // ########## SVG related ######################################################
 
   this.getEventPoint = (event, mode) => {
-    const e = event.originalEvent;
     const gridSpace = 10;
     let X = 0; let Y = 0;
-    if(mode === 'svg') {
-      const sCircuit = Snap('.js-circuit-canvas').select('.js-circuit');
-      const t = sCircuit.transform().globalMatrix.split();
-      X = ( e.layerX - t.dx)/ t.scalex;
-      Y = ( e.layerY - t.dy)/ t.scaley;
+//    if (typeof event.pointerType === 'undefined') {
+//      console.log( event );
+//    }
+
+    if (event.type.indexOf('mouse') > -1) {
+      //event.type === 'mousemove'
+      if(mode === 'svg') {
+        const C = Snap('.js-circuit-canvas').select('.js-circuit');
+        const t = C.transform().globalMatrix.split();
+        X = (event.offsetX - t.dx) / t.scalex;
+        Y = (event.offsetY - t.dy) / t.scaley;
+      }
+      else {
+        X = event.offsetX;
+        Y = event.offsetY;
+      }
     }
-    else {
-      X = e.layerX;
-      Y = e.layerY;
+    else if (event.pointerType === 'mouse') {
+      if(mode === 'svg') {
+        const C = Snap('.js-circuit-canvas').select('.js-circuit');
+        const t = C.transform().globalMatrix.split();
+        X = (event.layerX - t.dx) / t.scalex;
+        Y = (event.layerY - t.dy) / t.scaley;
+      }
+      else {
+        X = event.layerX;
+        Y = event.layerY;
+      }
+    }
+    else if(event.pointerType === 'touch'){
+      if(mode === 'svg') {
+        const C = Snap('.js-circuit-canvas').select('.js-circuit');
+        const t = C.transform().globalMatrix.split();
+        X = event.deltaX / t.scalex;
+        Y = event.deltaY / t.scaley;
+      }
+      else {
+        X = event.deltaX;
+        Y = event.deltaY;
+      }
     }
     return {
       x: Math.round(X/gridSpace) * gridSpace,
@@ -96,29 +127,47 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 
   this.zoom = (event) => {
     console.log('ZOOM');
-    const T = this.getEventPoint(event, 'svg');
-    const z = event.originalEvent.deltaY > 0 ? 0.9 : 1.1;
-    const sCircuit = Snap('.js-circuit-canvas').select('.js-circuit');
-    const t = sCircuit.transform().globalMatrix.scale(z, z, T.x, T.y);
-    sCircuit.transform(t);
+    const C = Snap('.js-circuit-canvas').select('.js-circuit');
+    if(event.type === 'pinch') {
 
-    const out = t.split();
-    this.state.set('zoom', (out.scalex*100).toFixed() );
-    this.state.set('pan', `${(out.dx).toFixed()}, ${(out.dy).toFixed()}` );
+    }
+    else {
+      const T = this.getEventPoint(event, 'svg');
+      const z = event.originalEvent.deltaY > 0 ? 0.9 : 1.1;
+      const t = C.transform().globalMatrix.scale(z, z, T.x, T.y);
+//      C.transform(t);
+
+      const out = t.split();
+      this.state.set('zoom', out.scalex );
+      this.state.set('pan', {x: out.dx*1, y: out.dy*1} );
+    }
   };
 
   this.pan = (event) => {
     console.log('PAN');
-    const T = this.getEventPoint(event, 'svg');
-    const T0 = this.state.get('dragOffset');
-    const sCircuit = Snap('.js-circuit-canvas').select('.js-circuit');
-    const t = sCircuit.transform().globalMatrix.translate(T.x - T0.x, T.y - T0.y);
-    sCircuit.transform(t);
-
-    const out = t.split();
-    this.state.set('pan', `${(out.dx).toFixed()}, ${(out.dy).toFixed()}` );
+    const C = Snap('.js-circuit-canvas').select('.js-circuit');
+    if(event.type === 'pan'){
+      if(!this.state.get('dragOffset')){
+        this.state.set('dragOffset', this.state.get('pan') );
+      }
+      const off = this.state.get('dragOffset' );
+      const dT = this.getEventPoint(event, 'svg');
+      if(event.srcEvent.type === 'touchmove') {
+        this.state.set('pan', {x: (off.x+dT.x), y: (off.y+dT.y)} );
+      }
+      if(event.srcEvent.type === 'touchend') {
+        this.state.set('dragOffset', false );
+      }
+    }
+    else {
+      const T = this.getEventPoint(event, 'svg');
+      const T0 = this.state.get('dragOffset');
+      const t =  C.transform().globalMatrix.translate(T.x - T0.x, T.y - T0.y);
+//        sCircuit.transform(t);
+      const out = t.split();
+      this.state.set('pan', {x: out.dx*1, y: out.dy*1} );
+    }
   };
-
 
 // ########## wiring ###########################################################
 
@@ -238,6 +287,13 @@ Template.Circuits_show.helpers({
   mouse: () => Template.instance().state.get('mouse'),
   zoom: () => Template.instance().state.get('zoom'),
   pan: () => Template.instance().state.get('pan'),
+  viewzoom() {
+    return (Template.instance().state.get('zoom')*100).toFixed();
+  },
+  viewPan() {
+    const pan = Template.instance().state.get('pan');
+    return `${(pan.x).toFixed()},${(pan.y).toFixed()},`;
+  },
 
   actingClass: () => Template.instance().state.get('acting'),
   active: () => Template.instance().state.get('active'),
@@ -311,6 +367,17 @@ Template.Circuits_show.helpers({
       },
     };
   },
+
+  templateGestures: {
+    'pan .js-circuit-canvas'(event, instance) {
+      event.preventDefault();
+      instance.pan(event);
+    },
+    'pinch .js-circuit-canvas'(event, instance) {
+      event.preventDefault();
+      instance.zoom(event);
+    },
+  },
 });
 
 
@@ -339,29 +406,6 @@ Template.Circuits_show.events({
   },
 
   // COMMON --------------------------------------------------------------------
-  /*
-  'touchstart .js-circuit-canvas' (event, instance) {
-    console.log( 'touchstart event' );
-    console.log( event );
-  },
-
-  'touchend .js-circuit-canvas' (event, instance) {
-    console.log( 'touchend event' );
-    console.log( event );
-    console.log( event.changedTouches );
-  },
-
-  'touchmove .js-circuit-canvas' (event, instance) {
-    console.log( 'touchmove event' );
-    console.log( event );
-  },
-
-  'touchcancel .js-circuit-canvas' (event, instance) {
-    console.log( 'touchcancel event' );
-    console.log( event );
-  },
-  */
-
   'click .js-view-circuit' (event, instance) {
     event.preventDefault();
     instance.state.set('acting', 'viewing');
@@ -386,14 +430,14 @@ Template.Circuits_show.events({
     instance.zoom(event);
   },
 
-  'mousedown, touchstart .js-circuit-canvas'(event, instance){
+  'mousedown .js-circuit-canvas'(event, instance){
     event.preventDefault();
     if( instance.$(event.target).is('svg.js-circuit-canvas') ){
-      Session.set('dragging', 'panning'); //panning | moving
+      instance.state.set('dragging', 'panning'); //panning | moving
     }
     else if ( instance.$(event.target).is('.js-select-element') ) {
       // copy element to js-active-element
-      Session.set('dragging', 'moving'); //panning | moving
+      instance.state.set('dragging', 'moving'); //panning | moving
       // instance.$('js-active-element').attr('visibility', 'visable');
     }
     const T = instance.getEventPoint(event, 'svg');
@@ -401,22 +445,21 @@ Template.Circuits_show.events({
     console.log('drag starts');
   },
 
-  'mouseup, touchend .js-circuit-canvas'(event, instance){
+  'mouseup .js-circuit-canvas'(event, instance){
     event.preventDefault();
-    Session.set('dragging', false);
+    instance.state.set('dragging', false);
     console.log('drag stops');
   },
 
-
-  'mousemove, touchmove .js-circuit-canvas'(event, instance) {
+  'mousemove .js-circuit-canvas'(event, instance) {
     event.preventDefault();
     const pos = instance.getEventPoint(event, 'svg');
     instance.state.set('mouse', {x:pos.x, y:pos.y} );
 
-    if( Session.equals('dragging', 'panning') ){
+    if( instance.state.equals('dragging', 'panning') ){
       instance.pan(event);
     }
-    if( Session.equals('dragging', 'moving') ){
+    if( instance.state.equals('dragging', 'moving') ){
       console.log('to MOVE');
 //      instance.move(event);
     }
