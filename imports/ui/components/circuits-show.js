@@ -5,6 +5,7 @@ import { Session } from 'meteor/session';
 import { $ } from 'meteor/jquery';
 import { _ } from 'meteor/underscore';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Hammer } from 'meteor/chriswessels:hammer';
 import Snap from 'snapsvg';
 
 import { Elements } from '../../api/elements/elements.js';
@@ -59,6 +60,12 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     mouse: {x:0, y:0},
   });
 
+  this.active = new ReactiveDict();
+  this.active .setDefault({
+    element: false, // {component: 'r', transform: {x: 0, y:0, rot:0}, visibility: 'hidden'}
+    wire: false,    // {d:'M0,0', visibility: 'hidden'}
+  });
+
   this.autorun(() => {
     new SimpleSchema({
       circuit: { type: Function },
@@ -74,55 +81,66 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 
 
 // ########## SVG related ######################################################
+  this.snapToGrid = (T) => {
+    const gridSpace = 10;
+    return {
+      x: Math.round(T.x/gridSpace) * gridSpace,
+      y: Math.round(T.y/gridSpace) * gridSpace,
+    };
+  };
 
   this.getEventPoint = (event, mode) => {
-    const gridSpace = 10;
-    let X = 0; let Y = 0;
-//    if (typeof event.pointerType === 'undefined') {
-//      console.log( event );
-//    }
-
+    const T = { x:0, y:0 };
     if (event.type.indexOf('mouse') > -1) {
       //event.type === 'mousemove'
       if(mode === 'svg') {
         const C = Snap('.js-circuit-canvas').select('.js-circuit');
         const t = C.transform().globalMatrix.split();
-        X = (event.offsetX - t.dx) / t.scalex;
-        Y = (event.offsetY - t.dy) / t.scaley;
+        T.x = (event.offsetX - t.dx) / t.scalex;
+        T.y = (event.offsetY - t.dy) / t.scaley;
       }
       else {
-        X = event.offsetX;
-        Y = event.offsetY;
+        T.x = event.offsetX;
+        T.y = event.offsetY;
       }
     }
     else if (event.pointerType === 'mouse') {
       if(mode === 'svg') {
         const C = Snap('.js-circuit-canvas').select('.js-circuit');
         const t = C.transform().globalMatrix.split();
-        X = (event.layerX - t.dx) / t.scalex;
-        Y = (event.layerY - t.dy) / t.scaley;
+        T.x = (event.layerX - t.dx) / t.scalex;
+        T.y = (event.layerY - t.dy) / t.scaley;
       }
       else {
-        X = event.layerX;
-        Y = event.layerY;
+        T.x = event.layerX;
+        T.y = event.layerY;
       }
     }
     else if(event.pointerType === 'touch'){
       if(mode === 'svg') {
         const C = Snap('.js-circuit-canvas').select('.js-circuit');
         const t = C.transform().globalMatrix.split();
-        X = event.deltaX / t.scalex;
-        Y = event.deltaY / t.scaley;
+        T.x = event.deltaX / t.scalex;
+        T.y = event.deltaY / t.scaley;
       }
       else {
-        X = event.deltaX;
-        Y = event.deltaY;
+        T.x = event.deltaX;
+        T.y = event.deltaY;
       }
     }
-    return {
-      x: Math.round(X/gridSpace) * gridSpace,
-      y: Math.round(Y/gridSpace) * gridSpace,
-    };
+    return this.snapToGrid(T);
+  };
+
+
+  this.setmenuPosition = (T0, mode) => {
+    const T = T0;
+    if(mode === 'svg') {
+      const C = Snap('.js-circuit-canvas').select('.js-circuit');
+      const t = C.transform().globalMatrix.split();
+      T.x = T0.x / t.scalex + t.dx;
+      T.y = T0.y / t.scaley + t.dy;
+    }
+    this.state.set('menuPosition', `translate(${T.x},${T.y})`);
   };
 
   this.zoom = (event) => {
@@ -287,8 +305,9 @@ Template.Circuits_show.helpers({
   mouse: () => Template.instance().state.get('mouse'),
   zoom: () => Template.instance().state.get('zoom'),
   pan: () => Template.instance().state.get('pan'),
-  viewzoom() {
-    return (Template.instance().state.get('zoom')*100).toFixed();
+  viewZoom() {
+    const zoom = Template.instance().state.get('zoom');
+    return `${(zoom*100).toFixed()}`;
   },
   viewPan() {
     const pan = Template.instance().state.get('pan');
@@ -368,59 +387,59 @@ Template.Circuits_show.helpers({
     };
   },
 
+  configureHammer () {
+    return function (hammer, instance) {
+      const twoFingerSwipe = new Hammer.Swipe({
+        event: '2fingerswipe', /* prefix for custom swipe events, e.g. 2fingerswipeleft, 2fingerswiperight */
+        pointers: 2,
+        velocity: 0.5,
+      });
+      hammer.add([twoFingerSwipe]);
+
+      return hammer;
+    };
+  },
   templateGestures: {
     'pan .js-circuit-canvas'(event, instance) {
-      event.preventDefault();
       instance.pan(event);
     },
     'pinch .js-circuit-canvas'(event, instance) {
-      event.preventDefault();
       instance.zoom(event);
+    },
+    'tap .js-select-element'(event, instance) {
+      console.log("tap .js-select-element");
+      this.selected ? this.setSelected(false) : this.setSelected(true);
+      const p = this.element.transform;
+      instance.setmenuPosition({x:p.x, y:p.y}, 'svg');
+      instance.focusCli();
+    },
+
+    'doubletap .js-select-element'(event, instance) {
+      console.log("doubletap .js-select-element");
+      this.selected ? this.setSelected(false) : this.setSelected(true);
+      const p = this.element.transform;
+      instance.setmenuPosition({x:p.x, y:p.y}, 'svg');
+      instance.state.set('acting', 'editing');
+      instance.focusCli();
     },
   },
 });
 
 
 Template.Circuits_show.events({
-  // SELECTING -----------------------------------------------------------------
-  'click .js-select-element'(event, instance) {
-    event.preventDefault();
-    this.selected ? this.setSelected(false) : this.setSelected(true);
-    const p = this.element.transform;
-    instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
-  },
-
-  'dblclick .js-circuit-element'(event, instance) {
-    event.preventDefault();
-    instance.state.set('selection', this.element._id);
-    instance.state.set('active', 'element');
-    instance.state.set('acting', 'editing');
-    instance.focusCli();
-  },
-
-  'click .viewing .js-wire, click .editing .js-wire' (event, instance) {
-    event.preventDefault();
-    const p = instance.getEventPoint(event, 'svg');
-    instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
-    this.setSelected(true);
-  },
-
   // COMMON --------------------------------------------------------------------
   'click .js-view-circuit' (event, instance) {
     event.preventDefault();
     instance.state.set('acting', 'viewing');
   },
-
   'click .js-edit-circuit' (event, instance) {
     event.preventDefault();
     instance.state.set('acting', 'editing');
   },
-
   'click .js-wire-circuit' (event, instance) {
     event.preventDefault();
     instance.state.set('acting', 'wiring');
   },
-
   'click .js-cancel-selection' (event, instance) {
     instance.state.set('selection', false);
     instance.state.set('active', false);
@@ -463,6 +482,29 @@ Template.Circuits_show.events({
       console.log('to MOVE');
 //      instance.move(event);
     }
+  },
+
+  // SELECTING -----------------------------------------------------------------
+  'click .js-select-element'(event, instance) {
+    event.preventDefault();
+    this.selected ? this.setSelected(false) : this.setSelected(true);
+    const p = this.element.transform;
+    instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
+  },
+
+  'dblclick .js-select-element'(event, instance) {
+    event.preventDefault();
+    this.selected ? this.setSelected(false) : this.setSelected(true);
+    instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
+    instance.state.set('acting', 'editing');
+    instance.focusCli();
+  },
+
+  'click .viewing .js-wire, click .editing .js-wire' (event, instance) {
+    event.preventDefault();
+    const p = instance.getEventPoint(event, 'svg');
+    instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
+    this.setSelected(true);
   },
 
   // ADDING --------------------------------------------------------------------

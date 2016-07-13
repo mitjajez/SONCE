@@ -1,6 +1,5 @@
 import { Template } from 'meteor/peerlibrary:blaze-components';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Session } from 'meteor/session';
 
 import { Circuits } from '../../api/circuits/circuits.js';
 
@@ -15,7 +14,6 @@ Template.Circuits_show_page.onCreated(function circuitsShowPageOnCreated() {
   this.getCircuitId = () => FlowRouter.getParam('_id');
 
   this.autorun(() => {
-//    Session.set("openCircuit", this.getCircuitId());
     this.subscribe('elements.inCircuit', this.getCircuitId());
     this.subscribe('wires.inCircuit', this.getCircuitId());
     this.subscribe('symbols.all');
@@ -41,17 +39,15 @@ Template.Circuits_show_page.helpers({
   },
   circuitArgs(cid) {
     const instance = Template.instance();
-    // By finding the circuit with only the `_id` field set, we don't create a dependency on the
-    // `circuit.incompleteCount`, and avoid re-rendering the elements when it changes
     const circuit = Circuits.findOne(cid, { fields: { _id: true } });
     const elements = circuit && circuit.elements();
     const wires = circuit && circuit.wires();
     return {
       subscriptionsReady: instance.subscriptionsReady(),
-      // We pass `circuit` (which contains the full circuit, with all fields, as a function
-      // because we want to control reactivity. When you check a element item, the
-      // `circuit.incompleteCount` changes. If we didn't do this the entire circuit would
-      // re-render whenever you checked an item. By isolating the reactiviy on the circuit
+      // We pass `circuit` (which contains the full circuit, with all fields,
+      // as a function because we want to control reactivity.
+      // If we didn't do this the entire circuit would re-render whenever you
+      // edit an element. By isolating the reactiviy on the circuit
       // to the area that cares about it, we stop it from happening.
       circuit() {
         return Circuits.findOne(cid);
