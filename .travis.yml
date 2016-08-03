@@ -5,17 +5,19 @@ branches:
   - "/^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$/"
 git:
   depth: 2
-language: node_js
-node_js:
-  - "4.4"
-env:
-  - CXX=g++-4.8
+sudo: required
+dist: trusty
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+language: node_js
+node_js:
+  - "4.4"
+env:
+  - CXX=g++-4.8
 cache:
   directories:
   - "~/.meteor"
@@ -25,6 +27,7 @@ install:
   - export PATH="$HOME/.meteor:$PATH"
 before_script:
   - npm install
+  - npm cache clean
   - mkdir $HOME/app
 script:
   - meteor build --architecture=os.linux.x86_64 --directory $HOME/app --server=http://localhost:3000
