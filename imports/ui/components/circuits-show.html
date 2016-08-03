@@ -64,12 +64,14 @@
         </marker>
       </defs>
 
+      {{> Ruler (rulerArgs)}}
+
       {{#if subscriptionsReady}}
       <g class="js-circuit" transform="translate({{pan.x}},{{pan.y}}) scale({{zoom}})">
+
         {{#if wiring}}
-        <path
-        class="js-active-wire active-wire wire"
-        marker-end="url(#activeWireEnd)" />
+          <path class="js-active-wire active-wire wire"
+          marker-end="url(#activeWireEnd)" />
         {{/if}}
 
         {{#if adding}}

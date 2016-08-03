@@ -1,3 +1,5 @@
+import './circuits-show.html';
+
 import { Template } from 'meteor/peerlibrary:blaze-components';
 import { Mongo } from 'meteor/mongo';
 import { ReactiveDict } from 'meteor/reactive-dict';
@@ -15,6 +17,7 @@ import { Wires } from '../../api/wires/wires.js';
 import { displayError } from '../lib/errors.js';
 
 // Component used in the template
+import './ruler.js';
 import './elements-item.js';
 import './wires-item.js';
 import './command-box.js';
@@ -26,8 +29,6 @@ import './wire-edit-menu.js';
 import './operations.js';
 import './active-element.js';
 import './active-pin.js';
-
-import './circuits-show.html';
 
 import {
   insertElement,
@@ -47,6 +48,8 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 
   this.state = new ReactiveDict();
   this.state.setDefault({
+    width: 0,
+    height: 0,
     acting: 'viewing',    // viewing | editing | adding | wiring
     active: false,        // element | wire | net | node
     selection: false,     //
@@ -147,7 +150,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     console.log('ZOOM');
     const C = Snap('.js-circuit-canvas').select('.js-circuit');
     if(event.type === 'pinch') {
-
+      // what here?
     }
     else {
       const T = this.getEventPoint(event, 'svg');
@@ -156,7 +159,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 //      C.transform(t);
 
       const out = t.split();
-      this.state.set('zoom', out.scalex );
+      this.state.set('zoom', out.scalex*1 );
       this.state.set('pan', {x: out.dx*1, y: out.dy*1} );
     }
   };
@@ -186,6 +189,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
       this.state.set('pan', {x: out.dx*1, y: out.dy*1} );
     }
   };
+
 
 // ########## wiring ###########################################################
 
@@ -298,6 +302,19 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
 });
 
 Template.Circuits_show.onRendered(function circuitShowOnRendered() {
+  const instance = Template.instance();
+  const b = $( '.js-circuit-canvas' )[0].getBoundingClientRect();
+  instance.state.set({
+    width: b.width,
+    height: b.height,
+  });
+  $(window).resize(function() {
+    const b = $( '.js-circuit-canvas' )[0].getBoundingClientRect();
+    instance.state.set({
+      width: b.width,
+      height: b.height,
+    });
+  });
 });
 
 
@@ -328,9 +345,18 @@ Template.Circuits_show.helpers({
   selectedWire: () => Template.instance().state.equals('active', 'wire') ||
                       Template.instance().state.equals('active', 'net'),
 
-  cancel() {
+  cancel: () => {
     const state = Template.instance().state;
     return !state.equals('acting', 'viewing') || !state.equals('active', false);
+  },
+  rulerArgs() {
+    const instance = Template.instance();
+    return {
+      width: instance.state.get('width'),
+      height: instance.state.get('height'),
+      zoom: instance.state.get('zoom'),
+      pan: instance.state.get('pan'),
+    };
   },
   elementArgs(element) {
     const instance = Template.instance();
@@ -407,7 +433,7 @@ Template.Circuits_show.helpers({
       instance.zoom(event);
     },
     'tap .js-select-element'(event, instance) {
-      console.log("tap .js-select-element");
+      console.log('tap .js-select-element');
       this.selected ? this.setSelected(false) : this.setSelected(true);
       const p = this.element.transform;
       instance.setmenuPosition({x:p.x, y:p.y}, 'svg');
@@ -415,7 +441,7 @@ Template.Circuits_show.helpers({
     },
 
     'doubletap .js-select-element'(event, instance) {
-      console.log("doubletap .js-select-element");
+      console.log('doubletap .js-select-element');
       this.selected ? this.setSelected(false) : this.setSelected(true);
       const p = this.element.transform;
       instance.setmenuPosition({x:p.x, y:p.y}, 'svg');
@@ -495,6 +521,7 @@ Template.Circuits_show.events({
   'dblclick .js-select-element'(event, instance) {
     event.preventDefault();
     this.selected ? this.setSelected(false) : this.setSelected(true);
+    const p = this.element.transform;
     instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
     instance.state.set('acting', 'editing');
     instance.focusCli();
@@ -606,7 +633,7 @@ Template.Circuits_show.events({
     const pData = $pin.data();
     const $wire = instance.$('.js-active-wire');
     const w = $wire.data().wire;
-    console.log( 'CLICK on PIN '+ p.id );
+    console.log( `CLICK on PIN ${p.id}` );
 
     if (instance.state.get('selection') &&
     instance.state.equals('active', 'wire') ) {
@@ -629,7 +656,7 @@ Template.Circuits_show.events({
           insertWire.call({
             name: w.name,
             d:    w.d,
-            ends: w.ends.map( function(end) { return {e: end.e, p: end.p+''} }),
+            ends: w.ends.map( function(end) { return {e: `${end.e}`, p: `${end.p}`}; }),
             cid:  w.cid,
           }, displayError);
         }
@@ -696,7 +723,7 @@ Template.Circuits_show.events({
   'click .wiring .js-wire'(event, instance) {
     const name = instance.$(event.currentTarget).attr('name');
     const p = instance.getEventPoint(event, 'svg');
-    console.log( 'CLICK on WIRE '+ name );
+    console.log( `CLICK on WIRE ${name}` );
     const $wire = instance.$('.js-active-wire');
     const $wData = $wire.data();
     const w = $wData.wire;
@@ -706,15 +733,15 @@ Template.Circuits_show.events({
       // end this wire
       console.log( '--> Stop wiring' );
       const start = instance.state.get('startWire');
-      console.log( 'start: ' + start );
-      console.log( 'selection: ' + instance.state.get('selection') );
-      console.log( 'name: ' + name);
-      console.log( 'w.name: ' + w.name);
+      console.log( `start: ${start}`);
+      console.log( `selection: ${instance.state.get('selection')}`);
+      console.log( `name: ${name}`);
+      console.log( `w.name: ${w.name}`);
 
 
       if ( !instance.state.equals('selection', '.js-active-wire') &&
       w.name !== name) {
-        console.log('CONFLICT: '+ w.name +' !== '+ name +'; merge to?');
+        console.log(`CONFLICT: ${w.name} !== ${name}; merge to?'`);
         // TODO: prompt here
         updateNetName.call({
           cid: w.cid, net:w.name, newName: name,
