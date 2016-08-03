@@ -7,7 +7,7 @@ branches:
 git:
   depth: 2
 node_js:
-  - "0.12"
+  - "4.4"
 cache:
   directories:
   - "~/.meteor"
