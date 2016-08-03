@@ -1,4 +1,21 @@
 {
+  "name": "SONCE",
+  "description": "Simple ONline Circuit Editor",
+  "version": "0.4.0",
+  "license": "MIT",
+  "author": {
+    "name" : "Mitja Jež",
+    "email" : "mitja@xn--je-3va.si",
+    "url" : "https://mitja.xn--je-3va.si"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/mitjajez/SONCE.git"
+  },
+  "bugs": {
+    "url" : "https://github.com/mitjajez/SONCE/issues",
+    "email" : "mitja@xn--je-3va.si"
+  },
   "scripts": {
     "pretest": "npm run lint --silent",
     "test": "meteor test --once --driver-package dispatch:mocha-phantomjs",
@@ -13,7 +30,6 @@
     "meteor-node-stubs": "^0.2.3",
     "moment": "https://registry.npmjs.org/moment/-/moment-2.13.0.tgz",
     "snapsvg": "^0.4.0",
-    "svg-path-parser": "^1.0.1",
     "sweetalert": "^1.1.3",
     "viz.js": "^1.3.0"
   },
