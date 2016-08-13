@@ -10,15 +10,19 @@ general:
 
 dependencies:
   override:
-    - npm install
+    - node --version
+    - npm --version
     - if [ ! -f .meteor/meteor ]; then curl https://install.meteor.com | sh; fi
+    - meteor node --version
+    - meteor npm --version
+    - npm install
     - meteor build --architecture=os.linux.x86_64 --directory ../app --server=http://localhost:3000
-    - cd app/bundle/programs/server
+    - cd ../app/bundle/programs/server
     - npm install --production
-    - cd app/bundle
+    - cd ../app/bundle
   cache_directories:
     - .meteor
 
 test:
   override:
-    - cd app/bundle
+    - cd ../app/bundle
