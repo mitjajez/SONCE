@@ -17,10 +17,10 @@ Template.Ruler.onCreated( function rulerOnCreated() {
     new SimpleSchema({
       'width': { type: Number },
       'height': { type: Number },
-      'zoom': { type: Number },
+      'zoom': { type: Number, decimal: true },
       'pan': { type: Object },
-      'pan.x': { type: Number },
-      'pan.y': { type: Number },
+      'pan.x': { type: Number, decimal: true  },
+      'pan.y': { type: Number, decimal: true  },
     }).validate(Template.currentData());
   });
 
@@ -30,47 +30,44 @@ Template.Ruler.onCreated( function rulerOnCreated() {
 Template.Ruler.helpers({
   xTicsMajor: () => {
     const instance = Template.instance();
-    const ticSepMajor = instance.state.get('ticSepMajor');
-    const len = Math.ceil( instance.data.width / ticSepMajor);
-    const tics = new Array();
+    const sep = instance.state.get('ticSepMajor');
+    const k = instance.data.zoom * sep;
+    const len = Math.ceil(instance.data.width / k);
+    const off = Math.ceil(instance.data.pan.x / k) * k;
+    const tics = new Array(len).fill(0);
     for (let i = 0; i < len; i++) {
-      tics.push({
-        w: 1/instance.data.zoom,
-        h: 10/instance.data.zoom,
-        x: i*ticSepMajor - instance.data.pan.x,
-        y: 0,
-      });
+      tics[i] = i*k - off;
     }
     return tics;
   },
 
   yTicsMajor: () => {
     const instance = Template.instance();
-    const ticSepMajor = instance.state.get('ticSepMajor');
-    const len = Math.ceil(instance.data.height / ticSepMajor);
-    const tics = new Array();
+    const sep = instance.state.get('ticSepMajor');
+    const k = instance.data.zoom * sep;
+    const len = Math.ceil(instance.data.height / k);
+    const off = Math.ceil(instance.data.pan.y / k) * k;
+    const tics = new Array(len).fill(0);
     for (let i = 0; i < len; i++) {
-      tics.push({
-        w: 10/instance.data.zoom,
-        h: 1/instance.data.zoom,
-        x: 0,
-        y: i*ticSepMajor - instance.data.pan.y,
-      });
+      tics[i] = i*k - off;
     }
     return tics;
   },
 
   xTicsText: () => {
     const instance = Template.instance();
-    const ticSepText = instance.state.get('ticSepText');
-    const len = Math.ceil(instance.data.width / ticSepText);
-    const tics = new Array();
+    const sep = instance.state.get('ticSepText');
+    const k = instance.data.zoom * sep;
+    const len = Math.ceil(instance.data.width / k);
+    const lenoff = Math.ceil(instance.data.pan.x / k);
+    const off = lenoff * k;
+    const textoff = lenoff * sep;
+    const tics = new Array(0);
     for (let i = 0; i < len; i++) {
       tics.push({
-        s: 1/instance.data.zoom,
-        r: 0,
-        x: i*ticSepText - instance.data.pan.y,
-        y: 10,
+        r: '0 5 5',
+        t: i*k - off,
+        text: i*sep - textoff,
       });
     }
     return tics;
@@ -78,15 +75,18 @@ Template.Ruler.helpers({
 
   yTicsText: () => {
     const instance = Template.instance();
-    const ticSepText = instance.state.get('ticSepText');
-    const len = Math.ceil(instance.data.height / ticSepText);
-    const tics = new Array();
+    const sep = instance.state.get('ticSepText');
+    const k = instance.data.zoom * sep;
+    const len = Math.ceil(instance.data.height / k);
+    const lenoff = Math.ceil(instance.data.pan.y / k);
+    const off = lenoff * k;
+    const textoff = lenoff * sep;
+    const tics = new Array(0);
     for (let i = 0; i < len; i++) {
       tics.push({
-        s: 1/instance.data.zoom,
-        r: '90',
-        x: 10,
-        y: i*ticSepText - instance.data.pan.y,
+        r: '90 5 5',
+        t: i*k - off,
+        text: i*sep - textoff,
       });
     }
     return tics;
@@ -94,32 +94,26 @@ Template.Ruler.helpers({
 
   xTicsMinor: () => {
     const instance = Template.instance();
-    const ticSepMinor = instance.state.get('ticSepMinor');
-    const len = Math.ceil( instance.data.width / ticSepMinor);
-    const tics = new Array();
+    const sep = instance.state.get('ticSepMinor');
+    const k = instance.data.zoom * sep;
+    const len = Math.ceil(instance.data.width / k);
+    const off = Math.ceil(instance.data.pan.x / k) * k;
+    const tics = new Array(len).fill(0);
     for (let i = 0; i < len; i++) {
-      tics.push({
-        w: 1/instance.data.zoom,
-        h: 5/instance.data.zoom,
-        x: i*ticSepMinor - instance.data.pan.x,
-        y: 0,
-      });
+      tics[i] = i*k - off;
     }
     return tics;
   },
 
   yTicsMinor: () => {
     const instance = Template.instance();
-    const ticSepMinor = instance.state.get('ticSepMinor');
-    const len = Math.ceil(instance.data.height / ticSepMinor);
-    const tics = new Array();
+    const sep = instance.state.get('ticSepMinor');
+    const k = instance.data.zoom * sep;
+    const len = Math.ceil(instance.data.height / k);
+    const off = Math.ceil(instance.data.pan.y / k) * k;
+    const tics = new Array(len).fill(0);
     for (let i = 0; i < len; i++) {
-      tics.push({
-        w: 5/instance.data.zoom,
-        h: 1/instance.data.zoom,
-        x: 0,
-        y: i*ticSepMinor - instance.data.pan.y,
-      });
+      tics[i] = i*k - off;
     }
     return tics;
   },

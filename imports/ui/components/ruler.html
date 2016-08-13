@@ -1,33 +1,35 @@
 <template name="Ruler">
-  <g class="ruler-horizontal" transform="translate({{pan.x}},0) scale({{zoom}})">
-  {{#each tic in xTicsMajor}}
-    <rect x="{{tic.x}}" y="{{tic.y}}" width="{{tic.w}}" height="{{tic.h}}" />
+  <g class="ruler-horizontal" transform="translate({{pan.x}} 0)">
+    <rect class="cross-vertical" x="0" y="0" width="1" height="{{height}}" />
+  {{#each t in xTicsMajor}}
+    <rect x="{{t}}" y="0" width="1" height="10" />
   {{/each}}
   {{#each tic in xTicsText}}
-    <g class="ruler-text" transform="translate({{tic.x}} 0)">
-      <text transform="scale({{tic.s}}) rotate({{tic.r}})" x="0" y="{{tic.y}}"
-      dominant-baseline="text-before-edge">{{tic.x}}</text>
+    <rect x="{{tic.t}}" y="0" width="1" height="15" />
+    <g class="ruler-text" transform="translate({{tic.t}} 0)">
+      <text transform="rotate({{tic.r}})" x="0" y="5"
+      dominant-baseline="text-before-edge">{{tic.text}}</text>
     </g>
-    <rect x="{{tic.x}}" y="{{tic.y}}" width="{{tic.w}}" height="{{tic.h}}" />
   {{/each}}
-  {{#each tic in xTicsMinor}}
-    <rect x="{{tic.x}}" y="{{tic.y}}" width="{{tic.w}}" height="{{tic.h}}" />
+  {{#each t in xTicsMinor}}
+    <rect x="{{t}}" y="0" width="1" height="5" />
   {{/each}}
   </g>
 
-  <g class="ruler-vertical" transform="translate(0,{{pan.y}}) scale({{zoom}})">
-  {{#each tic in yTicsMajor}}
-    <rect x="{{tic.x}}" y="{{tic.y}}" width="{{tic.w}}" height="{{tic.h}}" />
+  <g class="ruler-vertical" transform="translate(0 {{pan.y}})">
+    <rect class="cross-horizontal" x="0" y="0" width="{{width}}" height="1" />
+  {{#each t in yTicsMajor}}
+    <rect x="0" y="{{t}}" width="10" height="1" />
   {{/each}}
   {{#each tic in yTicsText}}
-    <g class="ruler-text" transform="translate(0 {{tic.y}})">
-      <text transform="scale({{tic.s}}) rotate({{tic.r}} {{tic.x}} {{tic.x}})"
-      x="0" y="0">{{tic.y}}</text>
+    <rect x="0" y="{{tic.t}}" width="20" height="1" />
+    <g class="ruler-text" transform="translate(0 {{tic.t}})">
+      <text transform="rotate({{tic.r}})"
+      x="0" y="0">{{tic.text}}</text>
     </g>
-    <rect x="{{tic.x}}" y="{{tic.y}}" width="{{tic.w}}" height="{{tic.h}}" />
   {{/each}}
-  {{#each tic in yTicsMinor}}
-    <rect x="{{tic.x}}" y="{{tic.y}}" width="{{tic.w}}" height="{{tic.h}}" />
+  {{#each t in yTicsMinor}}
+    <rect x="0" y="{{t}}" width="5" height="1" />
   {{/each}}
   </g>
 </template>

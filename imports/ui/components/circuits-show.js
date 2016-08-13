@@ -131,7 +131,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
         T.y = event.deltaY;
       }
     }
-    return this.snapToGrid(T);
+    return T;
   };
 
 
@@ -147,21 +147,30 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
   };
 
   this.zoom = (event) => {
-    console.log('ZOOM');
     const C = Snap('.js-circuit-canvas').select('.js-circuit');
-    if(event.type === 'pinch') {
+    let z = 1;
+    let T = {x:0, y:0}
+    const t = C.transform().globalMatrix.split();
+    T.x = (this.state.get('width')/2 - t.dx) / t.scalex;
+    T.y = (this.state.get('height')/2 - t.dy) / t.scaley;
+
+    if(event === 'in'){
+      z += 0.1;
+    }
+    else if(event === 'out') {
+      z -= 0.1;
+    }
+    else if(event.type === 'pinch') {
+      console.log('ZOOM pinch');
       // what here?
     }
     else {
-      const T = this.getEventPoint(event, 'svg');
-      const z = event.originalEvent.deltaY > 0 ? 0.9 : 1.1;
-      const t = C.transform().globalMatrix.scale(z, z, T.x, T.y);
-//      C.transform(t);
-
-      const out = t.split();
-      this.state.set('zoom', out.scalex*1 );
-      this.state.set('pan', {x: out.dx*1, y: out.dy*1} );
+      T = this.getEventPoint(event, 'svg');
+      z = event.originalEvent.deltaY > 0 ? 0.9 : 1.1;
     }
+    const out = C.transform().globalMatrix.scale(z, z, T.x, T.y).split();
+    this.state.set('zoom', out.scalex );
+    this.state.set('pan', {x: out.dx, y: out.dy} );
   };
 
   this.pan = (event) => {
@@ -328,7 +337,7 @@ Template.Circuits_show.helpers({
   },
   viewPan() {
     const pan = Template.instance().state.get('pan');
-    return `${(pan.x).toFixed()},${(pan.y).toFixed()},`;
+    return `${(pan.x).toFixed()},${(pan.y).toFixed()}`;
   },
 
   actingClass: () => Template.instance().state.get('acting'),
@@ -474,6 +483,26 @@ Template.Circuits_show.events({
   'wheel .js-circuit-canvas'(event, instance) {
     instance.zoom(event);
   },
+  'click .js-zoom-out' (event, instance) {
+    instance.zoom('out');
+  },
+  'click .js-zoom-in' (event, instance) {
+    instance.zoom('in');
+  },
+  'focus input[name=zoom]' (event, instance) {
+    instance.$('input[name=zoom]').val('');
+  },
+  'blur input[name=zoom]' (event, instance) {
+    instance.$('input[name=zoom]').val(instance.state.zoom);
+  },
+  'submit .js-set-zoom' (event, instance) {
+    event.preventDefault();
+    const val = instance.$('input[name=zoom]').val();
+    const zoom = parseInt(val, 10);
+    if(!isNaN(zoom)) {
+      console.log( zoom/100 );
+    }
+  },
 
   'mousedown .js-circuit-canvas'(event, instance){
     event.preventDefault();
@@ -498,8 +527,8 @@ Template.Circuits_show.events({
 
   'mousemove .js-circuit-canvas'(event, instance) {
     event.preventDefault();
-    const pos = instance.getEventPoint(event, 'svg');
-    instance.state.set('mouse', {x:pos.x, y:pos.y} );
+    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
+    instance.state.set('mouse', p );
 
     if( instance.state.equals('dragging', 'panning') ){
       instance.pan(event);
@@ -529,7 +558,7 @@ Template.Circuits_show.events({
 
   'click .viewing .js-wire, click .editing .js-wire' (event, instance) {
     event.preventDefault();
-    const p = instance.getEventPoint(event, 'svg');
+    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg') );
     instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
     this.setSelected(true);
   },
@@ -564,7 +593,7 @@ Template.Circuits_show.events({
   },
 
   'mousemove .adding .js-circuit-canvas'(event, instance) {
-    const p = instance.getEventPoint(event, 'svg');
+    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
     const $active = instance.$('.js-active-element');
     const t = $active.data().element.transform;
     t.x = p.x;
@@ -701,7 +730,7 @@ Template.Circuits_show.events({
 
   'click .wiring .js-active-wire'(event, instance){
     console.log( 'CLICK on ACTIVE WIRE' );
-    const p = instance.getEventPoint(event, 'svg');
+    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
     const w = instance.$('.js-active-wire').data().wire;
     w.d += instance.newWirePathPoint(p.x, p.y);
     if ( instance.state.equals('selection', '.js-active-wire') ) {
@@ -722,7 +751,7 @@ Template.Circuits_show.events({
 
   'click .wiring .js-wire'(event, instance) {
     const name = instance.$(event.currentTarget).attr('name');
-    const p = instance.getEventPoint(event, 'svg');
+    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
     console.log( `CLICK on WIRE ${name}` );
     const $wire = instance.$('.js-active-wire');
     const $wData = $wire.data();
@@ -802,7 +831,7 @@ Template.Circuits_show.events({
   'mousemove .wiring .js-circuit-canvas'(event, instance){
     const $wire = instance.$('.js-active-wire');
     if ( $wire.attr('visibility') === 'visible') {
-      const p = instance.getEventPoint(event, 'svg');
+      const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
       $wire.attr('d', $wire.data().wire.d + instance.newWirePathPoint(p.x, p.y));
     }
   },
