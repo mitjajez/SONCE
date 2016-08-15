@@ -1,6 +1,13 @@
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init --recursive
+
 machine:
   node:
     version: 4.4
+  pre:
+    - curl https://install.meteor.com | /bin/sh
 
 general:
   branches:
@@ -10,12 +17,10 @@ general:
 
 dependencies:
   override:
-    - node --version
-    - npm --version
-    - if [ ! -f .meteor/meteor ]; then curl https://install.meteor.com | sh; fi
+    - meteor --version
     - meteor node --version
     - meteor npm --version
-    - npm install
+    - meteor npm install
     - meteor build --architecture=os.linux.x86_64 --directory ../app --server=http://localhost:3000
     - cd ../app/bundle/programs/server
     - npm install --production

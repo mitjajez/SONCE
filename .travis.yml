@@ -23,11 +23,13 @@ cache:
   - "~/.meteor"
 before_install:
   - if [ ! -e "$HOME/.meteor/meteor" ]; then curl https://install.meteor.com | /bin/sh; fi
+  - meteor --version
+  - meteor node --version
+  - meteor npm --version
 install:
   - export PATH="$HOME/.meteor:$PATH"
 before_script:
-  - npm install
-  - npm cache clean
+  - meteor npm install
   - mkdir $HOME/app
 script:
   - meteor build --architecture=os.linux.x86_64 --directory $HOME/app --server=http://localhost:3000
