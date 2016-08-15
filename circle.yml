@@ -1,11 +1,6 @@
-checkout:
-  post:
-    - git submodule sync
-    - git submodule update --init --recursive
-
 machine:
   node:
-    version: 4.4
+    version: 5.2.0
   pre:
     - curl https://install.meteor.com | /bin/sh
 
@@ -16,18 +11,29 @@ general:
       - develop
 
 dependencies:
-  override:
-    - meteor --version
-    - meteor node --version
-    - meteor npm --version
-    - meteor npm install
-    - meteor build --architecture=os.linux.x86_64 --directory ../app --server=http://localhost:3000
-    - cd ../app/bundle/programs/server
-    - npm install --production
-    - cd ../app/bundle
   cache_directories:
-    - .meteor
+    - "~/.npm"
+    - "~/.meteor"
+    - "node_modules"
+    - "./.meteor/local/build"
+    - "./.meteor/local/bundler-cache"
+    - "./.meteor/local/isopacks"
+    - "./.meteor/local/plugin-cache"
+    - "/home/ubuntu/nvm/versions/node/v5.2.0/bin"
+    - "/home/ubuntu/nvm/versions/node/v5.2.0/lib/node_modules"
+  override:
+    - ./.testing/upgrade_chrome_version.sh
+    - ./.testing/cache_meteor.sh
+    - ./.testing/cache_npm_dependencies.sh
+    - ./.testing/cache_build_and_dependencies.sh
+    - chimp --path=features # Cache chimp deps by running it without any tests
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init --recursive
 
 test:
+  pre:
+    - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
   override:
     - cd ../app/bundle
