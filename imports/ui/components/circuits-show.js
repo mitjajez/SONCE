@@ -149,7 +149,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
   this.zoom = (event) => {
     const C = Snap('.js-circuit-canvas').select('.js-circuit');
     let z = 1;
-    let T = {x:0, y:0}
+    let T = {x:0, y:0};
     const t = C.transform().globalMatrix.split();
     T.x = (this.state.get('width')/2 - t.dx) / t.scalex;
     T.y = (this.state.get('height')/2 - t.dy) / t.scaley;
@@ -161,7 +161,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
       z -= 0.1;
     }
     else if(event.type === 'pinch') {
-      console.log('ZOOM pinch');
+      // console.log('ZOOM pinch');
       // what here?
     }
     else {
@@ -174,7 +174,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
   };
 
   this.pan = (event) => {
-    console.log('PAN');
+    // console.log('PAN');
     const C = Snap('.js-circuit-canvas').select('.js-circuit');
     if(event.type === 'pan'){
       if(!this.state.get('dragOffset')){
@@ -245,7 +245,7 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
         p.y += s[2];
         break;
       default:
-        console.log(`${s[0]} Not supported!`);
+        // console.log(`${s[0]} Not supported!`);
       }
       // console.log( `${i}: ${s} -> (${p.x},${p.y})`);
     });
@@ -423,7 +423,8 @@ Template.Circuits_show.helpers({
   },
 
   configureHammer () {
-    return function (hammer, instance) {
+//    return function (hammer, instance) {
+    return function (hammer) {
       const twoFingerSwipe = new Hammer.Swipe({
         event: '2fingerswipe', /* prefix for custom swipe events, e.g. 2fingerswipeleft, 2fingerswiperight */
         pointers: 2,
@@ -442,7 +443,7 @@ Template.Circuits_show.helpers({
       instance.zoom(event);
     },
     'tap .js-select-element'(event, instance) {
-      console.log('tap .js-select-element');
+      // console.log('tap .js-select-element');
       this.selected ? this.setSelected(false) : this.setSelected(true);
       const p = this.element.transform;
       instance.setmenuPosition({x:p.x, y:p.y}, 'svg');
@@ -450,7 +451,7 @@ Template.Circuits_show.helpers({
     },
 
     'doubletap .js-select-element'(event, instance) {
-      console.log('doubletap .js-select-element');
+      // console.log('doubletap .js-select-element');
       this.selected ? this.setSelected(false) : this.setSelected(true);
       const p = this.element.transform;
       instance.setmenuPosition({x:p.x, y:p.y}, 'svg');
@@ -500,7 +501,7 @@ Template.Circuits_show.events({
     const val = instance.$('input[name=zoom]').val();
     const zoom = parseInt(val, 10);
     if(!isNaN(zoom)) {
-      console.log( zoom/100 );
+      // console.log( zoom/100 );
     }
   },
 
@@ -516,13 +517,13 @@ Template.Circuits_show.events({
     }
     const T = instance.getEventPoint(event, 'svg');
     instance.state.set('dragOffset', T);
-    console.log('drag starts');
+    // console.log('drag starts');
   },
 
   'mouseup .js-circuit-canvas'(event, instance){
     event.preventDefault();
     instance.state.set('dragging', false);
-    console.log('drag stops');
+    // console.log('drag stops');
   },
 
   'mousemove .js-circuit-canvas'(event, instance) {
@@ -534,7 +535,7 @@ Template.Circuits_show.events({
       instance.pan(event);
     }
     if( instance.state.equals('dragging', 'moving') ){
-      console.log('to MOVE');
+      // console.log('to MOVE');
 //      instance.move(event);
     }
   },
@@ -605,14 +606,14 @@ Template.Circuits_show.events({
 
   'click .adding .js-circuit-canvas'(event, instance) {
     const newElement = instance.$('.js-active-element').data().element;
-    console.log( newElement );
+    // console.log( newElement );
     insertElement.call( newElement, displayError);
   },
 
   'keyup .adding input[name=command-line]' (event, instance) {
-    console.log( 'keyup .adding' );
+    // console.log( 'keyup .adding' );
     if (event.which === 82) { // r
-      console.log('--> r ... rotate');
+      // console.log('--> r ... rotate');
       const $active = instance.$('.js-active-element');
       const t = $active.data().element.transform;
       t.rot += 90;
@@ -662,14 +663,14 @@ Template.Circuits_show.events({
     const pData = $pin.data();
     const $wire = instance.$('.js-active-wire');
     const w = $wire.data().wire;
-    console.log( `CLICK on PIN ${p.id}` );
+    // console.log( `CLICK on PIN ${p.id}` );
 
     if (instance.state.get('selection') &&
     instance.state.equals('active', 'wire') ) {
       // end this wire
       if( instance.state.equals('startWire', p.id) ) {
         // remove all about this wire
-        console.log( '--> Cancel wiring' );
+        // console.log( '--> Cancel wiring' );
         if( !instance.state.equals('selection', '.js-active-wire')) {
           removeWire.call({
             wid: instance.state.get('selection'),
@@ -677,7 +678,7 @@ Template.Circuits_show.events({
         }
       }
       else {
-        console.log( '--> Stop wiring' );
+        // console.log( '--> Stop wiring' );
         w.d += instance.newWirePathPoint(p.x, p.y);
         w.ends.push({e: pData.e, p: `${pData.p}`});
         if( instance.state.equals('selection', '.js-active-wire') ){
@@ -718,18 +719,18 @@ Template.Circuits_show.events({
       instance.state.set('active', 'wire');
       instance.state.set('selection', '.js-active-wire');
       instance.focusCli();
-      console.log( '  --> Start wiring' );
+      // console.log( '  --> Start wiring' );
     }
   },
   'click .wiring .js-circuit-canvas' (event, instance) {
     if(instance.$(event.currentTarget).is('.js-circuit-canvas') &&
     !instance.state.equals('startWire', false) ) {
-      console.log( 'CLICK on SVG ACTIVE WIRE' ); // testing
+      // console.log( 'CLICK on SVG ACTIVE WIRE' ); // testing
     }
   },
 
   'click .wiring .js-active-wire'(event, instance){
-    console.log( 'CLICK on ACTIVE WIRE' );
+    // console.log( 'CLICK on ACTIVE WIRE' );
     const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
     const w = instance.$('.js-active-wire').data().wire;
     w.d += instance.newWirePathPoint(p.x, p.y);
@@ -752,7 +753,7 @@ Template.Circuits_show.events({
   'click .wiring .js-wire'(event, instance) {
     const name = instance.$(event.currentTarget).attr('name');
     const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
-    console.log( `CLICK on WIRE ${name}` );
+    // console.log( `CLICK on WIRE ${name}` );
     const $wire = instance.$('.js-active-wire');
     const $wData = $wire.data();
     const w = $wData.wire;
@@ -760,17 +761,17 @@ Template.Circuits_show.events({
     if (instance.state.get('selection') &&
     instance.state.equals('active', 'wire') ) {
       // end this wire
-      console.log( '--> Stop wiring' );
-      const start = instance.state.get('startWire');
-      console.log( `start: ${start}`);
-      console.log( `selection: ${instance.state.get('selection')}`);
-      console.log( `name: ${name}`);
-      console.log( `w.name: ${w.name}`);
+      // console.log( '--> Stop wiring' );
+      // const start = instance.state.get('startWire');
+      // console.log( `start: ${start}`);
+      // console.log( `selection: ${instance.state.get('selection')}`);
+      // console.log( `name: ${name}`);
+      // console.log( `w.name: ${w.name}`);
 
 
       if ( !instance.state.equals('selection', '.js-active-wire') &&
       w.name !== name) {
-        console.log(`CONFLICT: ${w.name} !== ${name}; merge to?'`);
+        // console.log(`CONFLICT: ${w.name} !== ${name}; merge to?'`);
         // TODO: prompt here
         updateNetName.call({
           cid: w.cid, net:w.name, newName: name,
@@ -813,7 +814,7 @@ Template.Circuits_show.events({
     }
     else {
       // start new wire
-      console.log( '  --> Start wiring' );
+      // console.log( '  --> Start wiring' );
       instance.state.set('startWire', name);
       $wData.wire = {
         name,
@@ -837,10 +838,10 @@ Template.Circuits_show.events({
   },
 
   'keyup .wiring input[name=command-line]' (event, instance) {
-    console.log( 'keydown .wiring' );
+    // console.log( 'keydown .wiring' );
     const $cli = instance.$('input[name=command-line]');
     if (event.which === 87) {
-      console.log('--> w ... wiring mode');
+      // console.log('--> w ... wiring mode');
       const modes = instance.wiringModes;
       const mode = instance.getWiringMode();
       let iMode = _.indexOf(modes, mode) + 1;
@@ -852,7 +853,7 @@ Template.Circuits_show.events({
     // ESC
     if (event.which === 27) {
       event.preventDefault();
-      console.log( '--> ESC');
+      // console.log( '--> ESC');
       const $active = instance.$('.js-active-wire');
       $active.attr({
         'visibility': 'hidden',
@@ -903,7 +904,7 @@ Template.Circuits_show.events({
   },
 
   'click .js-edit'(event, instance) {
-    console.log( 'CLICK EDITING' );
+    // console.log( 'CLICK EDITING' );
     instance.state.set('acting', 'editing');
   },
 });
