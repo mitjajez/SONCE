@@ -1,3 +1,5 @@
+sudo: required
+dist: trusty
 branches:
   only:
   - master
@@ -5,8 +7,6 @@ branches:
   - "/^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$/"
 git:
   depth: 2
-sudo: required
-dist: trusty
 addons:
   apt:
     sources:
@@ -15,14 +15,22 @@ addons:
       - g++-4.8
 language: node_js
 node_js:
-  - "4.4"
+  - "4.4.7"
 env:
   - CXX=g++-4.8
 cache:
   directories:
-  - "~/.meteor"
+    - "~/.npm"
+    - "~/.meteor"
+    - "node_modules"
+    - "~/.meteor/local/build"
+    - "~/.meteor/local/bundler-cache"
+    - "~/.meteor/local/isopacks"
+    - "~/.meteor/local/plugin-cache"
+    - "~/nvm/versions/node/v4.4.7/bin"
+    - "~/nvm/versions/node/v4.4.7/lib/node_modules"
 before_install:
-  - if [ ! -e "$HOME/.meteor/meteor" ]; then curl https://install.meteor.com | /bin/sh; fi
+  - curl https://install.meteor.com | /bin/sh
   - meteor --version
   - meteor node --version
   - meteor npm --version
