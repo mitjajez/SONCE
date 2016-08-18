@@ -4,7 +4,7 @@ if [ ! -e /home/ubuntu/nvm/versions/node/v5.2.0/lib/node_modules/chimp/bin/chimp
   npm install -g chimp;
 fi
 if [ ! -e /home/ubuntu/nvm/versions/node/v5.2.0/lib/node_modules/spacejam/bin/spacejam ]; then
-  echo "install chimp";
+  echo "install spacejam";
   npm install -g spacejam;
 fi
 echo "install dependencies";

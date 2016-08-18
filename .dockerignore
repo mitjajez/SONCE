@@ -8,3 +8,4 @@ run.sh
 *.txt
 docker-compose.yml
 .travis.yml
+circle.yml
