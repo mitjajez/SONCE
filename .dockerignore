@@ -1,4 +1,6 @@
 node_modules
+.testing
+tests
 .meteor/local
 .git
 .gitignore
