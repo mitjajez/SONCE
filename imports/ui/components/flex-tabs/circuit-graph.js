@@ -1,14 +1,11 @@
+import './circuit-graph.html';
 import { Template } from 'meteor/peerlibrary:blaze-components';
 
 import { Circuits } from '../../../api/circuits/circuits.js';
 import { Elements } from '../../../api/elements/elements.js';
 import { Wires } from '../../../api/wires/wires.js';
 
-//const Viz = require("viz.js");
 import Viz from 'viz.js';
-import Snap from 'snapsvg';
-
-import './circuit-graph.html';
 
 Template.Circuit_graph.onCreated(function circuitsGraphOnCreated() {
   this.getCircuitId = () => FlowRouter.getParam('_id');

@@ -10,14 +10,19 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Hammer } from 'meteor/chriswessels:hammer';
 import Snap from 'snapsvg';
 
+// API
 import { Elements } from '../../api/elements/elements.js';
 import { Symbols } from '../../api/symbols/symbols.js';
 import { Wires } from '../../api/wires/wires.js';
 
 import { displayError } from '../lib/errors.js';
+import {
+  getLastPointFromPathD,
+  getCanvasPoint,
+} from '../lib/svg.js';
 
 // Component used in the template
-import './ruler.js';
+import './ruler/ruler.js';
 import './elements-item.js';
 import './wires-item.js';
 import './command-box.js';
@@ -92,6 +97,15 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     };
   };
 
+  this.getCanvasCenter = () => {
+    const C = Snap('.js-circuit-canvas').select('.js-circuit');
+    const t = C.transform().globalMatrix.split();
+    return {
+      x: (this.state.get('width')/2 - t.dx) / t.scalex,
+      y: (this.state.get('height')/2 - t.dy) / t.scaley,
+    };
+  };
+
   this.getEventPoint = (event, mode) => {
     const T = { x:0, y:0 };
     if (event.type.indexOf('mouse') > -1) {
@@ -154,20 +168,32 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     T.x = (this.state.get('width')/2 - t.dx) / t.scalex;
     T.y = (this.state.get('height')/2 - t.dy) / t.scaley;
 
-    if(event === 'in'){
-      z += 0.1;
-    }
-    else if(event === 'out') {
-      z -= 0.1;
-    }
-    else if(event.type === 'pinch') {
+    if(event.type === 'pinch') {
       // console.log('ZOOM pinch');
       // what here?
     }
     else {
-      T = this.getEventPoint(event, 'svg');
+      T = this.state.get('mouse');
       z = event.originalEvent.deltaY > 0 ? 0.9 : 1.1;
     }
+    const out = C.transform().globalMatrix.scale(z, z, T.x, T.y).split();
+    this.state.set('zoom', out.scalex );
+    this.state.set('pan', {x: out.dx, y: out.dy} );
+  };
+
+  this.zoomIn = () => {
+    const C = Snap('.js-circuit-canvas').select('.js-circuit');
+    const T = this.getCanvasCenter();
+    const z = 1.1;
+    const out = C.transform().globalMatrix.scale(z, z, T.x, T.y).split();
+    this.state.set('zoom', out.scalex );
+    this.state.set('pan', {x: out.dx, y: out.dy} );
+  };
+
+  this.zoomIn = () => {
+    const C = Snap('.js-circuit-canvas').select('.js-circuit');
+    const T = this.getCanvasCenter();
+    const z = 0.9;
     const out = C.transform().globalMatrix.scale(z, z, T.x, T.y).split();
     this.state.set('zoom', out.scalex );
     this.state.set('pan', {x: out.dx, y: out.dy} );
@@ -212,92 +238,53 @@ Template.Circuits_show.onCreated(function circuitShowOnCreated() {
     this.state.set('wiringMode', mode);
   };
 
-  this.getLastPoint = (d) => {
-    const p = {x:0, y:0};
-    d.map((s) => {
-      switch (s[0]) {
-      case 'M':
-        p.x = s[1];
-        p.y = s[2];
-        break;
-      case 'm':
-        p.x += s[1];
-        p.y += s[2];
-        break;
-      case 'H':
-        p.x = s[1];
-        break;
-      case 'h':
-        p.x += s[1];
-        break;
-      case 'V':
-        p.y = s[1];
-        break;
-      case 'v':
-        p.y += s[1];
-        break;
-      case 'L':
-        p.x = s[1];
-        p.y = s[2];
-        break;
-      case 'l':
-        p.x += s[1];
-        p.y += s[2];
-        break;
-      default:
-        // console.log(`${s[0]} Not supported!`);
-      }
-      // console.log( `${i}: ${s} -> (${p.x},${p.y})`);
-    });
-    return p;
-  };
-
-  this.newWirePathPoint = (x, y) => { // ['a-x', 'a-l', 'l', 'l-a', 'a-y']
+  this.newNetPathPoint = (T) => { // ['a-x', 'a-l', 'l', 'l-a', 'a-y']
     const d = this.$('.js-active-wire').data().wire.d;
-    let p = {x:0, y:0};
-    if(d) {
-      p = this.getLastPoint(Snap.parsePathString(d));
-    }
+    const p = d ? getLastPointFromPathD(d) : {x:0, y:0};
+//    let p = {x:0, y:0};
+//    if(d) {
+//      p = this.getLastPoint(d);
+//    }
 
     let str = '';
     let dl = 0;
     switch (this.state.get('wiringMode')) {
     case 'axis-x':
-      str = ` H${x} V${y}`;
+      str = ` H${T.x} V${T.y}`;
       break;
     case 'axis-line':
-      if( Math.abs(x-p.x) > Math.abs(y-p.y) ) {
-        dl = Math.abs(y-p.y);
-        str = x > p.x ? ` H${x-dl}` : ` H${x+dl}`;
-        str += x > p.x ? ` l${dl}` : ` l${-dl}`;
-        str += y > p.y ? `,${dl}` : `,${-dl}`;
+      if( Math.abs(T.x-p.x) > Math.abs(T.y-p.y) ) {
+        dl = Math.abs(T.y-p.y);
+        str = T.x > p.x ? ` H${T.x-dl}` : ` H${T.x+dl}`;
+        str += T.x > p.x ? ` l${dl}` : ` l${-dl}`;
+        str += T.y > p.y ? `,${dl}` : `,${-dl}`;
       }
       else {
-        dl = Math.abs(x-p.x);
-        str = y > p.y ? ` V${y-dl}` : ` V${y+dl}`;
-        str += x > p.x ? ` l${dl}` : ` l${-dl}`;
-        str += y > p.y ? `,${dl}` : `,${-dl}`;
+        dl = Math.abs(T.x-p.x);
+        str = T.y > p.y ? ` V${T.y-dl}` : ` V${T.y+dl}`;
+        str += T.x > p.x ? ` l${dl}` : ` l${-dl}`;
+        str += T.y > p.y ? `,${dl}` : `,${-dl}`;
       }
       break;
     case 'line':
-      str = ` L${x},${y}`;
+      str = ` L${T.x},${T.y}`;
       break;
     case 'line-axis':
-      if(Math.abs(x-p.x) > Math.abs(y-p.y)){ // LH ...
-        dl = Math.abs(y-p.y);
-        str = x > p.x ? ` l${dl}` : ` l${-dl}`;
-        str += y > p.y ? `,${dl}` : `,${-dl}`;
-        str += ` H${x}`;
+      if(Math.abs(T.x-p.x) > Math.abs(T.y-p.y)){ // LH ...
+        dl = Math.abs(T.y-p.y);
+        str = T.x > p.x ? ` l${dl}` : ` l${-dl}`;
+        str += T.y > p.y ? `,${dl}` : `,${-dl}`;
+        str += ` H${T.x}`;
       }
       else { // LV
-        dl = Math.abs(x-p.x);
-        str = x > p.x ? ` l${dl}` : ` l${-dl}`;
-        str += y > p.y ? `,${dl}` : `,${-dl}`;
-        str += ` V${y}`;
+        dl = Math.abs(T.x-p.x);
+        str = T.x > p.x ? ` l${dl}` : ` l${-dl}`;
+        str += T.y > p.y ? `,${dl}` : `,${-dl}`;
+        str += ` V${T.y}`;
       }
       break;
     case 'axis-y':
-      str = ` V${y} H${x}`;
+      str = ` V${T.y} H${T.x}`;
       break;
     default:
     }
@@ -365,6 +352,7 @@ Template.Circuits_show.helpers({
       height: instance.state.get('height'),
       zoom: instance.state.get('zoom'),
       pan: instance.state.get('pan'),
+//      mouse: instance.state.get('mouse'),
     };
   },
   elementArgs(element) {
@@ -482,13 +470,14 @@ Template.Circuits_show.events({
   },
 
   'wheel .js-circuit-canvas'(event, instance) {
+    const T = instance.state.get('mouse');
     instance.zoom(event);
   },
   'click .js-zoom-out' (event, instance) {
-    instance.zoom('out');
+    instance.zoomOut;
   },
   'click .js-zoom-in' (event, instance) {
-    instance.zoom('in');
+    instance.zoomIn();
   },
   'focus input[name=zoom]' (event, instance) {
     instance.$('input[name=zoom]').val('');
@@ -515,20 +504,25 @@ Template.Circuits_show.events({
       instance.state.set('dragging', 'moving'); //panning | moving
       // instance.$('js-active-element').attr('visibility', 'visable');
     }
-    const T = instance.getEventPoint(event, 'svg');
+    const T = instance.state.get('mouse');
     instance.state.set('dragOffset', T);
-    // console.log('drag starts');
   },
 
   'mouseup .js-circuit-canvas'(event, instance){
     event.preventDefault();
     instance.state.set('dragging', false);
-    // console.log('drag stops');
   },
 
   'mousemove .js-circuit-canvas'(event, instance) {
     event.preventDefault();
-    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
+    const T = {
+      x: event.pageX - $(event.currentTarget).offset().left,
+      y: event.pageY - $(event.currentTarget).offset().top,
+    };
+
+    const pan = instance.state.get('pan');
+    const zoom = instance.state.get('zoom');
+    const p = getCanvasPoint(T, pan, zoom);
     instance.state.set('mouse', p );
 
     if( instance.state.equals('dragging', 'panning') ){
@@ -544,22 +538,23 @@ Template.Circuits_show.events({
   'click .js-select-element'(event, instance) {
     event.preventDefault();
     this.selected ? this.setSelected(false) : this.setSelected(true);
-    const p = this.element.transform;
-    instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
+    const T = this.element.transform;
+    instance.state.set('menuPosition', `translate(${T.x},${T.y})`);
   },
 
   'dblclick .js-select-element'(event, instance) {
     event.preventDefault();
     this.selected ? this.setSelected(false) : this.setSelected(true);
-    const p = this.element.transform;
-    instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
+    const T = this.element.transform;
+    instance.state.set('menuPosition', `translate(${T.x},${T.y})`);
     instance.state.set('acting', 'editing');
     instance.focusCli();
   },
 
   'click .viewing .js-wire, click .editing .js-wire' (event, instance) {
     event.preventDefault();
-    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg') );
+    const T = instance.state.get('mouse');
+    const p = instance.snapToGrid(T);
     instance.state.set('menuPosition', `translate(${p.x},${p.y})`);
     this.setSelected(true);
   },
@@ -594,7 +589,8 @@ Template.Circuits_show.events({
   },
 
   'mousemove .adding .js-circuit-canvas'(event, instance) {
-    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
+    const T = instance.state.get('mouse');
+    const p = instance.snapToGrid(T);
     const $active = instance.$('.js-active-element');
     const t = $active.data().element.transform;
     t.x = p.x;
@@ -679,7 +675,7 @@ Template.Circuits_show.events({
       }
       else {
         // console.log( '--> Stop wiring' );
-        w.d += instance.newWirePathPoint(p.x, p.y);
+        w.d += instance.newNetPathPoint(p);
         w.ends.push({e: pData.e, p: `${pData.p}`});
         if( instance.state.equals('selection', '.js-active-wire') ){
           // insert new wire
@@ -725,15 +721,16 @@ Template.Circuits_show.events({
   'click .wiring .js-circuit-canvas' (event, instance) {
     if(instance.$(event.currentTarget).is('.js-circuit-canvas') &&
     !instance.state.equals('startWire', false) ) {
-      // console.log( 'CLICK on SVG ACTIVE WIRE' ); // testing
+      console.log( 'CLICK on SVG ACTIVE WIRE' ); // testing
     }
   },
 
   'click .wiring .js-active-wire'(event, instance){
     // console.log( 'CLICK on ACTIVE WIRE' );
-    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
+    const T = instance.state.get('mouse');
+    const p = instance.snapToGrid(T);
     const w = instance.$('.js-active-wire').data().wire;
-    w.d += instance.newWirePathPoint(p.x, p.y);
+    w.d += instance.newNetPathPoint(p);
     if ( instance.state.equals('selection', '.js-active-wire') ) {
       const wid = insertWire.call({
         d: w.d,
@@ -752,7 +749,8 @@ Template.Circuits_show.events({
 
   'click .wiring .js-wire'(event, instance) {
     const name = instance.$(event.currentTarget).attr('name');
-    const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
+    const T = instance.state.get('mouse');
+    const p = instance.snapToGrid(T);
     // console.log( `CLICK on WIRE ${name}` );
     const $wire = instance.$('.js-active-wire');
     const $wData = $wire.data();
@@ -779,7 +777,7 @@ Template.Circuits_show.events({
         w.name = name;
       }
 
-      w.d += instance.newWirePathPoint(p.x, p.y);
+      w.d += instance.newNetPathPoint(p);
       if ( instance.state.equals('selection', '.js-active-wire') ){
         // instance.insertWire(wire);
         w.ends.push({e: 'node', p: 'new'});
@@ -832,8 +830,9 @@ Template.Circuits_show.events({
   'mousemove .wiring .js-circuit-canvas'(event, instance){
     const $wire = instance.$('.js-active-wire');
     if ( $wire.attr('visibility') === 'visible') {
-      const p = instance.snapToGrid(instance.getEventPoint(event, 'svg'));
-      $wire.attr('d', $wire.data().wire.d + instance.newWirePathPoint(p.x, p.y));
+      const T = instance.state.get('mouse');
+      const p = instance.snapToGrid(T);
+      $wire.attr('d', $wire.data().wire.d + instance.newNetPathPoint(p));
     }
   },
 
@@ -866,8 +865,7 @@ Template.Circuits_show.events({
       }
       instance.state.set('active', false);
       instance.state.set('selection', false);
-      instance.state.set('startPin', false);
-
+      instance.state.set('startWire', false);
     }
     $cli.val('');
   },

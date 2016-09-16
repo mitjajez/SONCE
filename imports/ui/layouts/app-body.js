@@ -7,10 +7,10 @@ import { Template } from 'meteor/peerlibrary:blaze-components';
 
 import { TabBar } from 'meteor/flextab';
 
-import '../components/loading.js';
-import '../components/default-tab-bars.js';
-import '../components/flex-tab-bar.js';
-import '../components/account-box.js';
+import '../components/loader/loading.js';
+import '../components/flex-tab-bar/default-tab-bars.js';
+import '../components/flex-tab-bar/flex-tab-bar.js';
+import '../components/account/account-box.js';
 import '../components/circuits-list.js';
 
 const CONNECTION_ISSUE_TIMEOUT = 5000;

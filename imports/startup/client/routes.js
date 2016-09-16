@@ -20,7 +20,16 @@ FlowRouter.route('/', {
   },
 });
 
-FlowRouter.route('/circuits/:_id', {
+const circuitRoutes = FlowRouter.group({
+  prefix: '/circuits',
+  name: 'circuits',
+  triggersEnter: [function(context, redirect) {
+    console.log('running group triggers');
+  }],
+});
+
+// handling /circuits/:_id route
+circuitRoutes.route('/:_id', {
   name: 'Circuits.show',
   action() {
     TabBar.showGroup('circuit');
@@ -28,7 +37,23 @@ FlowRouter.route('/circuits/:_id', {
   },
 });
 
-FlowRouter.route('/symbols/:_id', {
+circuitRoutes.route('/:_id/edit', {
+  name: 'Circuits.edit',
+  action() {
+    TabBar.showGroup('circuit-edit');
+    BlazeLayout.render('App_body', { main: 'Circuits_show_page' });
+  },
+});
+
+const symbolRoutes = FlowRouter.group({
+  prefix: '/symbols',
+  name: 'Symbols',
+  triggersEnter: [function(context, redirect) {
+    console.log('running group triggers');
+  }],
+});
+
+symbolRoutes.route('/:_id', {
   name: 'Symbols.editor',
   action() {
     TabBar.showGroup('symbols');

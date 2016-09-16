@@ -49,7 +49,7 @@ Template.Ruler.helpers({
     const off = Math.ceil(instance.data.pan.y / k) * k;
     const tics = new Array(len).fill(0);
     for (let i = 0; i < len; i++) {
-      tics[i] = i*k - off;
+      tics[i] = Math.round(i*k - off);
     }
     return tics;
   },
@@ -66,7 +66,7 @@ Template.Ruler.helpers({
     for (let i = 0; i < len; i++) {
       tics.push({
         r: '0 5 5',
-        t: i*k - off,
+        t: Math.round(i*k - off),
         text: i*sep - textoff,
       });
     }
@@ -85,7 +85,7 @@ Template.Ruler.helpers({
     for (let i = 0; i < len; i++) {
       tics.push({
         r: '90 5 5',
-        t: i*k - off,
+        t: Math.round(i*k - off),
         text: i*sep - textoff,
       });
     }
@@ -100,7 +100,7 @@ Template.Ruler.helpers({
     const off = Math.ceil(instance.data.pan.x / k) * k;
     const tics = new Array(len).fill(0);
     for (let i = 0; i < len; i++) {
-      tics[i] = i*k - off;
+      tics[i] = Math.round(i*k - off);
     }
     return tics;
   },
@@ -113,7 +113,7 @@ Template.Ruler.helpers({
     const off = Math.ceil(instance.data.pan.y / k) * k;
     const tics = new Array(len).fill(0);
     for (let i = 0; i < len; i++) {
-      tics[i] = i*k - off;
+      tics[i] = Math.round(i*k - off);
     }
     return tics;
   },

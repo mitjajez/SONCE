@@ -15,7 +15,7 @@ addons:
       - g++-4.8
 language: node_js
 node_js:
-  - "4.4.7"
+  - "4.5.0"
 env:
   - CXX=g++-4.8
 cache:
@@ -27,13 +27,11 @@ cache:
     - "~/.meteor/local/bundler-cache"
     - "~/.meteor/local/isopacks"
     - "~/.meteor/local/plugin-cache"
-    - "~/nvm/versions/node/v4.4.7/bin"
-    - "~/nvm/versions/node/v4.4.7/lib/node_modules"
+    - "~/nvm/versions/node/v4.5.0/bin"
+    - "~/nvm/versions/node/v4.5.0/lib/node_modules"
 before_install:
+  - rm -rf $HOME/.meteor
   - curl https://install.meteor.com | /bin/sh
-  - meteor --version
-  - meteor node --version
-  - meteor npm --version
 install:
   - export PATH="$HOME/.meteor:$PATH"
 before_script:
@@ -41,9 +39,9 @@ before_script:
   - mkdir $HOME/app
 script:
   - free -m
-  - NODE_OPTIONS=' ulimit -n 999999 --max_old_space_size=4096 ' meteor build --architecture=os.linux.x86_64 --directory $HOME/app --server=http://localhost:3000
+  - NODE_OPTIONS=' --max_old_space_size=4096 ' meteor build --architecture=os.linux.x86_64 --directory $HOME/app --server=http://localhost:3000
   - cd $HOME/app/bundle/programs/server
-  - npm install --production
+  - meteor npm install --production
 
 services:
   - mongodb

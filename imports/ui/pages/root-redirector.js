@@ -8,7 +8,6 @@ import './root-redirector.html';
 Template.App_rootRedirector.onCreated(() => {
   // We need to set a timeout here so that we don't redirect from inside a redirection
   //   which is a limitation of the current version of FR.
-  //  Meteor.setTimeout(() => {
   Meteor.defer(() => {
     FlowRouter.go('Circuits.show', Circuits.findOne());
   });

@@ -1,4 +1,4 @@
-FROM node:4.4
+FROM node:4.5
 MAINTAINER Mitja Jež <mitja@xn--je-3va.si>
 
 RUN groupadd -r sonce \

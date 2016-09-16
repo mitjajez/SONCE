@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 
 class SymbolsCollection extends Mongo.Collection {
   insert(symbol, callback) {
@@ -63,5 +63,5 @@ Symbols.helpers({
     }
 
     return this.userId === userId;
-  }
+  },
 });

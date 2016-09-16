@@ -1,4 +1,4 @@
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { Circuits } from './circuits.js';
 import { insert, makePublic, makePrivate, updateName, remove } from './methods.js';
 import { Elements } from '../elements/elements.js';

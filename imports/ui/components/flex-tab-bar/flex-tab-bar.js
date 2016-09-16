@@ -1,10 +1,10 @@
+import './flex-tab-bar.html';
+
 import { Template } from 'meteor/peerlibrary:blaze-components';
 import { Tracker } from 'meteor/tracker';
 import { $ } from 'meteor/jquery';
 import { TabBar } from 'meteor/flextab';
 import { TAPi18n } from 'meteor/tap:i18n';
-
-import './flex-tab-bar.html';
 
 Template.Flex_tab_bar.onCreated(function() {
   this.autorun(() => {

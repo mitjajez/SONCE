@@ -1,9 +1,9 @@
 /* eslint-env mocha */
 
 import { Mongo } from 'meteor/mongo';
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { chai } from 'meteor/practicalmeteor:chai';
-import { Template } from 'meteor/templating';
+import { Template } from 'meteor/peerlibrary:blaze-components';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
@@ -14,7 +14,7 @@ import { Elements } from '../../../api/elements/elements.js';
 
 describe('Lists_show', () => {
   beforeEach(() => {
-    Template.registerHelper('_', key => key);
+    Template.registerHelper('_', (key) => key);
   });
 
   afterEach(() => {
@@ -28,7 +28,7 @@ describe('Lists_show', () => {
     // Create a local collection in order to get a cursor
     // Note that we need to pass the transform in so the documents look right when they come out.
     const elementsCollection = new Mongo.Collection(null, { transform: Elements._transform });
-    _.times(3, i => {
+    _.times(3, (i) => {
       const element = Factory.build('element', {
         circuitId: circuit._id,
         createdAt: new Date(timestamp - (3 - i)),
@@ -43,8 +43,8 @@ describe('Lists_show', () => {
       elements: elementsCursor,
     };
 
-    withRenderedTemplate('Lists_show', data, el => {
-      const elementsText = elementsCursor.map(t => t.text);
+    withRenderedTemplate('Lists_show', data, (el) => {
+      const elementsText = elementsCursor.map((t) => t.text);
       const renderedText = $(el).find('.circuit-items input[type=text]')
         .map((i, e) => $(e).val())
         .toArray();

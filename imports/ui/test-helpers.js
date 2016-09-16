@@ -1,7 +1,7 @@
 // TODO -- this should probably be some kind of test package that people use
 
 import { _ } from 'meteor/underscore';
-import { Template } from 'meteor/templating';
+import { Template } from 'meteor/peerlibrary:blaze-components';
 import { Blaze } from 'meteor/blaze';
 import { Tracker } from 'meteor/tracker';
 

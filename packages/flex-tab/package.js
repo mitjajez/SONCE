@@ -2,19 +2,18 @@ Package.describe({
   name: 'flextab',
   version: '1.0.0',
   summary: 'TabBar from RocketChat',
-  documentation: null,
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.1.0.2');
+  api.versionsFrom('1.4.1.1');
   api.use([
     'mongo',
-		'ecmascript',
-		'templating',
-		'coffeescript',
-		'underscore',
+    'ecmascript',
+    'templating',
+    'coffeescript',
+    'underscore',
     'reactive-var',
-    'tracker'
+    'tracker',
   ]);
   api.use('rate-limit');
   api.use('reactive-dict');

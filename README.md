@@ -40,10 +40,10 @@ sudo apt-get install -y nodejs-legacy
 ### Building
 ```sh
 git clone https://github.com/mitjajez/SONCE.git
-cd SONCE && npm install
+cd SONCE && meteor npm install
 meteor build --architecture=os.linux.x86_64 --directory /path/build-dir
 cd /path/build-dir/
-cd bundle/programs/server/ && npm install --production && cd ../../..
+cd bundle/programs/server/ && meteor npm install --production && cd ../../..
 ```
 ### Running
 Start your mongod db and run sonce:

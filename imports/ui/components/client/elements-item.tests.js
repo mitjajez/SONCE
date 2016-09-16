@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-import { Factory } from 'meteor/factory';
+import { Factory } from 'meteor/dburles:factory';
 import { chai } from 'meteor/practicalmeteor:chai';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';

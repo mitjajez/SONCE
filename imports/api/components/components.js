@@ -1,5 +1,4 @@
 import { Mongo } from 'meteor/mongo';
-import { Factory } from 'meteor/factory';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { EasySearch } from 'meteor/easy:search';
 

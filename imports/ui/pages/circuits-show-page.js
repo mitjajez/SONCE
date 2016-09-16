@@ -1,6 +1,7 @@
 import { Template } from 'meteor/peerlibrary:blaze-components';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
+// API
 import { Circuits } from '../../api/circuits/circuits.js';
 
 import { circuitRenderHold } from '../launch-screen.js';

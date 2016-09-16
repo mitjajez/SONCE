@@ -84,6 +84,7 @@
     "moment": false,
     "Mousetrap": false,
     "Picker": false,
+    "Package": true,
     "Presence": true,
     "presences": true,
     "Ps": true,
